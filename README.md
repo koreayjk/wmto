@@ -16,13 +16,15 @@ npm run dev                                     # http://localhost:3000
 ```
 
 ### Supabase 설정
-1. Supabase 프로젝트 생성 → SQL Editor에서 `apps/web/supabase/migrations/` 의 `0001_init.sql`, `0002_app_phase1.sql` 을 순서대로 실행
+1. Supabase 프로젝트 생성 → SQL Editor에서 `apps/web/supabase/migrations/` 의 `0001_init.sql`, `0002_app_phase1.sql`, `0003_app_phase2.sql` 을 순서대로 실행
 2. Auth에서 관리자 계정 생성 후 `insert into admins (user_id) values ('<auth user id>');`
 3. `.env.local`에 URL / anon key / service role key 입력 (service role key는 서버 전용)
 
 ### 회원 앱 (WMTO Connect, PWA) — `/connect`
 - 홈페이지와 같은 Next.js 프로젝트·같은 DB. 모바일 브라우저에서 "홈 화면에 추가"하면 앱처럼 설치됩니다.
 - 1단계: 로그인·프로필, 모임 일정·출석, 멘토링 기록, 자립 리포트. 관리자는 `/admin/members`(승인·초대), `/admin/matchings`(매칭 배정).
+- 2단계: 매칭 요청(선교사 → 사업가 수락 또는 관리자 배정), 리퍼럴, 감사 편지, 활동·성장(점수·단계 기록), 아카데미. 관리자는 `/admin/stages`(승급 제안 승인), `/admin/academy`, `/admin/matchings`(요청 배정).
+- 승급은 단계 기준으로 자동 제안되고(`promotion_suggestions` 뷰) 관리자가 승인해야 반영됩니다(`admin_set_stage`, 이력 `stage_history`).
 - 로그인은 이메일 링크 방식이며 승인된 회원만 가능합니다(자동 가입 없음).
 - **Supabase 이메일 템플릿 설정 필수** (Authentication → Email Templates). 링크를 다른 기기에서 열어도 동작하도록 아래 형태로 바꿔 주세요.
   - Invite user: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/connect`

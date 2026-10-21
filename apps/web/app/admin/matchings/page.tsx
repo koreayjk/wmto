@@ -14,6 +14,20 @@ async function create(fd: FormData) {
   revalidatePath("/admin/matchings");
 }
 
+async function assignRequest(fd: FormData) {
+  "use server";
+  const { supabase } = await requireAdmin();
+  const reqId = String(fd.get("request_id"));
+  const mentor = String(fd.get("mentor_id"));
+  if (!reqId || !mentor) return;
+  const { data: req } = await supabase.from("matching_requests").select("partner_id,contribution_type,status").eq("id", reqId).single();
+  if (!req || req.status !== "pending") return;
+  const { error } = await supabase.from("matchings").insert({ mentor_id: mentor, partner_id: req.partner_id, contribution_type: req.contribution_type });
+  if (error) return;
+  await supabase.from("matching_requests").update({ status: "accepted", mentor_id: mentor, responded_at: new Date().toISOString() }).eq("id", reqId);
+  revalidatePath("/admin/matchings");
+}
+
 async function end(fd: FormData) {
   "use server";
   const { supabase } = await requireAdmin();
@@ -24,9 +38,10 @@ async function end(fd: FormData) {
 export default async function AdminMatchings() {
   const { supabase } = await requireAdmin();
   const c = getMessages().connect.contribution;
-  const [{ data: members }, { data: matchings }] = await Promise.all([
+  const [{ data: members }, { data: matchings }, { data: requests }] = await Promise.all([
     supabase.from("members").select("id,name,role,email").eq("status", "active").in("role", ["mentor", "partner"]).order("name"),
     supabase.from("matchings").select("id,mentor_id,partner_id,contribution_type,status,started_at").order("created_at", { ascending: false }),
+    supabase.from("matching_requests").select("id,partner_id,contribution_type,message,created_at").eq("status", "pending").order("created_at"),
   ]);
   const mentors = (members ?? []).filter((x) => x.role === "mentor");
   const partners = (members ?? []).filter((x) => x.role === "partner");
@@ -35,6 +50,22 @@ export default async function AdminMatchings() {
   return (
     <>
       <h1 className="font-serif text-2xl font-semibold">매칭 배정</h1>
+      <h2 className="mt-6 text-sm font-semibold text-clay">대기 중인 요청 ({(requests ?? []).length})</h2>
+      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+        {(requests ?? []).length === 0 && <li className="py-5 text-soft">대기 중인 요청이 없습니다.</li>}
+        {(requests ?? []).map((r) => (
+          <li key={r.id} className="py-4">
+            <p><b>{name.get(r.partner_id) ?? "—"}</b> <span className="text-xs text-clay">{c[r.contribution_type as keyof typeof c]}</span></p>
+            {r.message && <p className="mt-1 text-sm text-soft">{r.message}</p>}
+            <form action={assignRequest} className="mt-2 flex gap-2">
+              <input type="hidden" name="request_id" value={r.id} />
+              <select name="mentor_id" required defaultValue="" className="border border-black/20 px-2 py-1"><option value="" disabled>사업가 선택</option>{mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
+              <button className="bg-clay px-4 py-1 text-white">배정</button>
+            </form>
+          </li>
+        ))}
+      </ul>
+      <h2 className="mt-10 text-sm font-semibold text-clay">직접 배정</h2>
       <form action={create} className="mt-6 grid gap-3 md:grid-cols-4">
         <select name="mentor_id" required defaultValue="" className="field"><option value="" disabled>사업가</option>{mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
         <select name="partner_id" required defaultValue="" className="field"><option value="" disabled>선교사</option>{partners.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>

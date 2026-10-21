@@ -24,7 +24,11 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   if (active?.role === "mentor" || active?.role === "partner") {
     items.push({ href: "/connect/mentoring", label: m.nav.mentoring }, { href: "/connect/report", label: m.nav.report });
   }
-  items.push({ href: "/connect/profile", label: m.nav.profile });
+  items.push({
+    href: "/connect/more",
+    label: m.nav.more,
+    also: ["/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile"],
+  });
 
   return (
     <div className="min-h-svh bg-paper">

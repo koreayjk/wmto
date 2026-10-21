@@ -79,7 +79,12 @@ export default async function ConnectHome() {
       </>
     );
   } else if (me.role === "mentor") {
-    const { data: ms } = await supabase.from("matchings").select("id,partner_id,contribution_type").eq("status", "active");
+    const [{ data: ms }, { data: openReqs }, { count: unread }] = await Promise.all([
+      supabase.from("matchings").select("id,partner_id,contribution_type").eq("status", "active"),
+      supabase.rpc("open_matching_requests"),
+      supabase.from("thanks_letters").select("id", { count: "exact", head: true }).eq("recipient_id", me.id).is("read_at", null),
+    ]);
+    const reqCount = (openReqs as unknown[] | null)?.length ?? 0;
     const partnerIds = (ms ?? []).map((x) => x.partner_id);
     const matchingIds = (ms ?? []).map((x) => x.id);
     const [{ data: people }, { data: profs }, { data: reps }, { data: logs }] = partnerIds.length
@@ -99,6 +104,14 @@ export default async function ConnectHome() {
 
     body = (
       <>
+        {(reqCount > 0 || (unread ?? 0) > 0) && (
+          <Card>
+            <ul className="space-y-2">
+              {reqCount > 0 && <li><Link href="/connect/matching" className="font-medium text-clay underline">{m.pending.requests} {reqCount}건</Link></li>}
+              {(unread ?? 0) > 0 && <li><Link href="/connect/thanks" className="font-medium text-clay underline">{m.pending.unread} {unread}통</Link></li>}
+            </ul>
+          </Card>
+        )}
         <Card title={m.stageTitle}>
           <StageBar stages={mentorStages} current={me.stage} names={m.stageNames} desc={m.stageDesc} />
         </Card>
