@@ -1,27 +1,36 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { Bezel } from "./Bezel";
 import { Reveal } from "./Reveal";
 import { PhotoFrame } from "./Photo";
 import type { PhotoKey } from "@/lib/photos";
 
 type Variant = "solid" | "ghost" | "onAccent" | "onAccentGhost";
+const EASE = "ease-[cubic-bezier(0.32,0.72,0,1)]";
 
-/** 버튼: 컨트롤은 rounded-lg, 컨테이너(카드·사진·패널)는 rounded-2xl 로 통일 */
-export function Button({ href, children, variant = "solid" }: { href: string; children: ReactNode; variant?: Variant | "light" }) {
+/** 버튼: 알약형. 주요 버튼은 오른쪽에 아이콘 원이 들어가고, 누르면 살짝 눌리고 호버하면 아이콘이 비스듬히 움직인다. */
+export function Button({ href, children, variant = "solid", icon }: { href: string; children: ReactNode; variant?: Variant | "light"; icon?: boolean }) {
   const v = variant === "light" ? "ghost" : variant;
+  const hasIcon = icon ?? (v === "solid" || v === "onAccent");
   const styles: Record<Variant, string> = {
     solid: "bg-accent text-white hover:bg-[var(--accent-hover)]",
-    ghost: "border border-ink/20 text-ink hover:bg-deep hover:border-ink/40",
+    ghost: "text-ink ring-1 ring-inset ring-ink/15 hover:bg-black/[0.04] hover:ring-ink/30",
     onAccent: "bg-white text-accent hover:bg-tint",
-    onAccentGhost: "border border-white/60 text-white hover:bg-white/10",
+    onAccentGhost: "text-white ring-1 ring-inset ring-white/50 hover:bg-white/10",
   };
+  const circle = v === "onAccent" ? "bg-accent/10" : "bg-white/15";
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center gap-2 max-w-full rounded-lg px-6 py-3.5 text-center text-[15px] font-semibold tracking-tight transition duration-200 active:scale-[0.98] ${styles[v]}`}
+      className={`group inline-flex max-w-full items-center justify-center gap-3 rounded-full text-center text-[15px] font-semibold tracking-tight transition duration-500 ${EASE} active:scale-[0.98] ${hasIcon ? "py-2 pl-6 pr-2" : "px-6 py-[13px]"} ${styles[v]}`}
     >
       {children}
+      {hasIcon && (
+        <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full transition duration-500 ${EASE} group-hover:-translate-y-px group-hover:translate-x-0.5 group-hover:scale-105 ${circle}`}>
+          <ArrowUpRight size={16} weight="bold" aria-hidden />
+        </span>
+      )}
     </Link>
   );
 }
@@ -50,7 +59,7 @@ export function ButtonRow({ buttons, onAccent }: { buttons: readonly { label: st
 /** 하위 페이지 상단: 왼쪽 글, 오른쪽 사진. 헤더는 sticky 라 위 여백은 짧게. */
 export function PageHero({ photo, title, sub, children }: { photo: PhotoKey; title: string; sub?: string; eyebrow?: string; children?: ReactNode }) {
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 pb-16 pt-12 md:grid-cols-[1.15fr_0.85fr] md:gap-16 md:pb-24 md:pt-20">
+    <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 pb-20 pt-28 md:grid-cols-[1.15fr_0.85fr] md:gap-16 md:pb-32 md:pt-40">
       <div>
         <h1 className="display rise text-[2rem] sm:text-5xl md:text-[3.5rem]">{title}</h1>
         {sub && <p className="rise rise-1 mt-6 max-w-xl text-lg text-soft md:text-xl">{sub}</p>}
@@ -67,7 +76,7 @@ type Tone = "paper" | "deep" | "tint" | "night";
 export function Section({ title, sub, children, tone = "paper", narrow }: { title?: string; eyebrow?: string; sub?: string; children?: ReactNode; tone?: Tone; narrow?: boolean }) {
   const bg = { paper: "bg-paper", deep: "bg-deep", tint: "bg-tint", night: "bg-tint" }[tone];
   return (
-    <section className={`${bg} py-20 md:py-28`}>
+    <section className={`${bg} py-24 md:py-36`}>
       <div className={`mx-auto px-6 ${narrow ? "max-w-3xl" : "max-w-6xl"}`}>
         {title && <Reveal as="h2" className="display max-w-3xl text-[1.75rem] sm:text-4xl md:text-[2.75rem]">{title}</Reveal>}
         {sub && <p className="mt-5 max-w-2xl text-lg text-soft">{sub}</p>}
@@ -81,7 +90,7 @@ export function Section({ title, sub, children, tone = "paper", narrow }: { titl
 export function Split({ photo, title, body, children, flip, ratio = "aspect-[4/3]", tone = "paper" }: { photo: PhotoKey; title: string; body?: string; children?: ReactNode; flip?: boolean; ratio?: string; tone?: "paper" | "deep" }) {
   return (
     <section className={tone === "deep" ? "bg-deep" : "bg-paper"}>
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-24 md:grid-cols-2 md:gap-16 md:py-36">
         <div className={flip ? "md:order-2" : ""}>
           <Reveal as="h2" className="display text-[1.75rem] sm:text-4xl md:text-[2.5rem]">{title}</Reveal>
           {body && <p className="mt-6 max-w-xl text-lg leading-[1.9] text-soft">{body}</p>}
@@ -144,69 +153,75 @@ export function Steps({ items }: { items: readonly string[] }) {
   );
 }
 
-/** 마지막 행동 유도: 악센트 면 위에 흰 글자 */
+/** 마지막 행동 유도: 악센트 면을 이중 테두리로 감싼다 */
 export function FinalCta({ title, body, buttons, verse }: { photo?: PhotoKey; title: string; body?: string; buttons: readonly { label: string; href: string }[]; verse?: string }) {
   return (
-    <section className="bg-paper px-6 pb-20 md:pb-28">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-2xl bg-accent p-8 text-white md:grid-cols-[1.3fr_1fr] md:gap-14 md:p-16">
+    <section className="bg-paper px-4 pb-24 md:px-6 md:pb-36">
+      <Bezel className="mx-auto max-w-6xl" inner="bg-accent text-white" innerClassName="grid items-center gap-10 p-8 md:grid-cols-[1.3fr_1fr] md:gap-14 md:p-16">
         <div>
           {verse && <p className="mb-5 text-sm text-white/85">{verse}</p>}
           <Reveal as="h2" className="display text-[1.75rem] sm:text-4xl md:text-[2.5rem]">{title}</Reveal>
           {body && <p className="mt-5 max-w-xl text-lg text-white/85">{body}</p>}
         </div>
-        <div className="md:justify-self-end">
-          <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
-            {buttons.map((b, i) => (
-              <Button key={b.label} href={b.href} variant={i === 0 ? "onAccent" : "onAccentGhost"}>{b.label}</Button>
-            ))}
-          </div>
+        <div className="flex flex-col gap-3 sm:flex-row md:flex-col md:justify-self-end">
+          {buttons.map((b, i) => (
+            <Button key={b.label} href={b.href} variant={i === 0 ? "onAccent" : "onAccentGhost"}>{b.label}</Button>
+          ))}
         </div>
-      </div>
+      </Bezel>
     </section>
   );
 }
 
 type Cell = { name: string; text?: string };
 
-/** 핵심 사실 묶음: 1px 선으로 나뉜 한 덩어리 */
+/** 핵심 사실 묶음: 이중 테두리 안에서 1px 선으로 나뉜다 */
 export function Facts({ items }: { items: readonly Cell[] }) {
   return (
-    <dl className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
-      {items.map((it) => (
-        <div key={it.name} className="bg-white p-6 md:p-7">
-          <dt className="text-sm font-semibold text-accent">{it.name}</dt>
-          <dd className="mt-1.5 text-lg font-medium leading-snug">{it.text}</dd>
-        </div>
-      ))}
-    </dl>
+    <Reveal>
+      <Bezel innerClassName="">
+        <dl className="grid gap-px bg-line sm:grid-cols-2">
+          {items.map((it) => (
+            <div key={it.name} className="bg-white p-6 md:p-8">
+              <dt className="text-sm font-semibold text-accent">{it.name}</dt>
+              <dd className="mt-1.5 text-lg font-medium leading-snug">{it.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </Bezel>
+    </Reveal>
   );
 }
 
-/** 위쪽 선만 있는 단(段). 순서·병렬 항목에 사용 */
+const stagger = (i: number) => (Math.min(i, 3) as 0 | 1 | 2 | 3) || undefined;
+
+/** 위쪽 선만 있는 단(段). 순서·병렬 항목에 사용. 항목이 차례로 올라온다 */
 export function Columns({ items, cols = 3 }: { items: readonly Cell[]; cols?: 2 | 3 | 4 }) {
   const grid = { 2: "md:grid-cols-2", 3: "md:grid-cols-3", 4: "md:grid-cols-2 lg:grid-cols-4" }[cols];
   return (
-    <div className={`grid gap-x-8 gap-y-10 ${grid}`}>
-      {items.map((it) => (
-        <div key={it.name} className="border-t-2 border-ink pt-5">
+    <div className={`grid gap-x-8 gap-y-12 ${grid}`}>
+      {items.map((it, i) => (
+        <Reveal key={it.name} delay={stagger(i)} className="border-t-2 border-ink pt-6">
           <h3 className="text-xl font-bold tracking-tight">{it.name}</h3>
           {it.text && <p className="mt-2 text-soft">{it.text}</p>}
-        </div>
+        </Reveal>
       ))}
     </div>
   );
 }
 
-/** 색 면 타일: 번갈아 다른 면색 */
+/** 색 면 타일: 이중 테두리, 번갈아 다른 면색 */
 export function Tiles({ items }: { items: readonly Cell[] }) {
   const tones = ["bg-white", "bg-deep", "bg-deep", "bg-white"];
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {items.map((it, i) => (
-        <div key={it.name} className={`rounded-2xl border border-line p-7 md:p-9 ${tones[i % 4]}`}>
-          <h3 className="text-xl font-bold tracking-tight md:text-2xl">{it.name}</h3>
-          {it.text && <p className="mt-3 text-soft">{it.text}</p>}
-        </div>
+        <Reveal key={it.name} delay={stagger(i)}>
+          <Bezel inner={tones[i % 4]} innerClassName="p-7 md:p-10">
+            <h3 className="text-xl font-bold tracking-tight md:text-2xl">{it.name}</h3>
+            {it.text && <p className="mt-3 text-soft">{it.text}</p>}
+          </Bezel>
+        </Reveal>
       ))}
     </div>
   );

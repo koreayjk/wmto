@@ -21,7 +21,7 @@ export default async function Apply({ searchParams }: { searchParams: Promise<{ 
             <Link
               key={t}
               href={`/apply?type=${t}`}
-              className={`rounded-lg border px-3.5 py-2.5 transition-colors ${
+              className={`rounded-full border px-4 py-2.5 transition-colors duration-300 ${
                 t === type ? "border-clay bg-clay text-white" : "border-line text-soft hover:border-ink"
               }`}
             >

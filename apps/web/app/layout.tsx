@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <noscript><style>{".reveal{opacity:1!important;transform:none!important}"}</style></noscript>
         <a href="#main" className="sr-only rounded-lg bg-accent px-4 py-3 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50">
           본문으로 건너뛰기
         </a>

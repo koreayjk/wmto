@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, type ReactNode } from "react";
+import { useActionState, useEffect, useRef, type ReactNode } from "react";
 import { getMessages } from "@/lib/i18n";
 import { campTracks, contributionTypes, roles, sponsorKinds, sponsorTypes, type ApplicationType } from "@/lib/codes";
 import { submitApplication, type ApplyState } from "./actions";
@@ -49,6 +49,9 @@ const input = (name: string, props: React.InputHTMLAttributes<HTMLInputElement> 
 
 export function ApplyForm({ type }: { type: ApplicationType }) {
   const [state, action, pending] = useActionState(submitApplication, initial);
+  const errRef = useRef<HTMLDivElement>(null);
+  // 제출 실패 시 오류 요약으로 포커스를 옮겨 키보드·화면낭독 사용자도 바로 알 수 있게 함
+  useEffect(() => { if (state.error) errRef.current?.focus(); }, [state]);
   const f = m.fields;
 
   if (state.ok) {
@@ -66,6 +69,12 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
   return (
     <form action={action} className="mt-10 space-y-6">
       <input type="hidden" name="type" value={type} />
+      {state.error && (
+        <div ref={errRef} role="alert" tabIndex={-1} className="rounded-2xl bg-[#fdf1ee] p-5 text-[#8a2f1a] outline-none ring-1 ring-[#e9b9ac]">
+          <p className="font-bold">제출하지 못했습니다</p>
+          <p className="mt-1 text-sm">{m.errors[state.error]}</p>
+        </div>
+      )}
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field label={f.name} required>{input("name", { required: true, autoComplete: "name" })}</Field>
@@ -142,11 +151,10 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
         </label>
       </div>
 
-      {state.error && <p role="alert" className="text-clay">{m.errors[state.error]}</p>}
 
       <button
         disabled={pending}
-        className="w-full bg-clay py-4 font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:opacity-60 sm:w-auto sm:px-14 rounded-lg"
+        className="w-full rounded-full bg-accent py-4 font-semibold text-white transition duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[var(--accent-hover)] active:scale-[0.98] disabled:opacity-60 sm:w-auto sm:px-16"
       >
         {pending ? m.submitting : m.submit}
       </button>

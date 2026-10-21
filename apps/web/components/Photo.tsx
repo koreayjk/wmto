@@ -33,7 +33,7 @@ export function Photo({ name, alt = "", priority = false }: { name: PhotoKey; al
 /** 비율이 고정된 사진 프레임 */
 export function PhotoFrame({ name, ratio = "aspect-[4/3]", alt, className = "" }: { name: PhotoKey; ratio?: string; alt?: string; className?: string }) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl ${ratio} ${className}`}>
+    <div className={`relative overflow-hidden rounded-[1.25rem] ${ratio} ${className}`}>
       <Photo name={name} alt={alt} />
     </div>
   );
