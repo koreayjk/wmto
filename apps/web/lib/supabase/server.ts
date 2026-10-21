@@ -1,0 +1,34 @@
+import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
+
+const url = () => process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const anon = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+export function isSupabaseConfigured() {
+  return Boolean(url() && anon());
+}
+
+/** 로그인 세션(쿠키)을 사용하는 클라이언트. RLS 가 적용됩니다. */
+export async function createSupabaseServerClient() {
+  const cookieStore = await cookies();
+  return createServerClient(url(), anon(), {
+    cookies: {
+      getAll: () => cookieStore.getAll(),
+      setAll(list) {
+        try {
+          list.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+        } catch {
+          // 서버 컴포넌트에서는 쿠키를 쓸 수 없습니다. proxy.ts 가 세션을 갱신합니다.
+        }
+      },
+    },
+  });
+}
+
+/** 서버 전용. RLS 를 우회하므로 신청 폼 저장 등 서버 코드에서만 사용하세요. */
+export function createSupabaseAdminClient() {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url() || !key) throw new Error("Supabase service role is not configured");
+  return createClient(url(), key, { auth: { persistSession: false } });
+}
