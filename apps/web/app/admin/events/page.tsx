@@ -18,7 +18,8 @@ async function addEvent(fd: FormData) {
     start_at: new Date(`${start}:00+09:00`).toISOString(),
     end_at: end ? new Date(`${end}:00+09:00`).toISOString() : null,
     location: String(fd.get("location") ?? "") || null,
-    zoom_url: String(fd.get("zoom_url") ?? "") || null,
+    meeting_provider: String(fd.get("meeting_url") ?? "") ? (fd.get("meeting_provider") === "bbb" ? "bbb" : "zoom") : null,
+    meeting_url: String(fd.get("meeting_url") ?? "") || null,
   });
   revalidatePath("/admin/events");
   revalidatePath("/events");
@@ -47,7 +48,8 @@ export default async function AdminEvents() {
         <label className="text-sm text-soft">시작 (KST)<input name="start_at" type="datetime-local" required className="field mt-1" /></label>
         <label className="text-sm text-soft">종료 (KST)<input name="end_at" type="datetime-local" className="field mt-1" /></label>
         <input name="location" placeholder="장소" className="field" />
-        <input name="zoom_url" placeholder="Zoom 링크" className="field" />
+        <select name="meeting_provider" className="field"><option value="zoom">Zoom</option><option value="bbb">BigBlueButton</option></select>
+        <input name="meeting_url" type="url" placeholder="회의 링크 (회원에게만 공개)" className="field md:col-span-2" />
         <button className="bg-clay py-3 font-medium text-white md:col-span-2">일정 등록</button>
       </form>
       <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">

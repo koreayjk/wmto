@@ -8,7 +8,7 @@ const m = getMessages();
 
 export function Footer() {
   const path = usePathname();
-  if (path.startsWith("/admin")) return null;
+  if (path.startsWith("/admin") || path.startsWith("/connect") || path.startsWith("/auth")) return null;
   return (
     <footer className="bg-night text-white/70">
       <div className="mx-auto max-w-6xl px-6 py-16">

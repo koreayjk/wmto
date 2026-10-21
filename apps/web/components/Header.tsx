@@ -20,7 +20,7 @@ export function Header() {
   }, []);
   useEffect(() => setOpen(false), [path]);
 
-  if (path.startsWith("/admin")) return null;
+  if (path.startsWith("/admin") || path.startsWith("/connect") || path.startsWith("/auth")) return null;
   // 밝은 배경으로 시작하는 페이지는 처음부터 solid 헤더
   const lightTop = path.startsWith("/apply");
   const light = !solid && !open && !lightTop;

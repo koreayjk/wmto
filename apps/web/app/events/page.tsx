@@ -9,7 +9,7 @@ import type { EventType } from "@/lib/codes";
 export const metadata: Metadata = { title: "일정" };
 export const revalidate = 300;
 
-type Ev = { id: string; type: EventType; title: string; start_at: string; end_at: string | null; location: string | null; zoom_url: string | null };
+type Ev = { id: string; type: EventType; title: string; start_at: string; end_at: string | null; location: string | null };
 
 const fmt = new Intl.DateTimeFormat("ko-KR", {
   dateStyle: "long", timeStyle: "short", timeZone: "Asia/Seoul",
@@ -22,7 +22,7 @@ export default async function Events() {
   if (db) {
     const { data } = await db
       .from("events")
-      .select("id,type,title,start_at,end_at,location,zoom_url")
+      .select("id,type,title,start_at,end_at,location")
       .gte("start_at", new Date(Date.now() - 86400000).toISOString())
       .order("start_at");
     events = (data ?? []) as Ev[];

@@ -19,6 +19,7 @@
   --color-night: var(--night);
   --color-clay: var(--clay);
   --color-gold: var(--gold);
+  --color-line: var(--line);
   --font-serif: "Noto Serif KR", "Nanum Myeongjo", "Apple SD Gothic Neo", serif;
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;

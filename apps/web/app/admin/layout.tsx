@@ -22,6 +22,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <b className="font-serif text-lg">WMTO {m.title}</b>
         <nav className="flex gap-5 text-soft">
           <Link href="/admin" className="hover:text-ink">{m.applications}</Link>
+          <Link href="/admin/members" className="hover:text-ink">회원</Link>
+          <Link href="/admin/matchings" className="hover:text-ink">매칭</Link>
           <Link href="/admin/events" className="hover:text-ink">{m.events}</Link>
           <Link href="/admin/stories" className="hover:text-ink">{m.stories}</Link>
         </nav>
