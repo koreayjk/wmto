@@ -42,7 +42,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const f = getMessages().apply;
   const p = (me.profile ?? {}) as Record<string, string | string[] | null>;
   const { saved } = await searchParams;
-  const roleLabel = me.role ? f.options.role[me.role] : "—";
+  const roleLabel = me.role ? f.options.role[me.role] : "-";
 
   return (
     <div className="space-y-4">
@@ -94,7 +94,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
               <label className="block"><span className={labelCls}>{f.fields.churchName}</span><input name="church_name" defaultValue={(p.church_name as string) ?? ""} className="field" /></label>
             </>
           )}
-          <button className="w-full bg-clay py-3.5 font-medium text-white">{t.save}</button>
+          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
         </form>
       </Card>
       <p className="px-1 text-sm text-soft">{t.install}</p>

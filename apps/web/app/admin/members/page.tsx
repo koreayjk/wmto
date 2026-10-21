@@ -63,7 +63,7 @@ export default async function AdminMembers() {
 
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">회원 관리</h1>
+      <h1 className="font-display text-2xl font-semibold">회원 관리</h1>
       <p className="mt-2 text-sm text-soft">승인하면 앱 계정이 만들어지고 초대 메일이 발송됩니다.</p>
 
       <h2 className="mt-8 text-sm font-semibold text-clay">신청자 ({applicants.length})</h2>
@@ -83,7 +83,7 @@ export default async function AdminMembers() {
                   {roles.map((r) => <option key={r} value={r}>{roleLabel[r]}</option>)}
                 </select>
               )}
-              <button className="bg-clay px-4 py-1.5 text-white">승인·초대</button>
+              <button className="bg-clay px-4 py-1.5 text-white rounded-lg">승인·초대</button>
             </form>
           </li>
         ))}
@@ -95,7 +95,7 @@ export default async function AdminMembers() {
           <li key={x.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
             <span>
               {x.name} <span className="text-soft">{x.email}</span>
-              <span className="ml-2 text-xs text-clay">{x.role ? roleLabel[x.role] : "—"} · {statusLabel[x.status]}</span>
+              <span className="ml-2 text-xs text-clay">{x.role ? roleLabel[x.role] : "-"} · {statusLabel[x.status]}</span>
             </span>
             <form action={setStatus}>
               <input type="hidden" name="id" value={x.id} />

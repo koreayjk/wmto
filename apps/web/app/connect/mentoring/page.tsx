@@ -51,7 +51,7 @@ export default async function Mentoring() {
                 <select name="matching_id" required className="field">
                   {active.map((x) => (
                     <option key={x.id} value={x.id}>
-                      {nameOf.get(x.partner_id) ?? "—"} · {m.contribution[x.contribution_type as keyof typeof m.contribution]}
+                      {nameOf.get(x.partner_id) ?? "-"} · {m.contribution[x.contribution_type as keyof typeof m.contribution]}
                     </option>
                   ))}
                 </select>
@@ -70,7 +70,7 @@ export default async function Mentoring() {
                 <span className={labelCls}>{t.content}</span>
                 <textarea name="content" required rows={5} maxLength={5000} className="field" />
               </label>
-              <button className="w-full bg-clay py-3.5 font-medium text-white">{t.save}</button>
+              <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
             </form>
           ) : (
             <p className="text-soft">{t.noMatching}</p>
@@ -89,8 +89,8 @@ export default async function Mentoring() {
               <p className="text-xs text-clay">
                 {fmtDateTime(l.held_at)} · {l.duration_min}{t.minutes}
               </p>
-              <p className="mt-1 font-serif text-lg font-semibold">
-                {me.role === "partner" ? `${t.withMentor} ` : ""}{other ?? "—"}
+              <p className="mt-1 font-display text-lg font-semibold">
+                {me.role === "partner" ? `${t.withMentor} ` : ""}{other ?? "-"}
               </p>
               <p className="mt-2 whitespace-pre-line text-soft">{l.content}</p>
             </Card>

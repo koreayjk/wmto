@@ -24,10 +24,10 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
     <div className="mx-auto max-w-sm px-6 py-32">
       <h1 className="display text-3xl">{m.title}</h1>
       <form action={login} className="mt-8 space-y-4">
-        <input name="email" type="email" required placeholder="이메일" className="field" />
-        <input name="password" type="password" required placeholder="비밀번호" className="field" />
+        <input name="email" type="email" required placeholder="이메일" aria-label="이메일" className="field" />
+        <input name="password" type="password" required placeholder="비밀번호" aria-label="비밀번호" className="field" />
         {msg && <p role="alert" className="text-sm text-clay">{msg}</p>}
-        <button className="w-full bg-clay py-3 font-medium text-white">{m.login}</button>
+        <button className="w-full bg-clay py-3 font-medium text-white rounded-lg">{m.login}</button>
       </form>
     </div>
   );

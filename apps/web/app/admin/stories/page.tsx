@@ -41,14 +41,14 @@ export default async function AdminStories() {
   const { data } = await supabase.from("stories").select("*").order("created_at", { ascending: false }).limit(100);
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">{getMessages().admin.stories}</h1>
+      <h1 className="font-display text-2xl font-semibold">{getMessages().admin.stories}</h1>
       <form action={addStory} className="mt-6 grid gap-3">
         <input name="title" required placeholder="제목" className="field" />
         <textarea name="body" required rows={6} placeholder="본문" className="field" />
         <input name="image_url" placeholder="이미지 URL (선택)" className="field" />
         <label className="flex items-center gap-2"><input type="checkbox" name="is_example" /> 예시 스토리 (&ldquo;예시&rdquo; 표시)</label>
         <label className="flex items-center gap-2"><input type="checkbox" name="publish" defaultChecked /> 바로 공개</label>
-        <button className="bg-clay py-3 font-medium text-white">등록</button>
+        <button className="bg-clay py-3 font-medium text-white rounded-lg">등록</button>
       </form>
       <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
         {(data ?? []).map((s) => (

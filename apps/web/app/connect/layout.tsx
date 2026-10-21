@@ -35,7 +35,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
       <ServiceWorker />
       <header className="border-b border-line pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex h-14 max-w-xl items-center px-5">
-          <span className="font-serif text-lg font-bold tracking-wide">WMTO</span>
+          <span className="font-display text-lg font-bold tracking-wide">WMTO</span>
           <span className="ml-2 text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
         </div>
       </header>

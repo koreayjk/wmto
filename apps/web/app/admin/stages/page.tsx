@@ -31,7 +31,7 @@ export default async function AdminStages() {
 
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">성장 단계</h1>
+      <h1 className="font-display text-2xl font-semibold">성장 단계</h1>
       <p className="mt-2 text-sm text-soft">기준을 충족한 회원이 자동으로 제안됩니다. 승인하면 단계가 바뀌고 이력이 남습니다.</p>
 
       <h2 className="mt-8 text-sm font-semibold text-clay">승급 제안 ({(sugg ?? []).length})</h2>
@@ -40,7 +40,7 @@ export default async function AdminStages() {
         {(sugg ?? []).map((s) => (
           <li key={`${s.member_id}-${s.to_stage}`} className="flex flex-wrap items-center justify-between gap-3 py-4">
             <span>
-              <b>{name.get(s.member_id) ?? "—"}</b>{" "}
+              <b>{name.get(s.member_id) ?? "-"}</b>{" "}
               <span className="text-soft">{label(s.from_stage)} → {label(s.to_stage)}</span>
               <span className="block text-xs text-soft">{s.reason}</span>
             </span>
@@ -48,7 +48,7 @@ export default async function AdminStages() {
               <input type="hidden" name="member_id" value={s.member_id} />
               <input type="hidden" name="to" value={s.to_stage} />
               <input type="hidden" name="note" value={s.reason} />
-              <button className="bg-clay px-4 py-1.5 text-white">승인</button>
+              <button className="bg-clay px-4 py-1.5 text-white rounded-lg">승인</button>
             </form>
           </li>
         ))}
@@ -69,7 +69,7 @@ export default async function AdminStages() {
                   {stages.map((s) => <option key={s} value={s}>{label(s)}</option>)}
                 </select>
                 <input name="note" placeholder="사유" className="border border-black/20 px-2 py-1" />
-                <button className="bg-ink px-3 py-1 text-white">변경</button>
+                <button className="bg-ink px-3 py-1 text-white rounded-lg">변경</button>
               </form>
             </li>
           );
@@ -80,7 +80,7 @@ export default async function AdminStages() {
       <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
         {(hist ?? []).map((h) => (
           <li key={h.id} className="py-3 text-sm">
-            {name.get(h.member_id) ?? "—"}: {label(h.from_stage ?? "")} → {label(h.to_stage)}{" "}
+            {name.get(h.member_id) ?? "-"}: {label(h.from_stage ?? "")} → {label(h.to_stage)}{" "}
             <span className="text-soft">{fmtDate(h.created_at)}{h.note ? ` · ${h.note}` : ""}</span>
           </li>
         ))}

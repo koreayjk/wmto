@@ -38,13 +38,13 @@ type Report = {
   self_reliance: number | null; difficulties: string | null; prayer_topics: string | null;
 };
 
-const money = (r: Report) => (r.revenue_amount == null ? "—" : `${Number(r.revenue_amount).toLocaleString("ko-KR")} ${r.currency}`);
+const money = (r: Report) => (r.revenue_amount == null ? "-" : `${Number(r.revenue_amount).toLocaleString("ko-KR")} ${r.currency}`);
 
 function Details({ r }: { r: Report }) {
   const t = getMessages().connect.report;
   return (
     <>
-      <p className="text-sm text-soft">{t.revenueLabel} {money(r)} · {t.reliance} {r.self_reliance ?? "—"}/5</p>
+      <p className="text-sm text-soft">{t.revenueLabel} {money(r)} · {t.reliance} {r.self_reliance ?? "-"}/5</p>
       {r.difficulties && <p className="mt-2 whitespace-pre-line text-sm"><b>{t.difficulties}</b> {r.difficulties}</p>}
       {r.prayer_topics && <p className="mt-2 whitespace-pre-line text-sm"><b>{t.prayer}</b> {r.prayer_topics}</p>}
     </>
@@ -74,7 +74,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
         {reports.length === 0 && <p className="text-soft">{t.empty}</p>}
         {reports.map((r) => (
           <Card key={r.id}>
-            <p className="font-serif text-lg font-semibold">{nameOf.get(r.partner_id) ?? "—"} <span className="text-sm font-normal text-clay">{fmtMonth(r.month)}</span></p>
+            <p className="font-display text-lg font-semibold">{nameOf.get(r.partner_id) ?? "-"} <span className="text-sm font-normal text-clay">{fmtMonth(r.month)}</span></p>
             <Details r={r} />
           </Card>
         ))}
@@ -94,7 +94,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       <nav aria-label={t.month} className="flex gap-2 text-sm">
         {[cur, prev].map((v) => (
           <Link key={v} href={v === cur ? "/connect/report" : `/connect/report?month=${v}`}
-            className={`border px-4 py-2 ${v === month ? "border-clay bg-clay text-white" : "border-line text-soft"}`}>
+            className={`rounded-lg border px-4 py-2 ${v === month ? "border-clay bg-clay text-white" : "border-line text-soft"}`}>
             {fmtMonth(v)}
           </Link>
         ))}
@@ -128,7 +128,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
             <span className={labelCls}>{t.prayer}</span>
             <textarea name="prayer_topics" rows={3} maxLength={3000} defaultValue={existing?.prayer_topics ?? ""} className="field" />
           </label>
-          <button className="w-full bg-clay py-3.5 font-medium text-white">{t.save}</button>
+          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
         </form>
       </Card>
 
@@ -136,7 +136,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
       {reports.length === 0 && <p className="text-soft">{t.empty}</p>}
       {reports.map((r) => (
         <Card key={r.id}>
-          <p className="font-serif text-lg font-semibold">{fmtMonth(r.month)}</p>
+          <p className="font-display text-lg font-semibold">{fmtMonth(r.month)}</p>
           <Details r={r} />
         </Card>
       ))}

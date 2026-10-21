@@ -29,9 +29,12 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         <p role="status" className="mt-8 border border-line bg-white/60 p-5">{m.sent}</p>
       ) : (
         <form action={sendLink} className="mt-8 space-y-4">
-          <input name="email" type="email" required autoComplete="email" placeholder={m.email} className="field" />
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium">{m.email}</span>
+            <input name="email" type="email" required autoComplete="email" className="field" />
+          </label>
           {msg && <p role="alert" className="text-sm text-clay">{msg}</p>}
-          <button className="w-full bg-clay py-3.5 font-medium text-white">{m.send}</button>
+          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{m.send}</button>
         </form>
       )}
       <p className="mt-10 text-sm text-soft">

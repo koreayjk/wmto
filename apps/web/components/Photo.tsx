@@ -1,36 +1,32 @@
 import { photos, type PhotoKey } from "@/lib/photos";
 import { getMessages } from "@/lib/i18n";
 
-/** 풀블리드 배경 사진. 사진이 없으면 자리표시 그라데이션. 부모는 relative + overflow-hidden. */
-export function Photo({
-  name,
-  alt = "",
-  drift = false,
-  overlay = "bg-night/45",
-  showLabel = true,
-}: {
-  name: PhotoKey;
-  alt?: string;
-  drift?: boolean;
-  overlay?: string;
-  showLabel?: boolean;
-}) {
+/** 부모를 가득 채우는 사진. 부모는 relative + overflow-hidden. 사진이 없으면 자리표시. */
+export function Photo({ name, alt = "" }: { name: PhotoKey; alt?: string }) {
   const src = photos[name];
   return (
     <div className="absolute inset-0" aria-hidden={alt === ""}>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className={`h-full w-full object-cover ${drift ? "drift" : ""}`} />
+        <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover" />
       ) : (
-        <div className={`photo-fallback h-full w-full ${drift ? "drift" : ""}`}>
-          {showLabel && process.env.NODE_ENV !== "production" && (
-            <span className="absolute bottom-3 right-4 text-[11px] tracking-widest text-white/40">
-              {getMessages().photo.placeholder} · {name}
+        <div className="photo-fallback h-full w-full">
+          {process.env.NODE_ENV !== "production" && (
+            <span className="absolute bottom-3 right-4 text-[11px] text-ink/40">
+              {getMessages().photo.placeholder} / {name}
             </span>
           )}
         </div>
       )}
-      <div className={`absolute inset-0 ${overlay}`} />
+    </div>
+  );
+}
+
+/** 비율이 고정된 사진 프레임 */
+export function PhotoFrame({ name, ratio = "aspect-[4/3]", alt, className = "" }: { name: PhotoKey; ratio?: string; alt?: string; className?: string }) {
+  return (
+    <div className={`relative overflow-hidden rounded-2xl ${ratio} ${className}`}>
+      <Photo name={name} alt={alt} />
     </div>
   );
 }

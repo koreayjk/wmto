@@ -56,7 +56,7 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
       <div className="mt-14 border-t border-line pt-14">
         <h2 className="display text-3xl">{m.thanks.title}</h2>
         <p className="mt-4 text-lg text-soft">{m.thanks.body}</p>
-        <Link href="/" className="mt-8 inline-block border border-ink/30 px-6 py-3 hover:bg-ink hover:text-paper">
+        <Link href="/" className="mt-8 inline-block border border-ink/30 px-6 py-3 hover:bg-ink hover:text-paper rounded-lg">
           {m.thanks.back}
         </Link>
       </div>
@@ -146,7 +146,7 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
 
       <button
         disabled={pending}
-        className="w-full bg-clay py-4 font-medium text-white transition-colors hover:bg-[#954220] disabled:opacity-60 sm:w-auto sm:px-14"
+        className="w-full bg-clay py-4 font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:opacity-60 sm:w-auto sm:px-14 rounded-lg"
       >
         {pending ? m.submitting : m.submit}
       </button>

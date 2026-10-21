@@ -21,7 +21,7 @@ export default async function More() {
           <li key={l.href}>
             <Link href={l.href} className="flex items-center justify-between gap-4 py-5">
               <span>
-                <span className="block font-serif text-lg font-semibold">{l.name}</span>
+                <span className="block font-display text-lg font-semibold">{l.name}</span>
                 <span className="text-sm text-soft">{l.text}</span>
               </span>
               <span aria-hidden className="text-clay">→</span>

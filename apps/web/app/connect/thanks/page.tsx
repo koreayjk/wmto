@@ -58,7 +58,7 @@ export default async function Thanks() {
                 </select>
               </label>
               <label className="block"><span className={labelCls}>{t.body}</span><textarea name="body" required rows={6} maxLength={5000} className="field" /></label>
-              <button className="w-full bg-clay py-3.5 font-medium text-white">{t.send}</button>
+              <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.send}</button>
             </form>
           )}
         </Card>
@@ -70,8 +70,8 @@ export default async function Thanks() {
           {received.length === 0 && <p className="text-soft">{t.empty}</p>}
           {received.map((l) => (
             <Card key={l.id}>
-              <p className="text-xs text-clay">{name.get(l.sender_id) ?? "—"} · {fmtDate(l.created_at)}{unread.has(l.id) && <b className="ml-2 text-white"><span className="bg-clay px-1.5 py-0.5">{t.newBadge}</span></b>}</p>
-              <p className="mt-2 whitespace-pre-line font-serif text-lg leading-relaxed">{l.body}</p>
+              <p className="text-xs text-clay">{name.get(l.sender_id) ?? "-"} · {fmtDate(l.created_at)}{unread.has(l.id) && <b className="ml-2 text-white"><span className="bg-clay px-1.5 py-0.5 rounded-lg">{t.newBadge}</span></b>}</p>
+              <p className="mt-2 whitespace-pre-line font-display text-lg leading-relaxed">{l.body}</p>
             </Card>
           ))}
         </>
@@ -83,7 +83,7 @@ export default async function Thanks() {
           {sent.length === 0 && <p className="text-soft">{t.empty}</p>}
           {sent.map((l) => (
             <Card key={l.id}>
-              <p className="text-xs text-clay">{name.get(l.recipient_id) ?? "—"} · {fmtDate(l.created_at)}</p>
+              <p className="text-xs text-clay">{name.get(l.recipient_id) ?? "-"} · {fmtDate(l.created_at)}</p>
               <p className="mt-2 whitespace-pre-line text-soft">{l.body}</p>
             </Card>
           ))}

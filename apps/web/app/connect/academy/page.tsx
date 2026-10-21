@@ -22,10 +22,10 @@ export default async function Academy() {
           <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-clay">{cat}</h2>
           {vids.map((v) => (
             <Card key={v.id}>
-              <p className="font-serif text-lg font-semibold">{v.title}</p>
+              <p className="font-display text-lg font-semibold">{v.title}</p>
               <p className="text-xs text-soft">{fmtDate(v.published_at)}</p>
               {v.description && <p className="mt-2 text-soft">{v.description}</p>}
-              <a href={v.video_url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white">{t.watch}</a>
+              <a href={v.video_url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">{t.watch}</a>
             </Card>
           ))}
         </section>

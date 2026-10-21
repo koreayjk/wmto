@@ -39,7 +39,7 @@ export default async function AdminEvents() {
   const { data } = await supabase.from("events").select("*").order("start_at", { ascending: false }).limit(100);
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">{getMessages().admin.events}</h1>
+      <h1 className="font-display text-2xl font-semibold">{getMessages().admin.events}</h1>
       <form action={addEvent} className="mt-6 grid gap-3 md:grid-cols-2">
         <select name="type" required className="field">
           {eventTypes.map((e) => <option key={e} value={e}>{t[e]}</option>)}
@@ -50,7 +50,7 @@ export default async function AdminEvents() {
         <input name="location" placeholder="장소" className="field" />
         <select name="meeting_provider" className="field"><option value="zoom">Zoom</option><option value="bbb">BigBlueButton</option></select>
         <input name="meeting_url" type="url" placeholder="회의 링크 (회원에게만 공개)" className="field md:col-span-2" />
-        <button className="bg-clay py-3 font-medium text-white md:col-span-2">일정 등록</button>
+        <button className="bg-clay py-3 font-medium text-white md:col-span-2 rounded-lg">일정 등록</button>
       </form>
       <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
         {(data ?? []).map((e) => (

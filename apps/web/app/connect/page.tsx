@@ -23,11 +23,11 @@ export default async function ConnectHome() {
     <Card title={m.nextEvent}>
       {next ? (
         <>
-          <p className="font-serif text-lg font-semibold">{next.title}</p>
+          <p className="font-display text-lg font-semibold">{next.title}</p>
           <p className="text-sm text-soft">{fmtDateTime(next.start_at)}</p>
           {next.meeting_url && (
             <a href={next.meeting_url} target="_blank" rel="noopener noreferrer"
-              className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white">
+              className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">
               {m.join}
             </a>
           )}
@@ -58,7 +58,7 @@ export default async function ConnectHome() {
             <ul className="space-y-2">
               {ms!.map((x) => (
                 <li key={x.id}>
-                  <span className="font-serif text-lg font-semibold">{nameOf.get(x.mentor_id) ?? "—"}</span>
+                  <span className="font-display text-lg font-semibold">{nameOf.get(x.mentor_id) ?? "-"}</span>
                   <span className="ml-2 text-sm text-soft">{m.contribution[x.contribution_type as keyof typeof m.contribution]}</span>
                 </li>
               ))}
@@ -71,7 +71,7 @@ export default async function ConnectHome() {
         <Card>
           <p className={rep ? "text-soft" : "font-medium"}>{rep ? m.reportDone : m.reportDue}</p>
           {!rep && (
-            <Link href="/connect/report" className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white">
+            <Link href="/connect/report" className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">
               {m.writeReport}
             </Link>
           )}
@@ -123,8 +123,8 @@ export default async function ConnectHome() {
                 const st = p?.stage as keyof typeof m.stageNames | undefined;
                 return (
                   <li key={x.id} className="py-4 first:pt-0 last:pb-0">
-                    <p className="font-serif text-lg font-semibold">
-                      {name.get(x.partner_id) ?? "—"}
+                    <p className="font-display text-lg font-semibold">
+                      {name.get(x.partner_id) ?? "-"}
                       {st && <span className="ml-2 text-xs font-normal text-clay">{m.stageNames[st]}</span>}
                     </p>
                     <p className="text-sm text-soft">

@@ -36,7 +36,7 @@ export default async function AdminAcademy() {
   const { data } = await supabase.from("academy_videos").select("*").order("published_at", { ascending: false }).limit(200);
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">아카데미</h1>
+      <h1 className="font-display text-2xl font-semibold">아카데미</h1>
       <form action={add} className="mt-6 grid gap-3 md:grid-cols-2">
         <input name="title" required placeholder="제목" className="field md:col-span-2" />
         <input name="video_url" type="url" required placeholder="영상 링크 (https://)" className="field md:col-span-2" />
@@ -47,7 +47,7 @@ export default async function AdminAcademy() {
           <legend className="mb-1 text-sm text-soft">공개 대상 (선택하지 않으면 모두)</legend>
           {roles.map((r) => <label key={r} className="flex items-center gap-2"><input type="checkbox" name="for_roles" value={r} /> {roleLabel[r]}</label>)}
         </fieldset>
-        <button className="bg-clay py-3 font-medium text-white md:col-span-2">영상 등록</button>
+        <button className="bg-clay py-3 font-medium text-white md:col-span-2 rounded-lg">영상 등록</button>
       </form>
       <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
         {(data ?? []).map((v) => (

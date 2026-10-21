@@ -19,7 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-white text-[15px]">
       <header className="flex flex-wrap items-center gap-6 border-b border-line px-6 py-4">
-        <b className="font-serif text-lg">WMTO {m.title}</b>
+        <b className="font-display text-lg">WMTO {m.title}</b>
         <nav className="flex gap-5 text-soft">
           <Link href="/admin" className="hover:text-ink">{m.applications}</Link>
           <Link href="/admin/members" className="hover:text-ink">회원</Link>

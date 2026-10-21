@@ -50,13 +50,13 @@ export default async function Growth() {
           {keys.map((k) => (
             <li key={k} className="flex justify-between py-2.5">
               <span>{g.labels[k]}</span>
-              <span className="font-serif font-semibold">{counts[k]}</span>
+              <span className="font-display font-semibold">{counts[k]}</span>
             </li>
           ))}
         </ul>
         <p className="mt-4 flex justify-between border-t border-line pt-4">
           <span className="text-soft">{g.scoreLabel}</span>
-          <span className="font-serif text-2xl font-semibold">{activityScore(counts)}</span>
+          <span className="font-display text-2xl font-semibold">{activityScore(counts)}</span>
         </p>
         <p className="mt-2 text-xs text-soft">{g.note}</p>
       </Card>
@@ -67,7 +67,7 @@ export default async function Growth() {
           <ul className="space-y-2">
             {hist.data!.map((h) => (
               <li key={h.id}>
-                <span className="font-serif font-semibold">{names[h.to_stage as keyof typeof names] ?? h.to_stage}</span>
+                <span className="font-display font-semibold">{names[h.to_stage as keyof typeof names] ?? h.to_stage}</span>
                 <span className="ml-2 text-sm text-soft">{fmtDate(h.created_at)}</span>
               </li>
             ))}

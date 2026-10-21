@@ -39,7 +39,7 @@ export const ko = {
       eyebrow: "WMTO 자립선교 비즈니스 네트워크",
       title: "크리스천 사업가가 가르치고,\n선교사가 일어섭니다",
       sub: "당신의 사업 경험이 선교사의 자립이 되고, 그 자립이 멈추지 않는 선교가 됩니다.",
-      verse: "More Blessed to Give — 주는 것이 받는 것보다 복이 있다 (행 20:35)",
+      verse: "More Blessed to Give - 주는 것이 받는 것보다 복이 있다 (행 20:35)",
       buttons: [
         { label: "사업가이신가요?", href: "/mentor" },
         { label: "선교사이신가요?", href: "/partner" },
@@ -147,7 +147,7 @@ export const ko = {
   },
 
   about: {
-    top: { title: "More Blessed to Give", sub: "주는 것이 받는 것보다 복이 있다 — 사도행전 20:35" },
+    top: { title: "More Blessed to Give", sub: "주는 것이 받는 것보다 복이 있다 - 사도행전 20:35" },
     who: {
       title: "크리스천 사업가들이 세운 자립 선교 네트워크",
       body: "WMTO(World Mission Tabernacle Organization)는 하나님께 받은 사업의 지혜와 경험을 선교지에 흘려보내기 위해 모인 크리스천 사업가, 선교사, 후원자들의 공동체입니다.",
@@ -318,7 +318,7 @@ export const ko = {
       title: "부담은 최소로, 책임은 함께",
       items: [
         { name: "연회비", text: "10만 원 (후원자 대납 가능)" },
-        { name: "캠프 본인 부담", text: "25~40만 원 — 항공료·숙식비 나머지는 후원으로 지원" },
+        { name: "캠프 본인 부담", text: "25~40만 원 - 항공료·숙식비 나머지는 후원으로 지원" },
         { name: "창업 자금", text: "순환 기금 100만~500만 원 무이자 (거치 6~12개월, 매출에 따라 상환)" },
       ],
       note: "사업이 어려워지면 사정을 살펴 상환을 면제할 수 있습니다",

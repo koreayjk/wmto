@@ -36,7 +36,7 @@ export default async function AdminApplications({ searchParams }: { searchParams
 
   return (
     <>
-      <h1 className="font-serif text-2xl font-semibold">{getMessages().admin.applications}</h1>
+      <h1 className="font-display text-2xl font-semibold">{getMessages().admin.applications}</h1>
       <div className="mt-4 flex gap-3 text-sm">
         <a href="/admin" className="underline">전체</a>
         {applicationStatuses.map((s) => (
@@ -64,7 +64,7 @@ export default async function AdminApplications({ searchParams }: { searchParams
               <select name="status" defaultValue={r.status} className="border border-black/20 px-2 py-1">
                 {applicationStatuses.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}
               </select>
-              <button className="bg-ink px-3 py-1 text-white">저장</button>
+              <button className="bg-ink px-3 py-1 text-white rounded-lg">저장</button>
             </form>
           </article>
         ))}

@@ -42,11 +42,11 @@ export default async function Events() {
                   <p className="mt-1 text-sm text-soft">{fmt.format(new Date(e.start_at))}</p>
                 </div>
                 <div>
-                  <h2 className="font-serif text-xl font-semibold md:text-2xl">{e.title}</h2>
+                  <h2 className="font-display text-xl font-semibold md:text-2xl">{e.title}</h2>
                   {e.location && <p className="text-sm text-soft">{e.location}</p>}
                 </div>
                 {e.type === "online" && (
-                  <Link href="/apply?type=observe" className="bg-clay px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#954220]">
+                  <Link href="/apply?type=observe" className="bg-clay px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[var(--accent-hover)] rounded-lg">
                     {m.observe}
                   </Link>
                 )}

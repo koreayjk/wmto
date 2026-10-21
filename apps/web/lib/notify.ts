@@ -20,7 +20,7 @@ export async function notifyAdmin(input: ApplicationInput, applicationId: string
       body: JSON.stringify({
         from,
         to,
-        subject: `[WMTO] 새 신청: ${label} — ${input.name}`,
+        subject: `[WMTO] 새 신청: ${label} - ${input.name}`,
         html: `<p><b>${esc(label)}</b></p>
 <p>${esc(input.name)} (${esc(input.email)})</p>
 <p>${esc(input.message ?? "")}</p>

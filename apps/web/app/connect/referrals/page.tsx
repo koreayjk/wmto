@@ -47,8 +47,8 @@ export default async function Referrals() {
   const all = (refs ?? []) as Ref[];
   const received = all.filter((r) => r.receiver_id === me.id);
   const sent = all.filter((r) => r.giver_id === me.id);
-  // 보낸 사람 이름은 members RLS 로는 보이지 않으므로 디렉토리에서 찾습니다. 없으면 "—".
-  const who = (id: string) => name.get(id) ?? "—";
+  // 보낸 사람 이름은 members RLS 로는 보이지 않으므로 디렉토리에서 찾습니다. 없으면 "-".
+  const who = (id: string) => name.get(id) ?? "-";
 
   return (
     <div className="space-y-4">
@@ -68,7 +68,7 @@ export default async function Referrals() {
             <label className="block"><span className={labelCls}>{t.client}</span><input name="client_name" required maxLength={200} className="field" /></label>
             <label className="block"><span className={labelCls}>{t.contact}</span><input name="client_contact" maxLength={200} className="field" /></label>
             <label className="block"><span className={labelCls}>{t.note}</span><textarea name="note" rows={3} maxLength={3000} className="field" /></label>
-            <button className="w-full bg-clay py-3.5 font-medium text-white">{t.send}</button>
+            <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.send}</button>
           </form>
         )}
       </Card>
@@ -78,15 +78,15 @@ export default async function Referrals() {
       {received.map((r) => (
         <Card key={r.id}>
           <p className="text-xs text-clay">{t.from} {who(r.giver_id)} · {fmtDate(r.created_at)}</p>
-          <p className="mt-1 font-serif text-lg font-semibold">{r.client_name}</p>
+          <p className="mt-1 font-display text-lg font-semibold">{r.client_name}</p>
           {r.client_contact && <p className="text-sm text-soft">{r.client_contact}</p>}
           {r.note && <p className="mt-2 whitespace-pre-line text-soft">{r.note}</p>}
           <form action={setStatus} className="mt-3 flex items-center gap-2">
             <input type="hidden" name="id" value={r.id} />
-            <select name="status" defaultValue={r.status} className="border border-line bg-white px-2 py-1.5 text-sm" aria-label={t.update}>
+            <select name="status" defaultValue={r.status} className="border border-line bg-white px-2 py-1.5 text-sm rounded-lg" aria-label={t.update}>
               {STATUSES.map((s) => <option key={s} value={s}>{t.status[s]}</option>)}
             </select>
-            <button className="bg-ink px-3 py-1.5 text-sm text-white">{t.update}</button>
+            <button className="bg-ink px-3 py-1.5 text-sm text-white rounded-lg">{t.update}</button>
           </form>
         </Card>
       ))}
@@ -96,7 +96,7 @@ export default async function Referrals() {
       {sent.map((r) => (
         <Card key={r.id}>
           <p className="flex justify-between text-xs text-clay"><span>{t.to} {who(r.receiver_id)} · {fmtDate(r.created_at)}</span><span>{t.status[r.status]}</span></p>
-          <p className="mt-1 font-serif text-lg font-semibold">{r.client_name}</p>
+          <p className="mt-1 font-display text-lg font-semibold">{r.client_name}</p>
           {r.note && <p className="mt-2 whitespace-pre-line text-soft">{r.note}</p>}
         </Card>
       ))}
