@@ -65,18 +65,18 @@ export function Header() {
       {/* 전체 화면 메뉴: 닫힌 동안은 포커스되지 않도록 invisible */}
       <div
         id="mobile-nav"
-        className={`fixed inset-0 z-30 bg-white/[0.97] backdrop-blur-2xl transition-[opacity,visibility] duration-500 lg:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-30 bg-white transition-[opacity,visibility] duration-300 motion-reduce:transition-none lg:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}
         aria-hidden={!open}
       >
         <nav className="flex h-full flex-col justify-center px-8 pb-10 pt-24" aria-label="모바일 메뉴">
           <ul className="space-y-1">
             {m.nav.items.map((i, n) => (
-              <li key={i.href} className="overflow-hidden">
+              <li key={i.href}>
                 <Link
                   href={i.href}
                   tabIndex={open ? 0 : -1}
-                  style={{ transitionDelay: open ? `${120 + n * 55}ms` : "0ms" }}
-                  className={`block py-2.5 text-[2rem] font-bold tracking-tight transition duration-700 ${EASE} ${open ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+                  style={{ transitionDelay: open ? `${60 + n * 35}ms` : "0ms" }}
+                  className={`block py-2.5 text-[2rem] font-bold leading-snug tracking-tight transition duration-500 motion-reduce:transition-none ${EASE} ${open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
                 >
                   {i.label}
                 </Link>
@@ -86,8 +86,8 @@ export function Header() {
           <Link
             href={m.nav.cta.href}
             tabIndex={open ? 0 : -1}
-            style={{ transitionDelay: open ? "520ms" : "0ms" }}
-            className={`mt-10 block rounded-full bg-accent px-6 py-4 text-center font-semibold text-white transition duration-700 ${EASE} ${open ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
+            style={{ transitionDelay: open ? "340ms" : "0ms" }}
+            className={`mt-10 block rounded-full bg-accent px-6 py-4 text-center font-semibold text-white transition duration-500 motion-reduce:transition-none ${EASE} ${open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
           >
             {m.nav.cta.label}
           </Link>
