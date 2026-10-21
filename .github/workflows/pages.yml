@@ -1,0 +1,30 @@
+name: Deploy preview to GitHub Pages
+
+# 수동 실행 전용: Actions 탭에서 "Run workflow" 를 누르면 site-preview/ 를 게시합니다.
+# 저장소가 공개(public)이거나 유료 플랜이어야 하고, Settings > Pages > Source 가 "GitHub Actions" 여야 합니다.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-preview
+      - id: deployment
+        uses: actions/deploy-pages@v4
