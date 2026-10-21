@@ -1,6 +1,6 @@
 import { getMessages } from "@/lib/i18n";
 import { Button, FinalCta, Rows, Section, Split, Steps, TextLink } from "@/components/ui";
-import { PhotoFrame } from "@/components/Photo";
+import { Photo, PhotoFrame } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
 import { Plus } from "@phosphor-icons/react/dist/ssr";
 
@@ -10,17 +10,18 @@ export default function Home() {
   const [primary, ...others] = h.hero.buttons;
   return (
     <>
-      {/* 1. 첫 화면: 한 장면에 메시지와 행동이 모두 보이도록 */}
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-10 md:min-h-[calc(100dvh-4rem)] md:grid-cols-[1.25fr_0.75fr] md:gap-14 md:py-12">
-        <div>
-          <h1 className="display rise text-[2rem] sm:text-[2.6rem] lg:text-[3.1rem]">{h.hero.title}</h1>
-          <p className="rise rise-1 mt-6 max-w-xl text-lg text-soft md:text-xl">{h.hero.sub}</p>
+      {/* 1. 첫 화면: 전체 사진 배경 + 글. 사진 위 가독성은 청록빛 어두운 막으로 확보 */}
+      <section className="relative isolate flex min-h-[calc(100dvh-4rem)] items-end overflow-hidden text-white md:items-center">
+        <Photo name="hero" alt="필리핀 교회에서 사람들이 손을 들고 함께 예배하는 모습" priority />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/55 to-[#06201b]/25 md:bg-gradient-to-r md:from-[#06201b]/90 md:via-[#06201b]/65 md:to-[#06201b]/10" aria-hidden />
+        <div className="relative mx-auto w-full max-w-6xl px-6 pb-14 pt-24 md:py-24">
+          <h1 className="display rise max-w-3xl text-[2.1rem] sm:text-[2.75rem] lg:text-[3.6rem]">{h.hero.title}</h1>
+          <p className="rise rise-1 mt-6 max-w-xl text-lg text-white/90 md:text-xl">{h.hero.sub}</p>
           <div className="rise rise-2 mt-9 flex flex-wrap gap-3">
-            <Button href={primary.href}>{primary.label}</Button>
-            {others.map((b) => <Button key={b.href} href={b.href} variant="ghost">{b.label}</Button>)}
+            <Button href={primary.href} variant="onAccent">{primary.label}</Button>
+            {others.map((b) => <Button key={b.href} href={b.href} variant="onAccentGhost">{b.label}</Button>)}
           </div>
         </div>
-        <PhotoFrame name="hero" ratio="aspect-[4/3] md:aspect-[4/5]" className="rise rise-2 md:max-h-[34rem] md:w-full" />
       </section>
 
       {/* 2. 문제: 한 문장에 집중 */}
@@ -42,7 +43,7 @@ export default function Home() {
             ][i];
             return (
               <div key={it.name} className={`flex min-h-48 flex-col justify-end rounded-2xl p-7 md:p-9 ${style}`}>
-                <p className={`text-sm font-semibold ${i === 0 ? "text-soft" : "text-accent"}`}>{it.en}</p>
+                <p className={`text-sm font-semibold ${i === 0 ? "text-white/85" : "text-accent"}`}>{it.en}</p>
                 <h3 className={`mt-1 font-bold tracking-tight ${i === 0 ? "text-3xl md:text-4xl" : "text-2xl"}`}>{it.name}</h3>
                 <p className={`mt-3 ${i === 0 ? "text-lg text-white/90" : "text-soft"}`}>{it.text}</p>
               </div>

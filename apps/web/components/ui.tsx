@@ -150,7 +150,7 @@ export function FinalCta({ title, body, buttons, verse }: { photo?: PhotoKey; ti
     <section className="bg-paper px-6 pb-20 md:pb-28">
       <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-2xl bg-accent p-8 text-white md:grid-cols-[1.3fr_1fr] md:gap-14 md:p-16">
         <div>
-          {verse && <p className="mb-5 text-sm text-soft">{verse}</p>}
+          {verse && <p className="mb-5 text-sm text-white/85">{verse}</p>}
           <Reveal as="h2" className="display text-[1.75rem] sm:text-4xl md:text-[2.5rem]">{title}</Reveal>
           {body && <p className="mt-5 max-w-xl text-lg text-white/85">{body}</p>}
         </div>
