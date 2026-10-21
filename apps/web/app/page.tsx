@@ -1,5 +1,8 @@
 import { getMessages } from "@/lib/i18n";
-import { Button, FinalCta, Rows, Section, Split, Steps, TextLink } from "@/components/ui";
+import { Button, FinalCta, Rows, Section, TextLink } from "@/components/ui";
+import { ValuesMarquee } from "@/components/Marquee";
+import { StoryScroll } from "@/components/StoryScroll";
+import { photos } from "@/lib/photos";
 import { Bezel } from "@/components/Bezel";
 import { Photo, PhotoFrame } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
@@ -25,6 +28,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 가치 띠 */}
+      <ValuesMarquee items={m.about.values.items} />
+
       {/* 2. 문제: 한 문장에 집중 */}
       <section className="bg-tint py-28 md:py-44">
         <div className="mx-auto max-w-4xl px-6">
@@ -33,21 +39,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. 세 사람: 크기가 다른 세 면(비대칭 벤토) */}
+      {/* 3. 세 사람: 크기가 다른 세 면, 사진을 바탕으로 */}
       <Section title={h.solution.title}>
         <div className="grid gap-4 md:grid-cols-5 md:grid-rows-2">
           {h.solution.items.map((it, i) => {
             const cfg = [
-              { span: "md:col-span-3 md:row-span-2", inner: "bg-accent text-white", label: "text-white/85", text: "text-lg text-white/90", name: "text-3xl md:text-4xl" },
-              { span: "md:col-span-2", inner: "bg-tint text-ink", label: "text-accent", text: "text-soft", name: "text-2xl" },
-              { span: "md:col-span-2", inner: "bg-white text-ink", label: "text-accent", text: "text-soft", name: "text-2xl" },
+              { span: "md:col-span-3 md:row-span-2", photo: "mentor" as const, min: "min-h-80 md:min-h-[26rem]", name: "text-3xl md:text-4xl", text: "text-lg" },
+              { span: "md:col-span-2", photo: "sponsor" as const, min: "min-h-60", name: "text-2xl", text: "" },
+              { span: "md:col-span-2", photo: "partner" as const, min: "min-h-60", name: "text-2xl", text: "" },
             ][i];
             return (
               <Reveal key={it.name} delay={(i + 1) as 1 | 2 | 3} className={cfg.span}>
-                <Bezel className="h-full" inner={cfg.inner} innerClassName="flex min-h-52 flex-col justify-end p-7 md:p-10">
-                  <p className={`text-sm font-semibold ${cfg.label}`}>{it.en}</p>
-                  <h3 className={`mt-1 font-bold tracking-tight ${cfg.name}`}>{it.name}</h3>
-                  <p className={`mt-3 ${cfg.text}`}>{it.text}</p>
+                <Bezel className="h-full" inner="bg-ink" innerClassName={`relative isolate flex flex-col justify-end p-7 text-white md:p-10 ${cfg.min}`}>
+                  <Photo name={cfg.photo} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/40 to-[#06201b]/5" aria-hidden />
+                  <div className="relative">
+                    <p className="text-sm font-semibold text-white/85">{it.en}</p>
+                    <h3 className={`mt-1 font-bold tracking-tight ${cfg.name}`}>{it.name}</h3>
+                    <p className={`mt-3 text-white/90 ${cfg.text}`}>{it.text}</p>
+                  </div>
                 </Bezel>
               </Reveal>
             );
@@ -55,35 +65,48 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 4. 사례와 흐름 */}
-      <Split photo="how" title={h.how.title} body={h.how.body} tone="deep">
-        <p className="text-sm text-soft">* {h.how.note}</p>
-      </Split>
-      <section className="bg-deep pb-24 md:pb-36">
-        <div className="mx-auto max-w-6xl px-6"><Steps items={h.how.flow} /></div>
-      </section>
+      {/* 4. 사례와 흐름: 스크롤하면 사진이 바뀌는 단계 이야기 */}
+      <Section title={h.how.title} sub={h.how.body} tone="deep">
+        <p className="-mt-6 mb-16 text-sm text-soft md:mb-20">* {h.how.note}</p>
+        <StoryScroll
+          steps={h.how.steps.map((st, i) => ({ ...st, src: photos[(["story1", "camp", "how", "story4", "story5"] as const)[i]] }))}
+        />
+      </Section>
 
-      {/* 5. 캠프: 핵심 사실을 옆에 */}
+      {/* 5. 캠프: 사진 위에 정보 카드가 겹친다 */}
       <Section title={h.camp.title}>
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:gap-16">
-          <div>
+        <div className="grid items-center gap-10 md:grid-cols-12 md:gap-16">
+          <div className="md:col-span-5">
             <p className="max-w-xl text-lg leading-[1.9] text-soft">{h.camp.body}</p>
             <div className="mt-8"><TextLink href={h.camp.cta.href}>{h.camp.cta.label}</TextLink></div>
           </div>
-          <Reveal delay={1}>
-            <Bezel>
-              <dl className="divide-y divide-line px-7 md:px-9">
-                {m.camp.overview.items.slice(0, 3).map((f) => (
-                  <div key={f.name} className="py-6">
-                    <dt className="text-sm font-semibold text-accent">{f.name}</dt>
-                    <dd className="mt-0.5 font-medium">{f.text}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Bezel>
-          </Reveal>
+          <div className="relative md:col-span-7 md:pb-12">
+            <PhotoFrame name="train" ratio="aspect-[4/3]" />
+            <Reveal delay={1} className="mt-4 md:absolute md:-bottom-0 md:-left-12 md:mt-0 md:w-[19rem]">
+              <Bezel className="shadow-[0_30px_60px_-30px_rgba(6,32,27,0.45)]">
+                <dl className="divide-y divide-line px-6 py-1">
+                  {m.camp.overview.items.slice(0, 3).map((f) => (
+                    <div key={f.name} className="py-4">
+                      <dt className="text-sm font-semibold text-accent">{f.name}</dt>
+                      <dd className="mt-0.5 font-medium">{f.text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Bezel>
+            </Reveal>
+          </div>
         </div>
       </Section>
+
+      {/* 말씀: 사진 전체 배경 */}
+      <section className="relative isolate flex min-h-[80svh] items-center overflow-hidden text-white">
+        <Photo name="about" />
+        <div className="absolute inset-0 bg-[#06201b]/65" aria-hidden />
+        <div className="relative mx-auto max-w-4xl px-6 py-28 text-center">
+          <Reveal as="p" className="display text-[2rem] sm:text-5xl md:text-6xl">&ldquo;{m.verse.en}&rdquo;</Reveal>
+          <Reveal as="p" delay={1} className="mt-8 text-lg text-white/90">{m.verse.ko} ({m.verse.ref})</Reveal>
+        </div>
+      </section>
 
       {/* 6. 순환 기금 */}
       <Section title={h.fund.title} tone="deep">
@@ -99,10 +122,10 @@ export default function Home() {
       {/* 7. 사업가 / 선교사: 이중 테두리 패널 */}
       <section className="bg-paper py-24 md:py-36">
         <div className="mx-auto grid max-w-6xl gap-6 px-6 md:grid-cols-2">
-          {([{ k: "mentor" as const }, { k: "partner" as const }]).map(({ k }, i) => (
+          {([{ k: "mentor" as const, ph: "mentorPanel" as const }, { k: "partner" as const, ph: "partnerPanel" as const }]).map(({ k, ph }, i) => (
             <Reveal key={k} delay={(i + 1) as 1 | 2 | 3}>
               <Bezel className="h-full" innerClassName="flex h-full flex-col p-5 md:p-7">
-                <PhotoFrame name={k} ratio="aspect-[16/10]" />
+                <PhotoFrame name={ph} ratio="aspect-[16/10]" />
                 <div className="flex flex-1 flex-col px-1.5 pb-2 pt-8 md:px-2">
                   <h2 className="display text-[1.5rem] md:text-[1.75rem]">{h[k].title}</h2>
                   <p className="mt-4 text-soft">{h[k].body}</p>
@@ -119,7 +142,7 @@ export default function Home() {
         <div className="grid gap-12 md:grid-cols-[1.1fr_0.9fr] md:gap-20">
           <Rows items={h.trust.items} />
           <div className="space-y-5">
-            <PhotoFrame name="base" />
+            {photos.base && <PhotoFrame name="base" alt="필리핀 선교본부" />}
             <div className="rounded-[1.25rem] border border-dashed border-ink/25 p-6">
               <p className="font-bold">{h.trust.board}</p>
               <p className="mt-1 text-sm text-soft">{h.trust.boardPlaceholder}</p>
@@ -149,7 +172,7 @@ export default function Home() {
       </section>
 
       {/* 10. 마지막 */}
-      <FinalCta title={h.final.title} body={h.final.body} buttons={h.final.buttons} verse={`"${m.verse.en}" - ${m.verse.refEn}`} />
+      <FinalCta title={h.final.title} body={h.final.body} buttons={h.final.buttons} />
     </>
   );
 }

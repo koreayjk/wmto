@@ -14,5 +14,10 @@
 | 순환 기금 | fund.jpg | alex jhonson | https://unsplash.com/photos/sewing-machine-and-hands-at-work-5zg-ZDesJAk |
 | 후원자 | sponsor.jpg | Candes J | https://unsplash.com/photos/farmer-holding-bucket-of-ripe-coffee-cherries-we5u09a0AxA |
 | About | about.jpg | George Dagerotip | https://unsplash.com/photos/a-man-standing-in-front-of-a-pile-of-coffee-beans-DSpl4Dhwglo |
-
+| 이야기 1단계(강의) | story1.jpg | Vitaly Gariev | https://unsplash.com/photos/HIheRKI9mTs |
+| 이야기 4단계(자립) | story4.jpg | Matthew Stephenson | https://unsplash.com/photos/MKVD9a9Pf5w |
+| 이야기 5단계(다음 세대) | story5.jpg | Avel Chuklanov | https://unsplash.com/photos/Ks4t8IK8Kgw |
+| 캠프 소개(주방 훈련) | train.jpg | Skytech Aviation | https://unsplash.com/photos/rX8aCCd14ws |
+| 사업가 패널 | mentor-panel.jpg | Maite Paternain | https://unsplash.com/photos/SEb14_nBjc4 |
+| 선교사 패널 | partner-panel.jpg | Collab Media | https://unsplash.com/photos/a-woman-using-a-sewing-machine-to-sew-clothes-upKXvfgKABY |
 필리핀 선교본부 시설 사진(`base`)은 아직 자리표시입니다. 실제 시설 사진이 필요합니다.

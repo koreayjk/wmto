@@ -86,6 +86,15 @@ p { text-wrap: pretty; }
     #eef4f2;
 }
 
+/* 핵심 가치 띠: 천천히 흐르고, 올리면 멈춘다. 움직임 줄이기 설정에서는 정지 */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 48s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; width: auto; flex-wrap: wrap; }
+  .marquee-dup { display: none; }
+}
+
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
 details[open] .plus { transform: rotate(45deg); }
