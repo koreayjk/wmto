@@ -18,13 +18,13 @@ export function Footer() {
             <p className="mt-2 text-sm">{m.site.name}</p>
             <p className="text-sm">{m.site.footerLine}</p>
           </div>
-          <ul className="grid grid-cols-2 gap-x-14 gap-y-2.5 text-sm">
+          <ul className="grid grid-cols-2 gap-x-10 text-sm">
             {m.nav.items.map((i) => (
-              <li key={i.href}><Link href={i.href} className="hover:text-accent">{i.label}</Link></li>
+              <li key={i.href}><Link href={i.href} className="inline-block py-2 hover:text-accent">{i.label}</Link></li>
             ))}
-            <li><Link href="/fund" className="hover:text-accent">순환 기금</Link></li>
-            <li><Link href="/apply?type=contact" className="hover:text-accent">문의</Link></li>
-            <li><Link href="/privacy" className="hover:text-accent">{m.site.privacy}</Link></li>
+            <li><Link href="/fund" className="inline-block py-2 hover:text-accent">순환 기금</Link></li>
+            <li><Link href="/apply?type=contact" className="inline-block py-2 hover:text-accent">문의</Link></li>
+            <li><Link href="/privacy" className="inline-block py-2 hover:text-accent">{m.site.privacy}</Link></li>
           </ul>
         </div>
         <p className="mt-12 border-t border-line pt-6 text-sm">

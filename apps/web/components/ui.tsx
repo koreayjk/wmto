@@ -19,7 +19,7 @@ export function Button({ href, children, variant = "solid" }: { href: string; ch
   return (
     <Link
       href={href}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-[15px] font-semibold tracking-tight whitespace-nowrap transition duration-200 active:scale-[0.98] ${styles[v]}`}
+      className={`inline-flex items-center justify-center gap-2 max-w-full rounded-lg px-6 py-3.5 text-center text-[15px] font-semibold tracking-tight transition duration-200 active:scale-[0.98] ${styles[v]}`}
     >
       {children}
     </Link>

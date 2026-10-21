@@ -25,8 +25,8 @@ function Checks({ name, values, labels }: { name: string; values: readonly strin
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-2">
       {values.map((v) => (
-        <label key={v} className="flex items-center gap-2">
-          <input type="checkbox" name={name} value={v} className="h-4 w-4 accent-[var(--clay)]" />
+        <label key={v} className="flex items-center gap-2.5 py-2">
+          <input type="checkbox" name={name} value={v} className="h-5 w-5 accent-[var(--clay)]" />
           {labels[v]}
         </label>
       ))}
@@ -134,7 +134,7 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
 
       <div className="border-t border-line pt-6">
         <label className="flex items-start gap-3">
-          <input type="checkbox" name="consent" required className="mt-1.5 h-4 w-4 accent-[var(--clay)]" />
+          <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 shrink-0 accent-[var(--clay)]" />
           <span>
             {m.consent}
             <span className="mt-1 block text-sm text-soft">{m.consentHelp}</span>

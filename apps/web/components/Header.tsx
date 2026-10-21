@@ -42,7 +42,7 @@ export function Header() {
           </Link>
         </nav>
         <button
-          className="-mr-2 rounded-lg p-2 lg:hidden"
+          className="-mr-2.5 rounded-lg p-2.5 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? m.nav.close : m.nav.menu}
