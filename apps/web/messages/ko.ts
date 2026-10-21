@@ -205,7 +205,7 @@ export const ko = {
     top: { title: "More Blessed to Give", sub: "주는 것이 받는 것보다 복이 있다 - 사도행전 20:35" },
     who: {
       title: "크리스천 사업가들이 세운 자립 선교 네트워크",
-      body: "WMTO(World Mission Tabernacle Organization)는 하나님께 받은 사업의 지혜와 경험을 선교지에 흘려보내기 위해 모인 크리스천 사업가, 선교사, 후원자들의 공동체입니다.",
+      body: "WMTO(Work Mission Tentmaking Organization)는 하나님께 받은 사업의 지혜와 경험을 선교지에 흘려보내기 위해 모인 크리스천 사업가, 선교사, 후원자들의 공동체입니다.",
     },
     vision: {
       title: "모든 선교사가 스스로 일어서는 선교",

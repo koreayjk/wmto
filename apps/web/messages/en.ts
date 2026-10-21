@@ -203,7 +203,7 @@ export const en: Messages = {
     top: { title: "More Blessed to Give", sub: "It is more blessed to give than to receive. Acts 20:35" },
     who: {
       title: "A self-sustaining mission network built by Christian business owners",
-      body: "WMTO (World Mission Tabernacle Organization) is a community of Christian business owners, missionaries, and sponsors who gather to pass the business wisdom and experience God gave them on to the mission field.",
+      body: "WMTO (Work Mission Tentmaking Organization) is a community of Christian business owners, missionaries, and sponsors who gather to pass the business wisdom and experience God gave them on to the mission field.",
     },
     vision: {
       title: "A mission where every missionary stands on their own",

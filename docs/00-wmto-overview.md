@@ -9,7 +9,7 @@
 
 **WMTO 자립선교 비즈니스 네트워크** — 크리스천 사업가가 가르치고, 선교사가 일어서는 네트워크.
 
-- 정식 명칭(가칭): WMTO (World Mission Tabernacle Organization)
+- 정식 명칭(가칭): WMTO (Work Mission Tentmaking Organization)
 - 대외 표기 원칙: "WMTO"는 단독으로 쓰지 않고 항상 **"WMTO 자립선교 비즈니스 네트워크"**처럼 설명어와 함께 사용
 
 ## 2. 핵심 가치
