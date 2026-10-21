@@ -2,6 +2,7 @@ import { getMessages } from "@/lib/i18n";
 import { Button, FinalCta, Rows, Section, TextLink } from "@/components/ui";
 import { ValuesMarquee } from "@/components/Marquee";
 import { StoryScroll } from "@/components/StoryScroll";
+import { PeopleBento } from "@/components/People";
 import { photos } from "@/lib/photos";
 import { Bezel } from "@/components/Bezel";
 import { Photo, PhotoFrame } from "@/components/Photo";
@@ -14,16 +15,18 @@ export default function Home() {
   const [primary, ...others] = h.hero.buttons;
   return (
     <>
-      {/* 1. 첫 화면: 전체 사진 배경 + 글. 위쪽은 떠 있는 유리 메뉴가 사진 위에 놓인다 */}
+      {/* 1. 첫 화면: 전체 사진 배경 + 글. 사진 속 인물이 왼쪽에 있어 글은 오른쪽에 둔다(모바일은 아래) */}
       <section className="relative isolate flex min-h-[100dvh] items-end overflow-hidden text-white md:items-center">
-        <Photo name="hero" alt="필리핀 교회에서 사람들이 손을 들고 함께 예배하는 모습" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/55 to-[#06201b]/30 md:bg-gradient-to-r md:from-[#06201b]/90 md:via-[#06201b]/65 md:to-[#06201b]/10" aria-hidden />
+        <Photo name="hero" alt="카페에서 커피 머신 앞에 선 사업가" priority />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/92 via-[#06201b]/50 to-[#06201b]/20 md:bg-gradient-to-l md:from-[#06201b]/88 md:via-[#06201b]/60 md:to-[#06201b]/0" aria-hidden />
         <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-32 md:py-32">
-          <h1 className="display rise max-w-3xl text-[2.1rem] sm:text-[2.75rem] lg:text-[3.6rem]">{h.hero.title}</h1>
-          <p className="rise rise-1 mt-6 max-w-xl text-lg text-white/90 md:text-xl">{h.hero.sub}</p>
-          <div className="rise rise-2 mt-10 flex flex-wrap gap-3">
-            <Button href={primary.href} variant="onAccent">{primary.label}</Button>
-            {others.map((b) => <Button key={b.href} href={b.href} variant="onAccentGhost">{b.label}</Button>)}
+          <div className="md:ml-auto md:max-w-[44rem]">
+            <h1 className="display rise text-[2.1rem] sm:text-[2.75rem] lg:text-[3.2rem]">{h.hero.title}</h1>
+            <p className="rise rise-1 mt-6 max-w-xl text-lg text-white/90 md:text-xl">{h.hero.sub}</p>
+            <div className="rise rise-2 mt-10 flex flex-wrap gap-3">
+              <Button href={primary.href} variant="onAccent">{primary.label}</Button>
+              {others.map((b) => <Button key={b.href} href={b.href} variant="onAccentGhost">{b.label}</Button>)}
+            </div>
           </div>
         </div>
       </section>
@@ -41,28 +44,7 @@ export default function Home() {
 
       {/* 3. 세 사람: 크기가 다른 세 면, 사진을 바탕으로 */}
       <Section title={h.solution.title}>
-        <div className="grid gap-4 md:grid-cols-5 md:grid-rows-2">
-          {h.solution.items.map((it, i) => {
-            const cfg = [
-              { span: "md:col-span-3 md:row-span-2", photo: "mentor" as const, min: "min-h-80 md:min-h-[26rem]", name: "text-3xl md:text-4xl", text: "text-lg" },
-              { span: "md:col-span-2", photo: "sponsor" as const, min: "min-h-60", name: "text-2xl", text: "" },
-              { span: "md:col-span-2", photo: "partner" as const, min: "min-h-60", name: "text-2xl", text: "" },
-            ][i];
-            return (
-              <Reveal key={it.name} delay={(i + 1) as 1 | 2 | 3} className={cfg.span}>
-                <Bezel className="h-full" inner="bg-ink" innerClassName={`relative isolate flex flex-col justify-end p-7 text-white md:p-10 ${cfg.min}`}>
-                  <Photo name={cfg.photo} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/40 to-[#06201b]/5" aria-hidden />
-                  <div className="relative">
-                    <p className="text-sm font-semibold text-white/85">{it.en}</p>
-                    <h3 className={`mt-1 font-bold tracking-tight ${cfg.name}`}>{it.name}</h3>
-                    <p className={`mt-3 text-white/90 ${cfg.text}`}>{it.text}</p>
-                  </div>
-                </Bezel>
-              </Reveal>
-            );
-          })}
-        </div>
+        <PeopleBento items={h.solution.items} />
       </Section>
 
       {/* 4. 사례와 흐름: 스크롤하면 사진이 바뀌는 단계 이야기 */}

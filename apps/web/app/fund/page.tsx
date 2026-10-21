@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getMessages } from "@/lib/i18n";
-import { Bullets, Button, PageHero, Prose, Rows, Section } from "@/components/ui";
+import { Bullets, Button, PageHero, PhotoBand, Rows, Section, Split } from "@/components/ui";
 import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = { title: "순환 기금" };
@@ -9,14 +9,18 @@ export default function Fund() {
   const f = getMessages().fund;
   return (
     <>
-      <PageHero photo="fund" title={f.top.title} />
-      <Section narrow><Prose>{f.body}</Prose></Section>
-      <Section title={f.termsTitle} tone="deep"><Rows items={f.terms} /></Section>
-      <Section title={f.safetyTitle}><Bullets items={f.safety} /></Section>
-      <Section title={f.status.title} tone="tint">
-        <Reveal as="p" className="font-display text-2xl md:text-3xl">{f.status.text}</Reveal>
-        <p className="mt-4 text-sm text-soft">{f.status.note}</p>
-        <div className="mt-10"><Button href={f.cta.href}>{f.cta.label}</Button></div>
+      <PageHero photo="partnerPanel" title={f.top.title} sub={f.body} />
+
+      <Section title={f.termsTitle}><Rows items={f.terms} /></Section>
+
+      <Split photo="fund" title={f.safetyTitle} tone="deep" flip>
+        <Bullets items={f.safety} />
+      </Split>
+
+      <PhotoBand photo="story5" title={f.status.text} body={f.status.note} />
+
+      <Section tone="deep">
+        <Reveal><Button href={f.cta.href}>{f.cta.label}</Button></Reveal>
       </Section>
     </>
   );

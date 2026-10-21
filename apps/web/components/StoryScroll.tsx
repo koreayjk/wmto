@@ -9,7 +9,7 @@ export type StoryStep = { name: string; text: string; src: string | null };
  * 큰 화면: 왼쪽 사진이 고정되고 오른쪽 단계가 넘어갈 때 사진이 서서히 바뀐다.
  * 작은 화면: 단계마다 사진이 위에 붙어 세로로 이어진다(고정 없음).
  */
-export function StoryScroll({ steps }: { steps: readonly StoryStep[] }) {
+export function StoryScroll({ steps, label = "{n}단계" }: { steps: readonly StoryStep[]; label?: string }) {
   const [active, setActive] = useState(0);
   const items = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -64,9 +64,9 @@ export function StoryScroll({ steps }: { steps: readonly StoryStep[] }) {
               <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-[1.25rem]">{photo(s.src)}</div>
             </div>
             <div className={`transition-opacity duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] md:max-w-md ${i === active ? "md:opacity-100" : "md:opacity-35"}`}>
-              <p className="text-sm font-semibold text-accent">{i + 1}단계</p>
+              <p className="text-sm font-semibold text-accent">{label.replace("{n}", String(i + 1))}</p>
               <h3 className="display mt-2 text-[1.6rem] md:text-[2.1rem]">{s.name}</h3>
-              <p className="mt-4 text-lg leading-[1.85] text-soft">{s.text}</p>
+              {s.text && <p className="mt-4 text-lg leading-[1.85] text-soft">{s.text}</p>}
             </div>
           </li>
         ))}

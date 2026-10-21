@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "개인정보 처리방침" };
 export default function Privacy() {
   return (
     <>
-      <PageHero photo="about" title="개인정보 처리방침" />
+      <PageHero photo="market" title="개인정보 처리방침" compact />
       <Section narrow>
         <div className="space-y-6 text-soft">
           <p><b className="text-ink">초안입니다.</b> 운영 주체와 법무 확인 후 확정 문구로 교체해 주세요.</p>

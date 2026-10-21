@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 import { createPublicClient } from "@/lib/supabase/public";
-import { PageHero, Section } from "@/components/ui";
+import { FinalCta, PageHero, PhotoTiles, Section } from "@/components/ui";
 import { Reveal } from "@/components/Reveal";
 import type { EventType } from "@/lib/codes";
 
@@ -29,7 +29,7 @@ export default async function Events() {
   }
   return (
     <>
-      <PageHero photo="camp" title={m.title} />
+      <PageHero photo="story1" title={m.title} compact />
       <Section>
         {events.length === 0 ? (
           <p className="text-lg text-soft">{m.empty}</p>
@@ -55,6 +55,12 @@ export default async function Events() {
           </ul>
         )}
       </Section>
+
+      <Section title={m.regularTitle} tone="deep">
+        <PhotoTiles items={m.regular.map((r, i) => ({ ...r, photo: (["story1", "groupTable", "camp", "community"] as const)[i] }))} />
+      </Section>
+
+      <FinalCta title="먼저 와서 보세요" body="격주 온라인 모임에 부담 없이 참관하실 수 있습니다." buttons={[{ label: "온라인 모임 참관 신청", href: "/apply?type=observe" }, { label: "문의하기", href: "/apply?type=contact" }]} />
     </>
   );
 }

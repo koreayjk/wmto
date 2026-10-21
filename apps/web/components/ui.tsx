@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { Bezel } from "./Bezel";
 import { Reveal } from "./Reveal";
-import { PhotoFrame } from "./Photo";
+import { Photo, PhotoFrame } from "./Photo";
 import type { PhotoKey } from "@/lib/photos";
 
 type Variant = "solid" | "ghost" | "onAccent" | "onAccentGhost";
@@ -56,17 +56,52 @@ export function ButtonRow({ buttons, onAccent }: { buttons: readonly { label: st
   );
 }
 
-/** 하위 페이지 상단: 왼쪽 글, 오른쪽 사진. 헤더는 sticky 라 위 여백은 짧게. */
-export function PageHero({ photo, title, sub, children }: { photo: PhotoKey; title: string; sub?: string; eyebrow?: string; children?: ReactNode }) {
+/** 하위 페이지 상단: 전체 사진 배경 + 글. 메뉴가 떠 있으므로 위 여백을 넉넉히 둔다 */
+export function PageHero({ photo, title, sub, children, compact }: { photo: PhotoKey; title: string; sub?: string; eyebrow?: string; children?: ReactNode; compact?: boolean }) {
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 pb-20 pt-28 md:grid-cols-[1.15fr_0.85fr] md:gap-16 md:pb-32 md:pt-40">
-      <div>
-        <h1 className="display rise text-[2rem] sm:text-5xl md:text-[3.5rem]">{title}</h1>
-        {sub && <p className="rise rise-1 mt-6 max-w-xl text-lg text-soft md:text-xl">{sub}</p>}
-        {children && <div className="rise rise-2 mt-8">{children}</div>}
+    <section className={`relative isolate flex items-end overflow-hidden text-white ${compact ? "min-h-[50svh]" : "min-h-[72svh]"}`}>
+      <Photo name={photo} priority />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/50 to-[#06201b]/25 md:bg-gradient-to-r md:from-[#06201b]/85 md:via-[#06201b]/55 md:to-[#06201b]/10" aria-hidden />
+      <div className="relative mx-auto w-full max-w-6xl px-6 pb-14 pt-36 md:pb-20">
+        <h1 className="display rise max-w-3xl text-[2rem] sm:text-5xl md:text-[3.4rem]">{title}</h1>
+        {sub && <p className="rise rise-1 mt-6 max-w-xl text-lg text-white/90 md:text-xl">{sub}</p>}
+        {children && <div className="rise rise-2 mt-9">{children}</div>}
       </div>
-      <PhotoFrame name={photo} ratio="aspect-[4/3] md:aspect-[4/5]" className="rise rise-2" />
     </section>
+  );
+}
+
+/** 사진 전체 배경 위의 한 문장 배너 */
+export function PhotoBand({ photo, title, body }: { photo: PhotoKey; title: string; body?: string }) {
+  return (
+    <section className="relative isolate flex min-h-[70svh] items-center overflow-hidden text-white">
+      <Photo name={photo} />
+      <div className="absolute inset-0 bg-[#06201b]/65" aria-hidden />
+      <div className="relative mx-auto max-w-4xl px-6 py-28 text-center">
+        <Reveal as="h2" className="display text-[1.9rem] sm:text-5xl md:text-[3.25rem]">{title}</Reveal>
+        {body && <Reveal as="p" delay={1} className="mx-auto mt-8 max-w-2xl text-lg leading-[1.9] text-white/90 md:text-xl">{body}</Reveal>}
+      </div>
+    </section>
+  );
+}
+
+/** 사진 바탕 타일 2열. 항목마다 다른 사진 */
+export function PhotoTiles({ items }: { items: readonly { name: string; text?: string; photo: PhotoKey }[] }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {items.map((it, i) => (
+        <Reveal key={it.name} delay={(Math.min(i, 3) as 0 | 1 | 2 | 3) || undefined}>
+          <Bezel className="h-full" inner="bg-ink" innerClassName="relative isolate flex min-h-72 flex-col justify-end p-7 text-white md:min-h-80 md:p-9">
+            <Photo name={it.photo} />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/90 via-[#06201b]/40 to-[#06201b]/5" aria-hidden />
+            <div className="relative">
+              <h3 className="text-xl font-bold tracking-tight md:text-2xl">{it.name}</h3>
+              {it.text && <p className="mt-2 text-white/90">{it.text}</p>}
+            </div>
+          </Bezel>
+        </Reveal>
+      ))}
+    </div>
   );
 }
 

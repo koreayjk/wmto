@@ -2,7 +2,11 @@
 // null 이면 단정한 자리표시가 보입니다. 현재 사진은 Unsplash 무료 라이선스 대체 사진입니다.
 // 출처는 docs/photo-credits.md. 실제 WMTO 사진이 생기면 같은 이름으로 교체하세요.
 export const photos = {
-  hero: "/images/hero.jpg", // 가로 3:2. 필리핀 교회에서 함께 예배하는 장면
+  hero: "/images/hero.jpg", // 가로 3:2. 카페에서 일하는 사업가(인물이 왼쪽에 있어 글은 오른쪽)
+  aboutHero: "/images/about-hero.jpg", // 필리핀 교회에서 함께 예배하는 장면
+  market: "/images/market.jpg", // 시장(판로 연결)
+  groupTable: "/images/group-table.jpg", // 둘러앉아 상담하는 모습
+  community: "/images/community.jpg", // 마을 모임
   problem: null as string | null,
   how: "/images/how.jpg", // 커피 수확 (자립 사업 이야기)
   camp: "/images/camp.jpg", // 기술 훈련 현장
@@ -23,7 +27,9 @@ export const photos = {
 
 /** 사진마다 얼굴·피사체가 잘 보이도록 잘라내는 기준점 */
 export const photoPosition: Partial<Record<keyof typeof photos, string>> = {
-  hero: "50% 35%",
+  hero: "40% 40%",
+  aboutHero: "50% 35%",
+  community: "50% 60%",
   partner: "50% 58%",
   story4: "50% 50%",
   story5: "50% 35%",

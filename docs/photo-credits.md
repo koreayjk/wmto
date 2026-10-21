@@ -6,7 +6,11 @@
 
 | 위치 | 파일 | 사진가 | 원본 |
 |---|---|---|---|
-| 홈 첫 화면 | hero.jpg | Elianna Gill | https://unsplash.com/photos/ARX5fDRz1Yw |
+| 홈 첫 화면(카페 사업가) | hero.jpg | Siborey Sean | https://unsplash.com/photos/lOlTLr43fuM |
+| About 첫 화면(예배) | about-hero.jpg | Elianna Gill | https://unsplash.com/photos/ARX5fDRz1Yw |
+| 시장 | market.jpg | Hitoshi Namura | https://unsplash.com/photos/x1cmd1b8Pd0 |
+| 둘러앉은 상담 | group-table.jpg | Elianna Gill | https://unsplash.com/photos/cniTyYf2Y2w |
+| 마을 모임 | community.jpg | Dario Valenzuela | https://unsplash.com/photos/dlVrk8WNWlw |
 | 이야기(커피 수확) | how.jpg | Felipe Osorio | https://unsplash.com/photos/hands-harvesting-ripe-coffee-cherries-from-a-plant-TcPJecW_V0g |
 | 캠프 | camp.jpg | Septian setiawan | https://unsplash.com/photos/x2y2rzLMKiA |
 | 사업가 | mentor.jpg | Nadya Spetnitskaya | https://unsplash.com/photos/tOYiQxF9-Ys |
