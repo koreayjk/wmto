@@ -1,7 +1,7 @@
 type Item = { name: string; text: string };
 
 /** 핵심 가치 띠. 한 번만 쓰는 장치라서 값(가치)을 보여주는 데만 사용한다. */
-export function ValuesMarquee({ items }: { items: readonly Item[] }) {
+export function ValuesMarquee({ items, label }: { items: readonly Item[]; label: string }) {
   const row = (dup: boolean) => (
     <ul className={`flex shrink-0 items-baseline gap-14 pr-14 ${dup ? "marquee-dup" : ""}`} aria-hidden={dup}>
       {items.map((it) => (
@@ -13,7 +13,7 @@ export function ValuesMarquee({ items }: { items: readonly Item[] }) {
     </ul>
   );
   return (
-    <section className="marquee overflow-hidden bg-paper py-10 md:py-14" aria-label="WMTO의 네 가지 핵심 가치">
+    <section className="marquee overflow-hidden bg-paper py-10 md:py-14" aria-label={label}>
       <div className="marquee-track">
         {row(false)}
         {row(true)}

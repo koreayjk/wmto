@@ -9,7 +9,7 @@ export type StoryStep = { name: string; text: string; src: string | null };
  * 큰 화면: 왼쪽 사진이 고정되고 오른쪽 단계가 넘어갈 때 사진이 서서히 바뀐다.
  * 작은 화면: 단계마다 사진이 위에 붙어 세로로 이어진다(고정 없음).
  */
-export function StoryScroll({ steps, label = "{n}단계" }: { steps: readonly StoryStep[]; label?: string }) {
+export function StoryScroll({ steps, label }: { steps: readonly StoryStep[]; label: string }) {
   const [active, setActive] = useState(0);
   const items = useRef<(HTMLLIElement | null)[]>([]);
 

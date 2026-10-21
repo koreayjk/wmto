@@ -34,6 +34,14 @@ npm run dev                                     # http://localhost:3000
 
 Supabase 설정 없이도 정적 페이지는 모두 표시되며, 일정·스토리는 빈 목록, 신청 폼 제출은 오류로 처리됩니다.
 
+## 언어 (한국어 / English)
+
+- 공개 사이트: 한국어는 주소에 접두사가 없고(`/about`), 영어는 `/en` 으로 시작합니다(`/en/about`). `proxy.ts` 가 한국어 주소를 내부적으로 `/ko/...` 로 연결합니다.
+- 회원 앱(`/connect`)은 쿠키 `wmto-locale` 로 언어를 정합니다. 공개 사이트에서 마지막으로 본 언어가 이어지고, 앱의 프로필 화면에서 바꿀 수 있습니다.
+- 관리자(`/admin`)는 항상 한국어입니다.
+- 문구는 `apps/web/messages/ko.ts`(기준)와 `en.ts`(같은 구조, 컴파일러가 누락을 잡아 줍니다)에 있습니다. 영어는 작업용 번역이므로 출시 전에 원어민 검수가 필요합니다.
+- 새 페이지를 추가할 때: 문구를 두 카탈로그에 추가하고, 페이지는 `params` 의 `locale` 로 `getMessages(locale)` 를 부르며, 링크는 `components/L.tsx` 를 거칩니다.
+
 ## 교체 지점
 - 문구: `apps/web/messages/ko.ts` (영어는 `en.ts` 추가 후 `lib/i18n.ts` 등록)
 - 사진: `apps/web/lib/photos.ts` 에 `public/images/` 경로를 채우면 전 페이지 반영

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { L } from "./L";
 import type { ReactNode } from "react";
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { Bezel } from "./Bezel";
@@ -21,7 +21,7 @@ export function Button({ href, children, variant = "solid", icon }: { href: stri
   };
   const circle = v === "onAccent" ? "bg-accent/10" : "bg-white/15";
   return (
-    <Link
+    <L
       href={href}
       className={`group inline-flex max-w-full items-center justify-center gap-3 rounded-full text-center text-[15px] font-semibold tracking-tight transition duration-500 ${EASE} active:scale-[0.98] ${hasIcon ? "py-2 pl-6 pr-2" : "px-6 py-[13px]"} ${styles[v]}`}
     >
@@ -31,16 +31,16 @@ export function Button({ href, children, variant = "solid", icon }: { href: stri
           <ArrowUpRight size={16} weight="bold" aria-hidden />
         </span>
       )}
-    </Link>
+    </L>
   );
 }
 
 export function TextLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} className="group inline-flex items-center gap-1.5 font-semibold text-accent">
+    <L href={href} className="group inline-flex items-center gap-1.5 font-semibold text-accent">
       <span className="underline decoration-accent/30 underline-offset-4 group-hover:decoration-accent">{children}</span>
       <ArrowRight size={16} weight="bold" className="transition-transform group-hover:translate-x-0.5" />
-    </Link>
+    </L>
   );
 }
 

@@ -1,10 +1,16 @@
-const KST = "Asia/Seoul";
+import type { Locale } from "./i18n";
 
-export const fmtDateTime = (iso: string) =>
-  new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeStyle: "short", timeZone: KST }).format(new Date(iso));
-export const fmtDate = (iso: string) =>
-  new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeZone: KST }).format(new Date(iso));
-export const fmtMonth = (isoDate: string) => `${isoDate.slice(0, 4)}년 ${Number(isoDate.slice(5, 7))}월`;
+const KST = "Asia/Seoul";
+const tag = (locale: Locale) => (locale === "en" ? "en-US" : "ko-KR");
+
+export const fmtDateTime = (iso: string, locale: Locale = "ko") =>
+  new Intl.DateTimeFormat(tag(locale), { dateStyle: "medium", timeStyle: "short", timeZone: KST }).format(new Date(iso));
+export const fmtDate = (iso: string, locale: Locale = "ko") =>
+  new Intl.DateTimeFormat(tag(locale), { dateStyle: "medium", timeZone: KST }).format(new Date(iso));
+export const fmtMonth = (isoDate: string, locale: Locale = "ko") =>
+  locale === "en"
+    ? new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", timeZone: "UTC" }).format(new Date(`${isoDate.slice(0, 7)}-01T00:00:00Z`))
+    : `${isoDate.slice(0, 4)}년 ${Number(isoDate.slice(5, 7))}월`;
 
 /** 한국 시간 기준 이번 달 1일 (YYYY-MM-01) */
 export function currentMonthKst(): string {

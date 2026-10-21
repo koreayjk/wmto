@@ -6,10 +6,17 @@ const verse = {
   en: "It is more blessed to give than to receive.",
   ref: "행 20:35",
   refEn: "Acts 20:35 (ESV)",
+  // 화면별 표기: 푸터 한 줄, 사진 배너(큰 글/작은 글)
+  footer: "주는 것이 받는 것보다 복이 있다 (행 20:35)",
+  bandTitle: "\u201CIt is more blessed to give than to receive.\u201D",
+  bandCaption: "주는 것이 받는 것보다 복이 있다 (행 20:35)",
 };
 
 export const ko = {
   site: {
+    tagline: "자립선교 비즈니스 네트워크",
+    skip: "본문으로 건너뛰기",
+    manifestDescription: "WMTO 자립선교 비즈니스 네트워크 회원 앱",
     name: "WMTO 자립선교 비즈니스 네트워크",
     short: "WMTO",
     description:
@@ -32,6 +39,46 @@ export const ko = {
     cta: { href: "/apply?type=observe", label: "참관 신청" },
     menu: "메뉴",
     close: "닫기",
+    main: "주 메뉴",
+    mobile: "모바일 메뉴",
+    switchTo: "English",
+    switchLabel: "Switch to English",
+  },
+  footer: { fund: "순환 기금", contact: "문의" },
+  common: { select: "선택", home: "처음으로" },
+  meta: {
+    about: "About",
+    mentor: "사업가 (Mentor)",
+    partner: "선교사 (Partner)",
+    sponsor: "후원자 (Sponsor)",
+    camp: "필리핀 훈련 캠프",
+    fund: "순환 기금",
+    stories: "스토리",
+    events: "일정",
+    apply: "신청·문의",
+    privacy: "개인정보 처리방침",
+  },
+  alts: {
+    hero: "카페에서 커피 머신 앞에 선 사업가",
+    base: "필리핀 선교본부",
+  },
+  labels: { step: "{n}단계", mission: "미션 {n}", week: "{n}주차", marquee: "WMTO의 네 가지 핵심 가치" },
+  notFound: {
+    title: "찾으시는 페이지가 없습니다",
+    body: "주소가 바뀌었거나 삭제된 페이지일 수 있습니다. 처음 화면에서 다시 찾아보세요.",
+    home: "처음으로",
+    contact: "문의하기",
+  },
+  privacy: {
+    title: "개인정보 처리방침",
+    draft: "초안입니다.",
+    draftNote: "운영 주체와 법무 확인 후 확정 문구로 교체해 주세요.",
+    items: [
+      "수집 항목: 이름, 이메일, 연락처, 거주 국가, 신청 시 입력하신 내용",
+      "이용 목적: 신청 접수, 상담 및 안내, 모임·캠프 운영",
+      "보관 기간: 목적 달성 시까지 (삭제를 요청하시면 지체 없이 파기)",
+      "문의: 신청·문의 페이지를 통해 연락해 주세요.",
+    ],
   },
 
   home: {
@@ -278,6 +325,7 @@ export const ko = {
     },
     fee: {
       title: "회비",
+      labels: ["회비", "순환 기금"],
       lines: ["가입비 20만 원 · 연회비 70만 원", "회비의 30%는 선교사 창업 순환 기금으로 적립됩니다"],
     },
     final: {
@@ -481,6 +529,13 @@ export const ko = {
   stories: {
     title: "열매 이야기",
     empty: "아직 등록된 이야기가 없습니다. 곧 첫 열매 이야기를 전해드리겠습니다.",
+    observeCta: "온라인 모임 참관 신청",
+    finalTitle: "다음 이야기의 주인공이 되어 주세요",
+    finalBody: "사업가로, 선교사로, 후원자로 함께해 주세요.",
+    finalButtons: [
+      { label: "사업가로 동참하기", href: "/mentor" },
+      { label: "자립 상담 신청", href: "/apply?type=partner_consult" },
+    ],
     emptyTitle: "첫 열매 이야기를 준비하고 있습니다",
     emptyBody: "실제 사례가 생기면 이곳에 전해드립니다. 그 전에 격주 온라인 모임에서 선교사님들의 이야기를 직접 들어 보세요.",
     example: "예시",
@@ -491,6 +546,12 @@ export const ko = {
     empty: "지금 등록된 개별 일정은 없습니다. 아래 정기 모임을 확인해 주세요.",
     observe: "참관 신청",
     zoom: "Zoom 링크",
+    finalTitle: "먼저 와서 보세요",
+    finalBody: "격주 온라인 모임에 부담 없이 참관하실 수 있습니다.",
+    finalButtons: [
+      { label: "온라인 모임 참관 신청", href: "/apply?type=observe" },
+      { label: "문의하기", href: "/apply?type=contact" },
+    ],
     regularTitle: "정기 모임",
     // docs/00-wmto-overview.md 7~8장
     regular: [
@@ -566,6 +627,8 @@ export const ko = {
     consent: "개인정보 수집·이용에 동의합니다 (필수)",
     consentHelp:
       "수집 항목: 이름, 이메일, 연락처, 거주 국가 및 입력하신 내용 / 목적: 신청 접수와 안내 / 보관: 목적 달성 시까지",
+    select: "선택",
+    errorTitle: "제출하지 못했습니다",
     submit: "보내기",
     submitting: "보내는 중…",
     thanks: {
@@ -678,6 +741,7 @@ export const ko = {
       role: "역할",
       stage: "성장 단계",
       logout: "로그아웃",
+      language: "언어",
       install: "홈 화면에 추가하면 앱처럼 사용할 수 있습니다.",
     },
     more: {
@@ -755,7 +819,9 @@ export const ko = {
       watch: "시청하기",
       uncategorized: "기타",
     },
-    pending: { requests: "새 매칭 요청", unread: "읽지 않은 감사 편지" },
+    pending: { requests: "새 매칭 요청", unread: "읽지 않은 감사 편지", requestsLine: "새 매칭 요청 {n}건", unreadLine: "읽지 않은 감사 편지 {n}통" },
+    select: "선택",
+    emailError: "이메일을 확인해 주세요.",
     errors: { generic: "저장 중 문제가 생겼습니다. 다시 시도해 주세요." },
   },
 
