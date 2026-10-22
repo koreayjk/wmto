@@ -358,10 +358,10 @@ export const en: Messages = {
     stages: {
       title: "One step at a time, without pressure",
       items: [
-        { name: "Ready", text: "Find and prepare a business that fits you (Academy is free)" },
-        { name: "Launch", text: "Learn at the Philippines camp and start your business (a mentor is assigned; you may apply for the Pass-It-On Fund)" },
-        { name: "Growing", text: "The first sales arrive and the business grows (second-stage support, sales channels)" },
-        { name: "Self-Sustaining", text: "You reach self-reliance and become a mentor to the next missionary" },
+        { name: "Ready", text: "Find and prepare a business that fits you (Academy is free)", detail: "At first you do not need an idea or a plan. You learn the basics of business slowly through the Academy videos.", points: ["The online Academy courses are free", "We help you find a business idea that fits you", "You meet business owners at the biweekly online meetings"] },
+        { name: "Launch", text: "Learn at the Philippines camp and start your business (a mentor is assigned; you may apply for the Pass-It-On Fund)", detail: "After the three-week camp, a mentor is assigned, and your business plan is reviewed so you can apply for start-up funds.", points: ["Three weeks at the Philippines camp: foundations, a specialty track, and your finished plan", "A mentor is assigned and walks with you to the end", "Apply for KRW 1 to 5 million from the Pass-It-On Fund (interest-free, after review)"] },
+        { name: "Growing", text: "The first sales arrive and the business grows (second-stage support, sales channels)", detail: "Once the first sales come in, we help the business grow one step further.", points: ["Second-stage support helps you expand", "We connect you to sales channels where you meet markets and customers", "After the grace period, you repay a small share of sales (5 to 10%)"] },
+        { name: "Self-Sustaining", text: "You reach self-reliance and become a mentor to the next missionary", detail: "Business income now sustains the ministry. Now you pass the help you received to the next person.", points: ["Business income keeps the ministry going", "You join as a mentor to the next missionary", "The repaid fund becomes the next missionary's start"] },
       ],
     },
     camp: {
@@ -455,9 +455,9 @@ export const en: Messages = {
     weeks: {
       title: "The three weeks (sample)",
       items: [
-        { name: "Week 1: Foundations", text: "The vision of a self-sustaining mission and the basics of business (pricing, accounting, customers)" },
-        { name: "Week 2: Specialist track", text: "Intensive practice in the field you chose" },
-        { name: "Week 3: Getting ready to start", text: "Complete your business plan, present it to your mentor for feedback, and apply for the Pass-It-On Fund" },
+        { name: "Week 1: Foundations", text: "The vision of a self-sustaining mission and the basics of business (pricing, accounting, customers)", detail: "So that even first-time business owners can follow, we start together with the most basic things.", points: ["The vision of self-sustaining mission and the mindset for business", "How to set prices and keep track of money", "How to meet customers and talk with them"] },
+        { name: "Week 2: Specialist track", text: "Intensive practice in the field you chose", detail: "You choose the track that fits the business you plan to run on the field, and learn by hand with a working business owner as your instructor.", points: ["Choose from business, marketing, digital, or a skill track (beauty, cooking and baking, coffee, and more)", "Your instructor watches right beside you and corrects on the spot", "Focus on skills you can actually use on the field"] },
+        { name: "Week 3: Getting ready to start", text: "Complete your business plan, present it to your mentor for feedback, and apply for the Pass-It-On Fund", detail: "At the end of the three weeks you explain your own business, and return to the field ready to start.", points: ["Complete your business plan", "Present to your mentor and receive feedback", "Apply for the Pass-It-On Fund and be connected with your mentor"] },
       ],
     },
     tracks: {
