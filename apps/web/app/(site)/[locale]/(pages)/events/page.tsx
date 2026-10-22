@@ -33,7 +33,7 @@ export default async function Events({ params }: { params: Promise<{ locale: str
   }
   return (
     <>
-      <PageHero photo="story1" title={m.title} compact />
+      <PageHero photo="aboutHero" title={m.title} compact />
       <Section>
         {events.length === 0 ? (
           <p className="text-lg text-soft">{m.empty}</p>
