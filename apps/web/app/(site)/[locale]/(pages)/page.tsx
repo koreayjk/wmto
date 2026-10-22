@@ -20,8 +20,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="relative isolate flex min-h-[100dvh] items-end overflow-hidden text-white md:items-center">
         <Photo name="hero" alt={m.alts.hero} priority />
         <div className="absolute inset-0 bg-gradient-to-t from-[#06201b]/92 via-[#06201b]/50 to-[#06201b]/20 md:bg-gradient-to-l md:from-[#06201b]/88 md:via-[#06201b]/60 md:to-[#06201b]/0" aria-hidden />
-        <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-32 md:py-32">
-          <div className="md:ml-auto md:max-w-[44rem]">
+        <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-32 md:py-32 min-[1500px]:max-w-[100rem] min-[1500px]:px-16">
+          <div className="md:ml-auto md:max-w-[44rem] min-[1500px]:max-w-[40rem]">
             <h1 className="display rise text-[2.1rem] sm:text-[2.75rem] lg:text-[3.2rem]">{h.hero.title}</h1>
             <p className="rise rise-1 mt-6 max-w-xl text-lg text-white/90 md:text-xl">{h.hero.sub}</p>
             <div className="rise rise-2 mt-10 flex flex-wrap gap-3">
