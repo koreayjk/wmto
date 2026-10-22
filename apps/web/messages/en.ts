@@ -116,11 +116,11 @@ export const en: Messages = {
         "Mentor to the next missionary",
       ],
       steps: [
-        { name: "Online meeting", text: "Every two weeks for 60 minutes. Hear field reports from missionaries and share lectures from business owners." },
-        { name: "Philippines training camp", text: "Twice a year for three weeks at the mission base. Learn a business that fits the field and complete your plan." },
-        { name: "1:1 mentoring", text: "Once a month, one business owner walks with one missionary to the end." },
-        { name: "Self-reliance", text: "The ministry continues on business income. The Pass-It-On Fund is repaid from a share of sales." },
-        { name: "Mentor to the next missionary", text: "A self-reliant missionary raises up the next one. The repaid fund becomes the next start." },
+        { name: "Online meeting", text: "Every two weeks for 60 minutes. Hear field reports from missionaries and share lectures from business owners.", detail: "First-time visitors are welcome to observe. Drop in once before you join and see how it feels.", points: ["A 60-second self-introduction helps everyone get to know each other", "Missionaries share their stories from the field in person", "A business owner teaches one topic"] },
+        { name: "Philippines training camp", text: "Twice a year for three weeks at the mission base. Learn a business that fits the field and complete your plan.", detail: "Working Christian business owners come to teach in person. You learn skills you can use on the field by doing them.", points: ["Week 1, foundations: pricing, accounting, customers", "Week 2, specialty track: focused hands-on practice in your chosen field", "Week 3: finish your business plan, present it, and apply to the Pass-It-On Fund"] },
+        { name: "1:1 mentoring", text: "Once a month, one business owner walks with one missionary to the end.", detail: "It does not end with one lecture. After you start, your mentor stays beside you to answer questions and walk with you.", points: ["You meet once a month to review how the business is going", "Every meeting is recorded in a mentoring log", "Your mentor walks with you when you receive Pass-It-On Fund support"] },
+        { name: "Self-reliance", text: "The ministry continues on business income. The Pass-It-On Fund is repaid from a share of sales.", detail: "Once the first sales come in, follow-up support and sales connections continue. Repayment is shaped to fit your situation.", points: ["The Pass-It-On Fund is interest-free and repaid from a share of sales (5 to 10%)", "If the business struggles, repayment can be waived after a review", "A monthly self-reliance report lets you share each month's progress"] },
+        { name: "Mentor to the next missionary", text: "A self-reliant missionary raises up the next one. The repaid fund becomes the next start.", detail: "One person's self-reliance does not end with them. It carries on to the next person.", points: ["The repaid fund becomes the next missionary's starting capital", "A self-reliant missionary joins as a mentor to the next one", "Where the fund has gone is shown openly"] },
       ],
     },
     camp: {

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export type StoryStep = { name: string; text: string; src: string | null };
+export type StoryStep = { name: string; text: string; src: string | null; detail?: string; points?: readonly string[] };
 
 /**
  * 스크롤하면 사진이 바뀌는 단계 이야기.
@@ -63,10 +63,21 @@ export function StoryScroll({ steps, label }: { steps: readonly StoryStep[]; lab
             <div className="md:hidden">
               <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-[1.25rem]">{photo(s.src)}</div>
             </div>
-            <div className={`transition-opacity duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] md:max-w-md ${i === active ? "md:opacity-100" : "md:opacity-35"}`}>
+            <div className={`transition-opacity duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] md:max-w-lg ${i === active ? "md:opacity-100" : "md:opacity-35"}`}>
               <p className="text-sm font-semibold text-accent">{label.replace("{n}", String(i + 1))}</p>
               <h3 className="display mt-2 text-[1.6rem] md:text-[2.1rem]">{s.name}</h3>
               {s.text && <p className="mt-4 text-lg leading-[1.85] text-soft">{s.text}</p>}
+              {s.detail && <p className="mt-4 leading-[1.85] text-soft">{s.detail}</p>}
+              {s.points && (
+                <ul className="mt-6 divide-y divide-line border-y border-line">
+                  {s.points.map((pt) => (
+                    <li key={pt} className="flex items-start gap-3 py-3.5 text-[15px] leading-relaxed">
+                      <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </li>
         ))}
