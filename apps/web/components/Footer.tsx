@@ -16,7 +16,11 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
-            <p className="text-xl font-extrabold tracking-tight text-ink">WMTO</p>
+            <p className="flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-ink">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
+              WMTO
+            </p>
             <p className="mt-2 text-sm">{m.site.name}</p>
             <p className="text-sm">{m.site.footerLine}</p>
           </div>

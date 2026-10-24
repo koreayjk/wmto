@@ -33,6 +33,8 @@ export function Header() {
       <header className="fixed inset-x-0 top-3 z-40 px-3 md:top-5 md:px-6">
         <div className="mx-auto flex max-w-5xl items-center justify-between min-[1700px]:max-w-6xl rounded-full bg-white/90 py-2 pl-5 pr-2 shadow-[0_10px_30px_-14px_rgba(14,106,91,0.35)] ring-1 ring-black/[0.06] backdrop-blur-xl">
           <Link href={home} className="flex shrink-0 items-baseline gap-2.5 whitespace-nowrap" aria-label={m.site.name}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo-mark.svg" alt="" width={32} height={32} className="h-8 w-8 self-center" />
             <span className="text-xl font-extrabold tracking-tight">WMTO</span>
             <span className="hidden whitespace-nowrap text-[13px] text-soft min-[1700px]:inline">{m.site.tagline}</span>
           </Link>
