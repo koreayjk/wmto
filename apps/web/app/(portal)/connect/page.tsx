@@ -40,6 +40,10 @@ export default async function ConnectHome() {
     </Card>
   );
 
+  const eventSoon = !!next && new Date(next.start_at).getTime() - Date.now() < 24 * 3600_000;
+  type Today = { text: string; cta?: string; href?: string };
+  const t = m.today;
+  let today: Today = { text: t.rest };
   let body: React.ReactNode;
 
   if (me.role === "partner") {
@@ -47,6 +51,11 @@ export default async function ConnectHome() {
       supabase.from("matchings").select("id,mentor_id,contribution_type").eq("status", "active"),
       supabase.from("self_reports").select("id").eq("partner_id", me.id).eq("month", currentMonthKst()).maybeSingle(),
     ]);
+    today = !rep
+      ? { text: t.report, cta: t.reportCta, href: "/connect/report" }
+      : eventSoon
+        ? { text: t.event, cta: t.eventCta, href: "/connect/events" }
+        : { text: t.thanks, cta: t.thanksCta, href: "/connect/thanks" };
     const ids = (ms ?? []).map((x) => x.mentor_id);
     const { data: mentors } = ids.length ? await supabase.from("members").select("id,name").in("id", ids) : { data: [] };
     const nameOf = new Map((mentors ?? []).map((x) => [x.id, x.name]));
@@ -104,6 +113,17 @@ export default async function ConnectHome() {
     const lastLog = new Map<string, string>();
     (logs ?? []).forEach((l) => { if (!lastLog.has(l.matching_id)) lastLog.set(l.matching_id, l.held_at); });
 
+    const monthAgo = Date.now() - 30 * 24 * 3600_000;
+    const staleMentoring = (ms ?? []).some((x) => { const l = lastLog.get(x.id); return !l || new Date(l).getTime() < monthAgo; });
+    today = reqCount > 0
+      ? { text: t.requests, cta: t.requestsCta, href: "/connect/matching" }
+      : (unread ?? 0) > 0
+        ? { text: t.unread, cta: t.unreadCta, href: "/connect/thanks" }
+        : staleMentoring
+          ? { text: t.mentoring, cta: t.mentoringCta, href: "/connect/mentoring" }
+          : eventSoon
+            ? { text: t.event, cta: t.eventCta, href: "/connect/events" }
+            : { text: t.rest };
     body = (
       <>
         {(reqCount > 0 || (unread ?? 0) > 0) && (
@@ -150,6 +170,7 @@ export default async function ConnectHome() {
       </>
     );
   } else {
+    if (eventSoon) today = { text: t.event, cta: t.eventCta, href: "/connect/events" };
     body = (
       <>
         <Card><p className="text-soft">{m.sponsorHome}</p></Card>
@@ -161,6 +182,14 @@ export default async function ConnectHome() {
   return (
     <div className="space-y-4">
       <PageTitle>{me.name}{m.greeting}</PageTitle>
+      <Card title={t.title} className="border-accent/30 bg-tint">
+        <p className="text-lg font-medium">{today.text}</p>
+        {today.href && (
+          <Link href={today.href} className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">
+            {today.cta}
+          </Link>
+        )}
+      </Card>
       {body}
     </div>
   );
