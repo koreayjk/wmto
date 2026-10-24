@@ -16,8 +16,10 @@ async function addLog(fd: FormData) {
   const matchingId = String(fd.get("matching_id") ?? "");
   if (!heldAt || !Number.isInteger(duration) || duration < 1 || duration > 600 || !content || !matchingId) return;
   // 담당 멘토인지·진행 중 매칭인지는 DB 정책이 최종 검증합니다.
+  const optional = (k: string) => String(fd.get(k) ?? "").trim().slice(0, 2000) || null;
   await supabase.from("mentoring_logs").insert({
     matching_id: matchingId, held_at: heldAt, duration_min: duration, content: content.slice(0, 5000), created_by: me.id,
+    next_steps: optional("next_steps"), prayer_topics: optional("prayer_topics"),
   });
   revalidatePath("/connect/mentoring");
 }
@@ -35,7 +37,7 @@ export default async function Mentoring() {
   const nameOf = new Map((people ?? []).map((p) => [p.id, p.name]));
   const matchingIds = (matchings ?? []).map((x) => x.id);
   const { data: logs } = matchingIds.length
-    ? await supabase.from("mentoring_logs").select("id,matching_id,held_at,duration_min,content").in("matching_id", matchingIds).order("held_at", { ascending: false }).limit(100)
+    ? await supabase.from("mentoring_logs").select("id,matching_id,held_at,duration_min,content,next_steps,prayer_topics").in("matching_id", matchingIds).order("held_at", { ascending: false }).limit(100)
     : { data: [] };
   const matchingOf = new Map((matchings ?? []).map((x) => [x.id, x]));
   const active = (matchings ?? []).filter((x) => x.status === "active");
@@ -72,6 +74,14 @@ export default async function Mentoring() {
                 <span className={labelCls}>{t.content}</span>
                 <textarea name="content" required rows={5} maxLength={5000} className="field" />
               </label>
+              <label className="block">
+                <span className={labelCls}>{t.nextSteps}</span>
+                <textarea name="next_steps" rows={2} maxLength={2000} className="field" />
+              </label>
+              <label className="block">
+                <span className={labelCls}>{t.prayer}</span>
+                <textarea name="prayer_topics" rows={2} maxLength={2000} className="field" />
+              </label>
               <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
             </form>
           ) : (
@@ -95,6 +105,8 @@ export default async function Mentoring() {
                 {me.role === "partner" ? `${t.withMentor} ` : ""}{other ?? "-"}
               </p>
               <p className="mt-2 whitespace-pre-line text-soft">{l.content}</p>
+              {l.next_steps && <p className="mt-3 whitespace-pre-line text-sm"><b>{t.nextSteps}</b> {l.next_steps}</p>}
+              {l.prayer_topics && <p className="mt-2 whitespace-pre-line text-sm"><b>{t.prayer}</b> {l.prayer_topics}</p>}
             </Card>
           );
         })
