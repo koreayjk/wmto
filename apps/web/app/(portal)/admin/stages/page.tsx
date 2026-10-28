@@ -31,11 +31,11 @@ export default async function AdminStages() {
 
   return (
     <>
-      <h1 className="font-display text-2xl font-semibold">성장 단계</h1>
+      <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">성장 단계</h1>
       <p className="mt-2 text-sm text-soft">기준을 충족한 회원이 자동으로 제안됩니다. 승인하면 단계가 바뀌고 이력이 남습니다.</p>
 
-      <h2 className="mt-8 text-sm font-semibold text-clay">승급 제안 ({(sugg ?? []).length})</h2>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <h2 className="mt-12 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">승급 제안 ({(sugg ?? []).length})</h2>
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {(sugg ?? []).length === 0 && <li className="py-5 text-soft">제안이 없습니다.</li>}
         {(sugg ?? []).map((s) => (
           <li key={`${s.member_id}-${s.to_stage}`} className="flex flex-wrap items-center justify-between gap-3 py-4">
@@ -48,15 +48,15 @@ export default async function AdminStages() {
               <input type="hidden" name="member_id" value={s.member_id} />
               <input type="hidden" name="to" value={s.to_stage} />
               <input type="hidden" name="note" value={s.reason} />
-              <button className="bg-clay px-4 py-1.5 text-white rounded-lg">승인</button>
+              <button className="cbtn cbtn-sm">승인</button>
             </form>
           </li>
         ))}
       </ul>
 
-      <h2 className="mt-10 text-sm font-semibold text-clay">직접 변경</h2>
+      <h2 className="mt-14 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">직접 변경</h2>
       <p className="mt-1 text-xs text-soft">캠프 수료(Launch)나 챕터 리더십(Elder)처럼 자동 기준이 없는 경우에 사용합니다.</p>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {(members ?? []).map((m) => {
           const stages = m.role === "mentor" ? mentorStages : partnerStages;
           return (
@@ -64,20 +64,20 @@ export default async function AdminStages() {
               <span>{m.name} <span className="text-xs text-clay">{label(stage.get(m.id) ?? "")}</span></span>
               <form action={promote} className="flex gap-2">
                 <input type="hidden" name="member_id" value={m.id} />
-                <select name="to" required defaultValue="" className="border border-black/20 px-2 py-1">
+                <select name="to" required defaultValue="" className="field !w-auto !py-1.5 !text-sm">
                   <option value="" disabled>단계</option>
                   {stages.map((s) => <option key={s} value={s}>{label(s)}</option>)}
                 </select>
-                <input name="note" placeholder="사유" className="border border-black/20 px-2 py-1" />
-                <button className="bg-ink px-3 py-1 text-white rounded-lg">변경</button>
+                <input name="note" placeholder="사유" className="field !w-auto !py-1.5 !text-sm" />
+                <button className="cbtn cbtn-sm">변경</button>
               </form>
             </li>
           );
         })}
       </ul>
 
-      <h2 className="mt-10 text-sm font-semibold text-clay">최근 이력</h2>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <h2 className="mt-14 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">최근 이력</h2>
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {(hist ?? []).map((h) => (
           <li key={h.id} className="py-3 text-sm">
             {name.get(h.member_id) ?? "-"}: {label(h.from_stage ?? "")} → {label(h.to_stage)}{" "}

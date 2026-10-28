@@ -63,11 +63,11 @@ export default async function AdminMembers() {
 
   return (
     <>
-      <h1 className="font-display text-2xl font-semibold">회원 관리</h1>
+      <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">회원 관리</h1>
       <p className="mt-2 text-sm text-soft">승인하면 앱 계정이 만들어지고 초대 메일이 발송됩니다.</p>
 
-      <h2 className="mt-8 text-sm font-semibold text-clay">신청자 ({applicants.length})</h2>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <h2 className="mt-12 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">신청자 ({applicants.length})</h2>
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {applicants.length === 0 && <li className="py-6 text-soft">승인 대기 중인 신청자가 없습니다.</li>}
         {applicants.map((x) => (
           <li key={x.id} className="flex flex-wrap items-center justify-between gap-3 py-4">
@@ -78,19 +78,19 @@ export default async function AdminMembers() {
             <form action={approve} className="flex items-center gap-2">
               <input type="hidden" name="id" value={x.id} />
               {!x.role && (
-                <select name="role" required defaultValue="" className="border border-black/20 px-2 py-1">
+                <select name="role" required defaultValue="" className="field !w-auto !py-1.5 !text-sm">
                   <option value="" disabled>역할</option>
                   {roles.map((r) => <option key={r} value={r}>{roleLabel[r]}</option>)}
                 </select>
               )}
-              <button className="bg-clay px-4 py-1.5 text-white rounded-lg">승인·초대</button>
+              <button className="cbtn cbtn-sm">승인·초대</button>
             </form>
           </li>
         ))}
       </ul>
 
-      <h2 className="mt-10 text-sm font-semibold text-clay">회원 ({others.length})</h2>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <h2 className="mt-14 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">회원 ({others.length})</h2>
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {others.map((x) => (
           <li key={x.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
             <span>

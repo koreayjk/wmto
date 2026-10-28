@@ -24,8 +24,9 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
   const { sent, error } = await searchParams;
   const msg = error === "link" ? m.invalidLink : error === "inactive" ? m.inactive : error === "email" ? getMessages(locale).connect.emailError : null;
   return (
-    <div className="pt-8">
-      <h1 className="display text-3xl">{m.title}</h1>
+    <div className="mx-auto max-w-md pt-6 md:pt-16">
+      <div className="cbezel c-rise"><div className="cbezel-in p-7 md:p-9">
+      <h1 className="display text-[2rem]">{m.title}</h1>
       <p className="mt-3 text-soft">{m.sub}</p>
       {sent ? (
         <p role="status" className="mt-8 rounded-2xl bg-tint p-5 text-accent">{m.sent}</p>
@@ -39,7 +40,8 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
           <button className="cbtn w-full">{m.send}</button>
         </form>
       )}
-      <p className="mt-10 text-sm text-soft">
+      </div></div>
+      <p className="mt-8 px-2 text-center text-sm text-soft">
         {m.notMember}{" "}
         <Link href={localizeHref(locale, "/apply?type=observe")} className="underline">{m.apply}</Link>
       </p>

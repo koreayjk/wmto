@@ -49,9 +49,9 @@ export default async function AdminMatchings() {
 
   return (
     <>
-      <h1 className="font-display text-2xl font-semibold">매칭 배정</h1>
-      <h2 className="mt-6 text-sm font-semibold text-clay">대기 중인 요청 ({(requests ?? []).length})</h2>
-      <ul className="mt-2 divide-y divide-black/10 border-y border-black/10">
+      <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">매칭 배정</h1>
+      <h2 className="mt-10 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">대기 중인 요청 ({(requests ?? []).length})</h2>
+      <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {(requests ?? []).length === 0 && <li className="py-5 text-soft">대기 중인 요청이 없습니다.</li>}
         {(requests ?? []).map((r) => (
           <li key={r.id} className="py-4">
@@ -59,20 +59,20 @@ export default async function AdminMatchings() {
             {r.message && <p className="mt-1 text-sm text-soft">{r.message}</p>}
             <form action={assignRequest} className="mt-2 flex gap-2">
               <input type="hidden" name="request_id" value={r.id} />
-              <select name="mentor_id" required defaultValue="" className="border border-black/20 px-2 py-1"><option value="" disabled>사업가 선택</option>{mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
-              <button className="bg-clay px-4 py-1 text-white rounded-lg">배정</button>
+              <select name="mentor_id" required defaultValue="" className="field !w-auto !py-1.5 !text-sm"><option value="" disabled>사업가 선택</option>{mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
+              <button className="cbtn cbtn-sm">배정</button>
             </form>
           </li>
         ))}
       </ul>
-      <h2 className="mt-10 text-sm font-semibold text-clay">직접 배정</h2>
+      <h2 className="mt-14 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">직접 배정</h2>
       <form action={create} className="mt-6 grid gap-3 md:grid-cols-4">
         <select name="mentor_id" required defaultValue="" className="field"><option value="" disabled>사업가</option>{mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
         <select name="partner_id" required defaultValue="" className="field"><option value="" disabled>선교사</option>{partners.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
         <select name="contribution_type" className="field">{contributionTypes.map((t) => <option key={t} value={t}>{c[t]}</option>)}</select>
-        <button className="bg-clay py-3 font-medium text-white rounded-lg">배정</button>
+        <button className="cbtn w-full">배정</button>
       </form>
-      <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
+      <ul className="mt-10 alist divide-y divide-black/[0.06]">
         {(matchings ?? []).length === 0 && <li className="py-6 text-soft">배정된 매칭이 없습니다.</li>}
         {(matchings ?? []).map((x) => (
           <li key={x.id} className="flex items-center justify-between gap-4 py-4">

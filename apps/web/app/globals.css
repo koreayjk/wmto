@@ -192,3 +192,11 @@ img, svg, video { max-width: 100%; }
 .c-rise:nth-child(4) { animation-delay: 0.21s; } .c-rise:nth-child(5) { animation-delay: 0.28s; }
 .c-rise:nth-child(n + 6) { animation-delay: 0.34s; }
 @media (prefers-reduced-motion: reduce) { .c-rise { animation: none; } .cbezel, .cbtn { transition: none; } }
+
+/* 관리자·목록용: 한 겹으로 그린 이중 테두리 (바깥 고리를 그림자로 표현) */
+@layer components {
+  .alist {
+    background: #fff; border-radius: 1.5rem; padding: 0.25rem 1.5rem;
+    box-shadow: 0 0 0 6px rgba(22, 24, 29, 0.035), 0 0 0 7px rgba(22, 24, 29, 0.045), 0 26px 44px -34px rgba(14, 70, 58, 0.35);
+  }
+}

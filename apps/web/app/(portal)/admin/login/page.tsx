@@ -21,14 +21,16 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
     : error === "config" ? "Supabase 환경 변수가 설정되지 않았습니다."
     : null;
   return (
-    <div className="mx-auto max-w-sm px-6 py-32">
-      <h1 className="display text-3xl">{m.title}</h1>
-      <form action={login} className="mt-8 space-y-4">
+    <div className="mx-auto max-w-sm py-16 md:py-24">
+      <div className="cbezel c-rise"><div className="cbezel-in p-7 md:p-8">
+      <h1 className="display text-[1.8rem]">{m.title}</h1>
+      <form action={login} className="mt-7 space-y-4">
         <input name="email" type="email" required placeholder="이메일" aria-label="이메일" className="field" />
         <input name="password" type="password" required placeholder="비밀번호" aria-label="비밀번호" className="field" />
         {msg && <p role="alert" className="text-sm text-clay">{msg}</p>}
-        <button className="w-full bg-clay py-3 font-medium text-white rounded-lg">{m.login}</button>
+        <button className="cbtn w-full">{m.login}</button>
       </form>
+      </div></div>
     </div>
   );
 }
