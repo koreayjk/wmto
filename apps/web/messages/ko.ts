@@ -821,6 +821,28 @@ export const ko = {
       watch: "시청하기",
       uncategorized: "기타",
     },
+    side: { network: "네트워크", activity: "활동", report: "리포트", learn: "배우기" },
+    dash: {
+      chartTitle: "최근 6개월의 나눔",
+      chartNote: "숫자는 순위가 아니라, 걸어온 길을 돌아보는 기록입니다.",
+      chartUnit: "{n}건",
+      chartAria: "월별 나눔 기록",
+      statsTitle: "이번 달",
+      upcoming: "다가오는 모임",
+      seeAll: "전체 보기",
+      profileTitle: "프로필을 채워 주세요",
+      profileHint: "서로를 더 잘 알 수 있도록 아래 항목을 채워 주세요.",
+      profileCta: "내 정보 수정",
+      profileFields: {
+        phone: "연락처", country: "거주 국가", business_name: "사업체 이름", industry: "업종", contribution_types: "기여 방식",
+        mission_field: "선교지", sending_org: "파송 기관", business_idea: "사업 아이디어", sponsor_type: "후원자 유형", church_name: "교회 이름",
+      },
+      shortcuts: "바로가기",
+      sc: {
+        report: "자립 리포트 쓰기", mentoring: "멘토링 기록", growth: "나눔·성장 보기",
+        referral: "고객 소개하기", thanks: "감사 편지", academy: "강의 보기",
+      },
+    },
     today: {
       title: "오늘 할 일",
       report: "이번 달 자립 리포트를 아직 쓰지 않았어요", reportCta: "리포트 쓰기",

@@ -810,6 +810,28 @@ export const en: Messages = {
       watch: "Watch",
       uncategorized: "Other",
     },
+    side: { network: "Network", activity: "Activity", report: "Reports", learn: "Learn" },
+    dash: {
+      chartTitle: "Giving over the last six months",
+      chartNote: "These numbers are not a ranking. They are a record of the road you have walked.",
+      chartUnit: "{n}",
+      chartAria: "Monthly giving records",
+      statsTitle: "This month",
+      upcoming: "Upcoming meetings",
+      seeAll: "See all",
+      profileTitle: "Please complete your profile",
+      profileHint: "Fill in the items below so that we can know each other better.",
+      profileCta: "Edit my profile",
+      profileFields: {
+        phone: "Phone", country: "Country of residence", business_name: "Business name", industry: "Industry", contribution_types: "Ways you contribute",
+        mission_field: "Mission field", sending_org: "Sending organization", business_idea: "Business idea", sponsor_type: "Sponsor type", church_name: "Church name",
+      },
+      shortcuts: "Shortcuts",
+      sc: {
+        report: "Write the self-reliance report", mentoring: "Mentoring log", growth: "See giving and growth",
+        referral: "Refer a client", thanks: "Thank-you letters", academy: "Watch lessons",
+      },
+    },
     today: {
       title: "Today",
       report: "You have not written this month's self-reliance report yet", reportCta: "Write the report",
