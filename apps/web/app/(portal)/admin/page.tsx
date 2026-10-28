@@ -59,7 +59,7 @@ export default async function AdminApplications({ searchParams }: { searchParams
                 <p className="mt-2 break-all text-xs text-soft">{JSON.stringify(r.details)}</p>
               )}
             </div>
-            <form action={setStatus} className="flex items-start gap-2">
+            <form action={setStatus} className="flex flex-wrap items-start gap-2">
               <input type="hidden" name="id" value={r.id} />
               <select name="status" defaultValue={r.status} className="field !w-auto !py-1.5 !text-sm">
                 {applicationStatuses.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}

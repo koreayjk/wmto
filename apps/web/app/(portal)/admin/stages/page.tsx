@@ -62,7 +62,7 @@ export default async function AdminStages() {
           return (
             <li key={m.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
               <span>{m.name} <span className="text-xs text-clay">{label(stage.get(m.id) ?? "")}</span></span>
-              <form action={promote} className="flex gap-2">
+              <form action={promote} className="flex flex-wrap gap-2">
                 <input type="hidden" name="member_id" value={m.id} />
                 <select name="to" required defaultValue="" className="field !w-auto !py-1.5 !text-sm">
                   <option value="" disabled>단계</option>

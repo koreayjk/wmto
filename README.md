@@ -37,6 +37,10 @@ npm run dev                                     # http://localhost:3000
 
 Supabase 설정 없이도 정적 페이지는 모두 표시되며, 일정·스토리는 빈 목록, 신청 폼 제출은 오류로 처리됩니다.
 
+## 데모 데이터
+
+시연용 가상 회원 70명과 활동 기록을 넣고 한 번에 지우는 SQL이 `apps/web/supabase/demo/` 에 있습니다. 사용법은 [docs/07-demo-data.md](docs/07-demo-data.md) 를 보세요.
+
 ## 언어 (한국어 / English)
 
 - 공개 사이트: 한국어는 주소에 접두사가 없고(`/about`), 영어는 `/en` 으로 시작합니다(`/en/about`). `proxy.ts` 가 한국어 주소를 내부적으로 `/ko/...` 로 연결합니다.

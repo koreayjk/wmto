@@ -75,7 +75,7 @@ export default async function AdminMembers() {
               <b>{x.name}</b> <span className="text-soft">{x.email}{x.country ? ` · ${x.country}` : ""}</span>
               <span className="ml-2 text-xs text-clay">{x.role ? roleLabel[x.role] : "역할 미정"}</span>
             </span>
-            <form action={approve} className="flex items-center gap-2">
+            <form action={approve} className="flex flex-wrap items-center gap-2">
               <input type="hidden" name="id" value={x.id} />
               {!x.role && (
                 <select name="role" required defaultValue="" className="field !w-auto !py-1.5 !text-sm">
