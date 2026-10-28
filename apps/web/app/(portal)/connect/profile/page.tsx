@@ -59,7 +59,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   return (
     <div className="space-y-4">
       <PageTitle>{t.title}</PageTitle>
-      {saved && <p role="status" className="border border-clay/40 bg-clay/10 p-3 text-sm">{t.saved}</p>}
+      {saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
       <Card>
         <p className="text-sm text-soft">{t.role}: {roleLabel}{me.stage ? ` · ${t.stage}: ${c.stageNames[me.stage as keyof typeof c.stageNames]}` : ""}</p>
         <p className="mt-1 text-sm text-soft">{me.email}</p>
@@ -106,7 +106,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
               <label className="block"><span className={labelCls}>{f.fields.churchName}</span><input name="church_name" defaultValue={(p.church_name as string) ?? ""} className="field" /></label>
             </>
           )}
-          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
+          <button className="cbtn w-full">{t.save}</button>
         </form>
       </Card>
       <Card>
@@ -115,7 +115,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           <span className="flex gap-2">
             {([["ko", "한국어"], ["en", "English"]] as const).map(([v, label]) => (
               <button key={v} name="locale" value={v} aria-pressed={locale === v}
-                className={`rounded-full border px-4 py-2 text-sm ${locale === v ? "border-accent bg-accent text-white" : "border-line text-soft"}`}>
+                className={`rounded-full border px-4 py-2 text-sm ${locale === v ? "border-accent bg-accent text-white" : "border-black/10 text-soft"}`}>
                 {label}
               </button>
             ))}
@@ -123,7 +123,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         </form>
       </Card>
       <p className="px-1 text-sm text-soft">{t.install}</p>
-      <form action={logout}><button className="w-full border border-ink/30 py-3.5 hover:bg-ink hover:text-paper">{t.logout}</button></form>
+      <form action={logout}><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
     </div>
   );
 }

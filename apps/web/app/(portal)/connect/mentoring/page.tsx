@@ -82,7 +82,7 @@ export default async function Mentoring() {
                 <span className={labelCls}>{t.prayer}</span>
                 <textarea name="prayer_topics" rows={2} maxLength={2000} className="field" />
               </label>
-              <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
+              <button className="cbtn w-full">{t.save}</button>
             </form>
           ) : (
             <p className="text-soft">{t.noMatching}</p>

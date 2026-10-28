@@ -55,7 +55,7 @@ export default async function Matching() {
             {r.message && <p className="mt-2 whitespace-pre-line text-soft">{r.message}</p>}
             <form action={accept} className="mt-4">
               <input type="hidden" name="id" value={r.id} />
-              <button className="bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">{t.accept}</button>
+              <button className="cbtn">{t.accept}</button>
               <p className="mt-2 text-xs text-soft">{t.acceptHint}</p>
             </form>
           </Card>
@@ -74,7 +74,7 @@ export default async function Matching() {
             {contributionTypes.map((c) => <option key={c} value={c}>{m.contribution[c]}</option>)}
           </select>
           <label className="block"><span className={labelCls}>{t.message}</span><textarea name="message" rows={4} maxLength={2000} className="field" /></label>
-          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.send}</button>
+          <button className="cbtn w-full">{t.send}</button>
         </form>
       </Card>
       <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-soft">{t.mine}</h2>

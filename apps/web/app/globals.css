@@ -137,3 +137,58 @@ img, svg, video { max-width: 100%; }
   .bezel > .bezel-in { border-radius: calc(2rem - 0.375rem); }
 }
 }
+
+/* ───────── WMTO Connect: 차분하고 고급스러운 앱 화면 ───────── */
+.connect {
+  background-color: #f6f5f1;
+  background-image: radial-gradient(70rem 30rem at 78% -14%, rgba(14, 106, 91, 0.08), transparent 70%);
+  color: var(--ink);
+}
+@layer components {
+  .cbezel {
+    border-radius: 1.75rem;
+    padding: 0.375rem;
+    background: rgba(22, 24, 29, 0.035);
+    box-shadow: 0 0 0 1px rgba(22, 24, 29, 0.045);
+    transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
+  }
+  .cbezel-in {
+    border-radius: calc(1.75rem - 0.375rem);
+    background: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 26px 44px -34px rgba(14, 70, 58, 0.35);
+  }
+  .cbezel-in.dark {
+    background: #0b3d35;
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 30px 50px -30px rgba(6, 32, 27, 0.6);
+  }
+  a.cbezel:hover { transform: translateY(-2px); }
+
+  .cbtn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+    border-radius: 999px; background: var(--accent); color: #fff;
+    padding: 0.8rem 1.5rem; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 14px 24px -16px rgba(14, 106, 91, 0.7);
+    transition: transform 0.5s var(--ease), background-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+  .cbtn:hover { background: var(--accent-hover); }
+  .cbtn:active { transform: scale(0.98); }
+  .cbtn-sm { padding: 0.55rem 1.05rem; font-size: 14px; }
+  .cbtn-quiet { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px rgba(22, 24, 29, 0.14); }
+  .cbtn-quiet:hover { background: rgba(22, 24, 29, 0.05); }
+  .cbtn-light { background: #fff; color: #0b3d35; box-shadow: 0 14px 24px -16px rgba(0, 0, 0, 0.5); }
+  .cbtn-light:hover { background: #e8f2ef; }
+  .cbtn-ico { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; margin: -0.3rem -0.7rem -0.3rem 0; border-radius: 999px; background: rgba(14, 106, 91, 0.12); transition: transform 0.5s var(--ease); }
+  .cbtn:hover .cbtn-ico { transform: translate(2px, -1px) scale(1.05); }
+}
+.connect .field {
+  background: #fcfbf8; border-color: rgba(22, 24, 29, 0.12); border-radius: 16px; padding: 0.85rem 1.05rem;
+}
+.connect .field:hover { border-color: rgba(22, 24, 29, 0.28); }
+.connect .field:focus { background: #fff; border-color: var(--accent); }
+@keyframes cRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.c-rise { animation: cRise 0.9s var(--ease) both; }
+.c-rise:nth-child(2) { animation-delay: 0.07s; } .c-rise:nth-child(3) { animation-delay: 0.14s; }
+.c-rise:nth-child(4) { animation-delay: 0.21s; } .c-rise:nth-child(5) { animation-delay: 0.28s; }
+.c-rise:nth-child(n + 6) { animation-delay: 0.34s; }
+@media (prefers-reduced-motion: reduce) { .c-rise { animation: none; } .cbezel, .cbtn { transition: none; } }

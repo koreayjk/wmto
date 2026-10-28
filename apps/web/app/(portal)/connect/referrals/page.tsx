@@ -70,7 +70,7 @@ export default async function Referrals() {
             <label className="block"><span className={labelCls}>{t.client}</span><input name="client_name" required maxLength={200} className="field" /></label>
             <label className="block"><span className={labelCls}>{t.contact}</span><input name="client_contact" maxLength={200} className="field" /></label>
             <label className="block"><span className={labelCls}>{t.note}</span><textarea name="note" rows={3} maxLength={3000} className="field" /></label>
-            <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.send}</button>
+            <button className="cbtn w-full">{t.send}</button>
           </form>
         )}
       </Card>
@@ -85,10 +85,10 @@ export default async function Referrals() {
           {r.note && <p className="mt-2 whitespace-pre-line text-soft">{r.note}</p>}
           <form action={setStatus} className="mt-3 flex items-center gap-2">
             <input type="hidden" name="id" value={r.id} />
-            <select name="status" defaultValue={r.status} className="border border-line bg-white px-2 py-1.5 text-sm rounded-lg" aria-label={t.update}>
+            <select name="status" defaultValue={r.status} className="field !w-auto !py-1.5 !text-sm" aria-label={t.update}>
               {STATUSES.map((s) => <option key={s} value={s}>{t.status[s]}</option>)}
             </select>
-            <button className="bg-ink px-3 py-1.5 text-sm text-white rounded-lg">{t.update}</button>
+            <button className="cbtn cbtn-sm">{t.update}</button>
           </form>
         </Card>
       ))}

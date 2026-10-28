@@ -92,11 +92,11 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
   return (
     <div className="space-y-4">
       <PageTitle>{t.title}</PageTitle>
-      {sp.saved && <p role="status" className="border border-clay/40 bg-clay/10 p-3 text-sm">{t.saved}</p>}
+      {sp.saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
       <nav aria-label={t.month} className="flex gap-2 text-sm">
         {[cur, prev].map((v) => (
           <Link key={v} href={v === cur ? "/connect/report" : `/connect/report?month=${v}`}
-            className={`rounded-lg border px-4 py-2 ${v === month ? "border-clay bg-clay text-white" : "border-line text-soft"}`}>
+            className={`rounded-full px-4 py-2 text-sm transition-colors duration-500 ${v === month ? "bg-accent text-white" : "text-soft ring-1 ring-inset ring-black/10 hover:text-ink"}`}>
             {fmtMonth(v, locale)}
           </Link>
         ))}
@@ -130,7 +130,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
             <span className={labelCls}>{t.prayer}</span>
             <textarea name="prayer_topics" rows={3} maxLength={3000} defaultValue={existing?.prayer_topics ?? ""} className="field" />
           </label>
-          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{t.save}</button>
+          <button className="cbtn w-full">{t.save}</button>
         </form>
       </Card>
 

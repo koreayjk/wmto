@@ -18,7 +18,7 @@ export default async function More() {
   return (
     <div>
       <PageTitle>{m.title}</PageTitle>
-      <ul className="divide-y divide-line border-y border-line">
+      <ul className="divide-y divide-black/[0.06]">
         {links.map((l) => (
           <li key={l.href}>
             <Link href={l.href} className="flex items-center justify-between gap-4 py-5">

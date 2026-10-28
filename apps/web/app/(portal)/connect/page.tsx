@@ -5,6 +5,7 @@ import { getPortalLocale } from "@/lib/locale";
 import { currentMonthKst, fmtDate, fmtDateTime, fmtMonth } from "@/lib/format";
 import { mentorStages, partnerStages } from "@/lib/stages";
 import { Card, PageTitle, StageBar } from "@/components/connect/ui";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { ActivityChart } from "@/components/connect/ActivityChart";
 import { catsFor, monthlyActivity } from "@/lib/activity";
 
@@ -28,7 +29,7 @@ export default async function ConnectHome() {
   const nextCard = (
     <Card title={d.upcoming}>
       {upcoming.length ? (
-        <ul className="divide-y divide-line">
+        <ul className="divide-y divide-black/[0.06]">
           {upcoming.map((e, i) => (
             <li key={e.id} className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
               <span>
@@ -37,7 +38,7 @@ export default async function ConnectHome() {
               </span>
               {i === 0 && e.meeting_url && (
                 <a href={e.meeting_url} target="_blank" rel="noopener noreferrer"
-                  className="shrink-0 bg-clay px-4 py-2 text-sm font-medium text-white rounded-lg">
+                  className="cbtn cbtn-sm shrink-0">
                   {m.join}
                 </a>
               )}
@@ -142,7 +143,7 @@ export default async function ConnectHome() {
         </Card>
         <Card title={m.myMentees}>
           {(ms ?? []).length ? (
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-black/[0.06]">
               {ms!.map((x) => {
                 const p = prof.get(x.partner_id);
                 const st = p?.stage as keyof typeof m.stageNames | undefined;
@@ -213,11 +214,12 @@ export default async function ConnectHome() {
   return (
     <div className="space-y-4">
       <PageTitle>{me.name}{m.greeting}</PageTitle>
-      <Card title={t.title} className="border-accent/30 bg-tint">
-        <p className="text-lg font-medium">{today.text}</p>
+      <Card title={t.title} tone="dark">
+        <p className="display max-w-xl text-[1.5rem] leading-snug md:text-[1.9rem]">{today.text}</p>
         {today.href && (
-          <Link href={today.href} className="mt-4 inline-block bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">
+          <Link href={today.href} className="cbtn cbtn-light mt-7">
             {today.cta}
+            <span className="cbtn-ico"><ArrowUpRight size={16} weight="light" aria-hidden /></span>
           </Link>
         )}
       </Card>
@@ -230,10 +232,11 @@ export default async function ConnectHome() {
           </Card>
           <div className="grid grid-cols-2 gap-4 lg:col-span-2">
             {cats.map((c) => (
-              <Link key={c} href={statHref[c]} className="rounded-2xl border border-line bg-white p-5 transition-colors hover:border-accent/40">
-                <p className="text-xs text-soft">{g.labels[c]}</p>
-                <p className="mt-2 font-display text-3xl font-semibold tabular-nums">{thisMonth.counts[c]}</p>
-                <p className="mt-1 text-xs text-clay">{d.statsTitle}</p>
+              <Link key={c} href={statHref[c]} className="cbezel c-rise block">
+                <div className="cbezel-in flex h-full min-h-32 flex-col justify-between p-5">
+                  <p className="text-[13px] text-soft">{g.labels[c]}</p>
+                  <p className="font-display text-[2.6rem] font-light leading-none tabular-nums">{thisMonth.counts[c]}</p>
+                </div>
               </Link>
             ))}
           </div>
@@ -256,7 +259,7 @@ export default async function ConnectHome() {
             </Card>
           )}
           <Card title={d.shortcuts}>
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-black/[0.06]">
               {shortcuts.map((x) => (
                 <li key={x.href}>
                   <Link href={x.href} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">

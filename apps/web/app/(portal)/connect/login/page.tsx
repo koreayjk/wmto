@@ -28,7 +28,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
       <h1 className="display text-3xl">{m.title}</h1>
       <p className="mt-3 text-soft">{m.sub}</p>
       {sent ? (
-        <p role="status" className="mt-8 border border-line bg-white/60 p-5">{m.sent}</p>
+        <p role="status" className="mt-8 rounded-2xl bg-tint p-5 text-accent">{m.sent}</p>
       ) : (
         <form action={sendLink} className="mt-8 space-y-4">
           <label className="block">
@@ -36,7 +36,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
             <input name="email" type="email" required autoComplete="email" className="field" />
           </label>
           {msg && <p role="alert" className="text-sm text-clay">{msg}</p>}
-          <button className="w-full bg-clay py-3.5 font-medium text-white rounded-lg">{m.send}</button>
+          <button className="cbtn w-full">{m.send}</button>
         </form>
       )}
       <p className="mt-10 text-sm text-soft">

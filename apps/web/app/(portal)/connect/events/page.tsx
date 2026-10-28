@@ -41,7 +41,7 @@ export default async function Events() {
         <p className="text-sm text-soft">{fmtDateTime(e.start_at, locale)}{e.location ? ` · ${e.location}` : ""}</p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           {canAct && e.meeting_url && (
-            <a href={e.meeting_url} target="_blank" rel="noopener noreferrer" className="bg-clay px-5 py-2.5 text-sm font-medium text-white rounded-lg">
+            <a href={e.meeting_url} target="_blank" rel="noopener noreferrer" className="cbtn">
               {m.connect.join}
             </a>
           )}
@@ -50,7 +50,7 @@ export default async function Events() {
           ) : canAct && open ? (
             <form action={checkIn}>
               <input type="hidden" name="event_id" value={e.id} />
-              <button className="border border-ink/30 px-5 py-2.5 text-sm hover:bg-ink hover:text-paper rounded-lg">{c.checkIn}</button>
+              <button className="cbtn cbtn-quiet">{c.checkIn}</button>
             </form>
           ) : canAct ? (
             <span className="text-xs text-soft">{c.checkInHint}</span>

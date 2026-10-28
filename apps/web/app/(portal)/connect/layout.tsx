@@ -53,12 +53,12 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   const stageName = active?.stage ? m.stageNames[active.stage as keyof typeof m.stageNames] : null;
 
   return (
-    <div className="min-h-svh bg-paper lg:flex">
+    <div className="connect min-h-svh lg:flex">
       <ServiceWorker />
       {active && (
-        <aside className="hidden w-64 shrink-0 border-r border-line lg:block">
-          <div className="sticky top-0 flex h-svh flex-col overflow-y-auto px-4 py-6">
-            <div className="mb-8 flex items-center gap-2.5 px-3">
+        <aside className="hidden w-72 shrink-0 lg:block">
+          <div className="sticky top-0 flex h-svh flex-col overflow-y-auto px-5 py-8">
+            <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={32} height={32} className="h-8 w-8" />
               <span className="font-display text-lg font-bold tracking-wide">WMTO</span>
@@ -69,8 +69,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
         </aside>
       )}
       <div className="min-w-0 flex-1">
-        <header className="border-b border-line pt-[env(safe-area-inset-top)]">
-          <div className="mx-auto flex h-14 max-w-xl items-center px-5 lg:h-16 lg:max-w-5xl">
+        <header className="pt-[env(safe-area-inset-top)]">
+          <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-20 lg:max-w-5xl lg:px-10">
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
@@ -78,14 +78,14 @@ export default async function ConnectLayout({ children }: { children: React.Reac
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
             </span>
             {active && (
-              <span className="ml-auto flex items-center gap-3 text-sm">
-                <span className="hidden text-soft sm:inline">{active.name}</span>
-                {stageName && <span className="rounded-full bg-tint px-3 py-1 text-xs font-semibold text-accent">{stageName}</span>}
+              <span className="ml-auto flex items-center gap-1 rounded-full bg-white/80 py-1.5 pl-4 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
+                <span className="hidden text-ink/70 sm:inline">{active.name}</span>
+                {stageName && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
               </span>
             )}
           </div>
         </header>
-        <main className={`px-5 pt-6 lg:px-10 lg:pt-8 ${active ? "pb-28 lg:pb-14" : "pb-12"}`}>
+        <main className={`px-5 pt-2 lg:px-10 lg:pt-4 ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
           <ContentFrame>{children}</ContentFrame>
         </main>
       </div>
