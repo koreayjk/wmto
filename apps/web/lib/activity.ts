@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { createSupabaseServerClient } from "./supabase/server";
 import type { Me } from "./me";
 import { currentMonthKst } from "./format";
 
@@ -17,7 +17,7 @@ export type MonthRow = { month: string; counts: Record<Cat, number>; total: numb
  * 최근 N개월(이번 달 포함)의 나눔 기록 건수. 순위가 아니라 걸어온 길을 보여 주기 위한 숫자입니다.
  * 모든 조회는 본인 권한(RLS)으로 이루어져 본인 것만 보입니다.
  */
-export async function monthlyActivity(supabase: SupabaseClient, me: Me, n = 6): Promise<MonthRow[]> {
+export async function monthlyActivity(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, me: Me, n = 6): Promise<MonthRow[]> {
   const cur = currentMonthKst().slice(0, 7);
   const [y, mo] = cur.split("-").map(Number);
   const months = Array.from({ length: n }, (_, i) => {

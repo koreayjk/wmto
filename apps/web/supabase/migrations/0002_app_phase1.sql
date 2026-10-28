@@ -1,3 +1,11 @@
+-- WMTO 는 SVM 등 다른 서비스와 같은 Supabase 프로젝트를 쓸 수 있도록 별도 스키마(wmto)에 만듭니다.
+-- 설정 후 Dashboard > Project Settings > API > Exposed schemas 에 wmto 를 추가해야 앱이 접근합니다.
+create schema if not exists wmto;
+grant usage on schema wmto to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on sequences to anon, authenticated, service_role;
+set search_path = wmto;
+
 -- WMTO Connect (회원 앱) 1단계: 로그인·프로필, 모임·출석, 멘토링 기록, 자립 리포트.
 -- 기존 7개 테이블은 새로 만들지 않고 확장만 합니다. 모든 신규 테이블은 member_id 로 연결됩니다.
 
@@ -23,7 +31,7 @@ alter table events drop column zoom_url;
 
 -- ───────── 헬퍼: 로그인한 활성 회원의 members.id ─────────
 create or replace function current_member_id() returns uuid
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = wmto as $$
   select id from members where auth_user_id = auth.uid() and status = 'active' limit 1;
 $$;
 

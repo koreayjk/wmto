@@ -32,7 +32,7 @@ async function approve(fd: FormData) {
   let userId: string | null = m.auth_user_id;
   if (!userId) {
     const site = process.env.NEXT_PUBLIC_SITE_URL ?? "";
-    const { data, error } = await db.auth.admin.inviteUserByEmail(m.email, { redirectTo: `${site}/auth/confirm?next=/connect` });
+    const { data, error } = await db.auth.admin.inviteUserByEmail(m.email, { redirectTo: `${site}/auth/confirm?next=/connect`, data: { wmto_member: true } });
     userId = data?.user?.id ?? (error ? await findAuthUserId(db, m.email) : null);
   }
   if (!userId) { console.error("approve: could not create or find auth user for", m.email); return; }

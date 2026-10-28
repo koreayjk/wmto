@@ -1,3 +1,11 @@
+-- WMTO 는 SVM 등 다른 서비스와 같은 Supabase 프로젝트를 쓸 수 있도록 별도 스키마(wmto)에 만듭니다.
+-- 설정 후 Dashboard > Project Settings > API > Exposed schemas 에 wmto 를 추가해야 앱이 접근합니다.
+create schema if not exists wmto;
+grant usage on schema wmto to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on sequences to anon, authenticated, service_role;
+set search_path = wmto;
+
 -- WMTO 1단계 스키마 (홈페이지). 회원 앱이 같은 DB를 그대로 사용합니다.
 -- 코드 값은 docs의 00-wmto-overview.md 와 동일합니다.
 
@@ -25,7 +33,7 @@ create table admins (
 );
 
 create or replace function is_admin() returns boolean
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = wmto as $$
   select exists (select 1 from admins where user_id = auth.uid());
 $$;
 

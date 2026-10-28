@@ -16,6 +16,14 @@ WMTO는 두 가지 서비스를 이어서 씁니다.
 | **Vercel** | 홈페이지와 앱을 인터넷에 올려 주는 서버 | 무료(Hobby)로 시작 가능. 단, Hobby는 비상업용이라 후원금을 받는 단계가 되면 유료(Pro) 전환을 확인하세요 |
 | **Resend** (선택) | 로그인 메일과 신청 알림 메일을 안정적으로 보내는 서비스 | 월 소량 무료 |
 
+> **이 안내서는 SVM과 같은 Supabase 프로젝트를 나눠 쓰는 경우를 기준으로 합니다.**
+> WMTO의 표는 전부 `wmto`라는 별도 칸(스키마)에 만들어지므로 SVM의 표와 이름이 겹치지 않습니다.
+> 대신 아래 세 가지는 프로젝트 전체가 공유하니 특히 조심하세요. (각 단계에 ⚠ 표시)
+> 1. **로그인 사용자 목록**(Authentication → Users): SVM 사용자와 WMTO 사용자가 한 목록에 섞입니다.
+> 2. **이메일 양식**(초대, 로그인 링크): 프로젝트에 하나뿐이라 SVM과 WMTO가 같이 씁니다. 5장에서 조건문으로 나눕니다.
+> 3. **Site URL**: 하나뿐이므로 SVM 설정을 바꾸지 말고 WMTO 주소는 "Redirect URLs"에만 추가합니다.
+> 별도 프로젝트로 분리하고 싶으면 1장에서 새 프로젝트를 만들면 되고, 나머지 단계는 같습니다.
+
 **준비물**
 - GitHub 계정(`koreayjk`) : 코드가 이미 `koreayjk/wmto` 저장소에 있습니다.
 - 관리자로 쓸 이메일 주소 1개
@@ -32,7 +40,11 @@ WMTO는 두 가지 서비스를 이어서 씁니다.
 
 ---
 
-## 1. Supabase 프로젝트 만들기
+## 1. Supabase 프로젝트 준비하기
+
+**SVM과 같은 프로젝트를 쓰는 경우:** 새로 만들지 않고 SVM이 쓰는 프로젝트를 열어 "키 3개 확인해 두기"로 바로 가세요. (SVM 쪽 설정은 건드리지 않습니다.)
+
+**새 프로젝트를 만드는 경우:**
 
 1. https://supabase.com 에 접속해 GitHub 계정으로 가입/로그인합니다.
 2. **New project**를 누릅니다. (처음이면 Organization을 먼저 만듭니다. 이름은 `WMTO`)
@@ -66,9 +78,20 @@ WMTO는 두 가지 서비스를 이어서 씁니다.
    | 3 | `0003_app_phase2.sql` | 앱 2단계: 매칭 요청, 리퍼럴, 감사 편지, 성장 단계, 아카데미 |
    | 4 | `0004_mentoring_followup.sql` | 멘토링 기록의 "다음에 할 것·기도제목" |
 
+   각 파일 맨 위에 `wmto` 스키마를 만드는 문장이 들어 있어서, SVM의 기존 표(`public` 칸)는 전혀 건드리지 않습니다. 파일을 고치지 말고 그대로 붙여 넣으세요.
+
 4. 매번 아래에 **Success**가 나오면 다음 파일로 넘어갑니다.
    - 빨간 오류가 나오면 **멈추고** 오류 문장을 복사해 두세요. 앞 단계를 건너뛰었거나 같은 파일을 두 번 실행한 경우가 대부분입니다. (처음부터 다시 하려면 8장 맨 아래 "처음부터 다시 하고 싶을 때"를 보세요.)
-5. 확인: 왼쪽 **Table Editor**에 `members`, `applications`, `events`, `matchings`, `mentoring_logs` 같은 표가 보이면 성공입니다.
+5. 확인: 왼쪽 **Table Editor** 상단의 스키마 선택칸(보통 `public`)을 **`wmto`** 로 바꾸면 `members`, `applications`, `events`, `matchings`, `mentoring_logs` 같은 표가 보여야 합니다. (SVM 표는 `public`에 그대로 있습니다.)
+
+### 2-1. ⚠ `wmto` 스키마를 앱에 열어 주기 (필수, 빠뜨리기 쉬움)
+Supabase는 기본적으로 `public` 칸만 앱에 열어 줍니다. WMTO가 쓸 수 있게 추가해야 합니다.
+
+1. **Project Settings → API** (또는 **Data API → Settings**) 를 엽니다.
+2. **Exposed schemas** 칸에 `wmto` 를 **추가**합니다. (기존의 `public` 등은 지우지 마세요.)
+3. **Save** 합니다.
+
+이걸 안 하면 신청서 저장과 앱이 "The schema must be one of the following" 같은 오류를 냅니다.
 
 > 중요: 4개를 **한 번에 하나씩, 순서대로**. 순서가 바뀌면 오류가 납니다.
 
@@ -79,12 +102,12 @@ WMTO는 두 가지 서비스를 이어서 씁니다.
 관리자는 `/admin`에서 신청을 승인하고, 일정·스토리·매칭을 관리합니다.
 
 1. Supabase 왼쪽 **Authentication → Users → Add user → Create new user**
-2. 관리자 이메일과 비밀번호를 입력하고 **Auto Confirm User**를 체크한 뒤 만듭니다.
+2. 관리자 이메일과 비밀번호를 입력하고 **Auto Confirm User**를 체크한 뒤 만듭니다. (⚠ 이 목록은 SVM과 공유됩니다. 이미 SVM에 가입한 이메일이면 새로 만들지 말고 그 사용자의 UID를 쓰세요. SVM 관리자 목록과는 별개이므로, WMTO 관리자 권한은 아래 SQL로만 부여됩니다.)
 3. 목록에서 방금 만든 사용자의 **User UID**(`xxxxxxxx-xxxx-...` 형식)를 복사합니다.
 4. **SQL Editor**에서 아래를 실행합니다. (`여기에-UID`를 복사한 값으로 바꿉니다. 따옴표는 남깁니다.)
 
 ```sql
-insert into admins (user_id) values ('여기에-UID');
+insert into wmto.admins (user_id) values ('여기에-UID');
 ```
 
 5. 관리자를 더 추가하려면 사용자를 만든 뒤 같은 SQL을 한 번 더 실행합니다.
@@ -107,6 +130,8 @@ insert into admins (user_id) values ('여기에-UID');
    | `SUPABASE_SERVICE_ROLE_KEY` | 1장의 service_role key |
    | `NEXT_PUBLIC_SITE_URL` | 사이트 주소. 처음에는 `https://wmto-xxxx.vercel.app` 처럼 Vercel이 주는 주소 (배포 후 정확한 값 확인. 아래 참고) |
 
+   (선택: `NEXT_PUBLIC_SUPABASE_SCHEMA` 는 기본값이 `wmto` 라서 따로 넣지 않아도 됩니다.)
+
    (신청 알림 메일을 받으려면 6장에서 만든 `RESEND_API_KEY`, `ADMIN_NOTIFY_EMAIL`, `NOTIFY_FROM_EMAIL`도 추가합니다. 지금은 건너뛰어도 됩니다.)
 5. **Deploy**를 누르고 2~3분 기다립니다. 성공하면 사이트 주소가 나옵니다.
 6. **주소를 확정하고 다시 배포하기**: 처음 입력한 `NEXT_PUBLIC_SITE_URL`이 실제 주소와 다르면, Vercel **Settings → Environment Variables**에서 값을 고치고 **Deployments → 가장 위 배포 → ⋯ → Redeploy** 합니다.
@@ -118,34 +143,48 @@ insert into admins (user_id) values ('여기에-UID');
 
 로그인 링크가 올바른 주소로 가고, 다른 기기에서 열어도 동작하게 하는 단계입니다. **여기를 빼먹으면 로그인 링크가 작동하지 않습니다.**
 
-### 5-1. 주소 등록
+### 5-1. 주소 등록 (⚠ SVM 설정을 바꾸지 마세요)
 Supabase **Authentication → URL Configuration**
 
-- **Site URL**: 4장의 `NEXT_PUBLIC_SITE_URL`과 **똑같이** (`https://...`, 끝에 `/` 없이)
-- **Redirect URLs**: `https://사이트주소/**` 를 추가 (예: `https://wmto-xxxx.vercel.app/**`)
+- **Site URL**: SVM이 이미 쓰고 있다면 **그대로 둡니다.** (바꾸면 SVM 로그인 메일이 깨집니다.) 새 프로젝트라면 WMTO 주소로 설정합니다.
+- **Redirect URLs**: `https://WMTO사이트주소/**` 를 **추가**합니다. (예: `https://wmto-xxxx.vercel.app/**`) 기존 SVM 주소는 지우지 않습니다.
 
-### 5-2. 이메일 양식 두 개 바꾸기
+### 5-2. ⚠ 이메일 양식 두 개 바꾸기 (SVM과 공유되므로 조건문 사용)
 Supabase **Authentication → Email Templates**
 
-**Invite user** (관리자가 승인하면 회원에게 가는 초대 메일)
-- Subject: `[WMTO] 앱 초대장` (원하는 문구)
-- Message body (HTML)에서 링크 부분을 아래로 바꿉니다.
+이메일 양식은 프로젝트에 하나뿐입니다. 그래서 **WMTO 회원에게 가는 메일만 WMTO 양식**으로, 나머지는 **지금 SVM이 쓰는 양식 그대로** 나가게 조건문으로 나눕니다.
+WMTO가 초대할 때 사용자에게 `wmto_member` 표시를 달아 두기 때문에 가능한 방식입니다.
+
+**먼저, 지금 들어 있는 양식을 메모장에 통째로 복사해 두세요.** (SVM용 원본이자 되돌릴 때 필요합니다.)
+
+**Invite user** (관리자가 승인하면 회원에게 가는 초대 메일) 의 Message body를 아래 형태로 바꿉니다. `여기에 기존 SVM 양식` 자리에 방금 복사한 원본을 붙여 넣습니다.
 
 ```html
+{{ if .Data.wmto_member }}
 <h2>WMTO Connect에 초대합니다</h2>
 <p>아래 버튼을 눌러 로그인하세요.</p>
-<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/connect">앱 열기</a></p>
+<p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=invite">앱 열기</a></p>
+{{ else }}
+여기에 기존 SVM 양식
+{{ end }}
 ```
 
 **Magic Link** (이후 로그인할 때마다 가는 메일)
 
 ```html
+{{ if .Data.wmto_member }}
 <h2>WMTO Connect 로그인</h2>
-<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/connect">로그인하기</a></p>
+<p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=magiclink">로그인하기</a></p>
 <p>이 메일은 로그인을 요청하신 분께만 전달됩니다.</p>
+{{ else }}
+여기에 기존 SVM 양식
+{{ end }}
 ```
 
-각각 **Save changes**를 누릅니다.
+- Subject(제목)는 하나뿐이니 `로그인 링크 / Login link` 처럼 어느 쪽에도 어색하지 않은 문구로 두세요.
+- `{{ .RedirectTo }}` 는 WMTO 앱이 메일을 요청할 때 보내는 주소(`https://WMTO주소/auth/confirm?next=/connect`)입니다. 그 뒤에 `&token_hash=...` 를 이어 붙이는 방식이라 SVM 주소와 섞이지 않습니다.
+- 저장한 뒤 **꼭 두 쪽을 다 시험**하세요. (WMTO 로그인 메일, SVM 로그인 메일)
+- ⚠ **한계:** 이미 SVM에 가입한 사람을 WMTO에서 승인하면 그 사람은 `wmto_member` 표시가 없어 로그인 메일이 SVM 양식으로 갑니다. 이런 분은 당분간 WMTO 전용 다른 이메일로 가입하도록 안내하는 것이 가장 단순합니다. (계정을 합치는 방식은 교사 연동을 설계할 때 같이 정합니다.)
 
 ---
 
@@ -209,11 +248,12 @@ Supabase **Project Settings → Authentication → SMTP Settings** (또는 Authe
 | 빌드(Deploy)가 실패한다 | Vercel **Root Directory**가 `apps/web`인지 확인. 환경 변수 이름 오타 확인 |
 | `/admin/login` 에 "Supabase 환경 변수가 설정되지 않았습니다" | Vercel 환경 변수 3개(URL, anon, service role)가 빠졌거나 오타. 입력 후 **재배포** |
 | 관리자 로그인이 되는데 "관리자가 아닙니다" | 3장의 `insert into admins` SQL을 실행하지 않았거나 UID를 잘못 넣음 |
-| 신청서 제출이 "저장하지 못했습니다" | `SUPABASE_SERVICE_ROLE_KEY` 누락·오타, 또는 SQL `0001`을 실행하지 않음 |
+| 신청서 제출이 "저장하지 못했습니다" 또는 오류에 `The schema must be one of the following` 가 보인다 | 2-1의 **Exposed schemas에 `wmto`** 를 추가하지 않았습니다. 그 외에는 `SUPABASE_SERVICE_ROLE_KEY` 누락·오타, 또는 SQL `0001`을 실행하지 않은 경우입니다 |
 | 초대/로그인 메일이 안 온다 | 스팸함 확인 → 6장 SMTP 설정 → Supabase **Authentication → Logs**에서 오류 확인 |
 | 메일 링크를 누르면 "링크가 만료되었거나 올바르지 않습니다" | 5-2의 이메일 양식을 `auth/confirm?token_hash=...` 형태로 바꾸지 않았거나, **Site URL**이 다름. 링크는 한 번만, 일정 시간 안에만 유효하니 새로 요청 |
 | 링크를 누르면 `localhost` 로 간다 | Supabase **Site URL** 또는 `NEXT_PUBLIC_SITE_URL`이 아직 `localhost`. 5-1 수정 후 재배포 |
 | 앱에 들어갔는데 "승인 후 이용" 메시지 | 관리자가 승인하지 않았거나 회원이 `비활성` 상태. `/admin/members` 확인 |
+| WMTO 로그인 메일이 SVM 모양으로 온다 / SVM 메일이 WMTO 모양으로 온다 | 5-2 조건문 확인. WMTO가 초대한 사용자만 `wmto_member` 표시가 있습니다 |
 | 일정이 목록에 안 뜬다 | `/admin/events` 에서 등록했는지, 지난 일정은 숨겨지는지 확인 |
 | 사이트 주소를 바꿨는데 링크가 예전 주소로 간다 | `NEXT_PUBLIC_SITE_URL`과 Supabase Site URL을 둘 다 바꾸고 **재배포** |
 

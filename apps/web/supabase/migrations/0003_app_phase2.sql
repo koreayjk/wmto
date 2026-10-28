@@ -1,3 +1,11 @@
+-- WMTO 는 SVM 등 다른 서비스와 같은 Supabase 프로젝트를 쓸 수 있도록 별도 스키마(wmto)에 만듭니다.
+-- 설정 후 Dashboard > Project Settings > API > Exposed schemas 에 wmto 를 추가해야 앱이 접근합니다.
+create schema if not exists wmto;
+grant usage on schema wmto to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema wmto grant all on sequences to anon, authenticated, service_role;
+set search_path = wmto;
+
 -- WMTO Connect 2단계: 매칭 요청, 리퍼럴, 감사 편지, 성장 단계(승급), 아카데미.
 -- 기존 테이블에 member_id 로 연결하며, 코드 값은 docs/00-wmto-overview.md 기준입니다.
 
@@ -6,12 +14,12 @@ create type referral_status as enum ('sent', 'contacted', 'closed');
 
 -- ───────── 헬퍼 (RLS 재귀를 피하려고 security definer) ─────────
 create or replace function current_member_role() returns member_role
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = wmto as $$
   select role from members where auth_user_id = auth.uid() and status = 'active' limit 1;
 $$;
 
 create or replace function is_active_member_with_role(p_member uuid, p_role member_role) returns boolean
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = wmto as $$
   select exists (select 1 from members where id = p_member and role = p_role and status = 'active');
 $$;
 
@@ -147,7 +155,7 @@ create policy academy_admin on academy_videos for all using (is_admin()) with ch
 create or replace function open_matching_requests() returns table (
   id uuid, partner_name text, mission_field text, contribution_type contribution_type,
   message text, created_at timestamptz
-) language sql stable security definer set search_path = public as $$
+) language sql stable security definer set search_path = wmto as $$
   select r.id, p.name, pp.mission_field, r.contribution_type, r.message, r.created_at
   from matching_requests r
   join members p on p.id = r.partner_id
@@ -160,7 +168,7 @@ create or replace function open_matching_requests() returns table (
 $$;
 
 create or replace function accept_matching_request(p_request uuid) returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = wmto as $$
 declare
   me uuid := current_member_id();
   req matching_requests;
@@ -182,7 +190,7 @@ end $$;
 -- 리퍼럴 받을 사업가 선택용 디렉토리 (이름·업종만)
 create or replace function mentor_directory() returns table (
   id uuid, name text, industry text, business_name text
-) language sql stable security definer set search_path = public as $$
+) language sql stable security definer set search_path = wmto as $$
   select m.id, m.name, mp.industry, mp.business_name
   from members m join mentor_profiles mp on mp.member_id = m.id
   where m.role = 'mentor' and m.status = 'active'
@@ -192,7 +200,7 @@ $$;
 
 -- 관리자 승인 승급 (단계 변경 + 이력)
 create or replace function admin_set_stage(p_member uuid, p_to text, p_note text default null) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = wmto as $$
 declare r member_role; cur text;
 begin
   if not is_admin() then raise exception 'forbidden'; end if;
