@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-/** 화면마다 어울리는 배경 사진(생동감을 위한 은은한 장면). 텐트는 텐트 안에 들어온 듯 전체 배경입니다. */
+/** 화면마다 어울리는 배경 사진. 메뉴까지 화면 전체에 깔리는 은은한 장면입니다. */
 const SCENES: Record<string, string> = {
   "/connect/tent": "tent", "/connect/mentoring": "mentoring", "/connect/events": "time", "/connect/thanks": "letters",
   "/connect/growth": "growth", "/connect/matching": "matching", "/connect/referrals": "matching", "/connect/report": "report",
@@ -16,9 +16,8 @@ export function ContentFrame({ children }: { children: React.ReactNode }) {
   const scene = SCENES[path];
   return (
     <>
-      {scene === "tent" && <div aria-hidden className="scene-room" style={{ backgroundImage: "url(/scenes/tent.jpg)" }} />}
-      {scene && scene !== "tent" && <div aria-hidden className="scene-hero" style={{ backgroundImage: `url(/scenes/${scene}.jpg)` }} />}
-      <div className={`relative z-10 mx-auto max-w-xl lg:max-w-[100rem] ${home ? "" : "connect-wide"} ${scene === "tent" ? "tent-theme" : ""}`}>{children}</div>
+      {scene && <div aria-hidden className="scene-room" style={{ backgroundImage: `url(/scenes/${scene}.jpg)` }} />}
+      <div className={`relative z-10 mx-auto max-w-xl lg:max-w-[100rem] ${home ? "" : "connect-wide"} ${scene ? "tent-theme" : ""}`}>{children}</div>
     </>
   );
 }

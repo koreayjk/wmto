@@ -221,12 +221,6 @@ img, svg, video { max-width: 100%; }
 }
 .connect .display { font-weight: 500; letter-spacing: -0.015em; }
 .serif { font-family: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif; }
-.scene-hero {
-  position: absolute; inset: -5rem 0 auto 0; height: 28rem; z-index: 0; pointer-events: none;
-  background-size: cover; background-position: center 40%; opacity: 0.3; filter: saturate(0.55) contrast(0.92);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.45) 50%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.45) 50%, transparent 100%);
-}
 .scene-room { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-size: cover; background-position: center 30%; filter: saturate(0.7); }
 .scene-room::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(248,244,236,0.55) 0%, rgba(248,244,236,0.86) 45%, rgba(248,244,236,0.94) 100%); }
 .tent-theme .cbezel { background: rgba(255, 252, 246, 0.4); box-shadow: 0 0 0 1px rgba(120, 90, 40, 0.1); }
