@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { DB_SCHEMA } from "./schema";
+import { VIEW_AS_HEADER, viewOnlyFetch } from "../viewas";
 
 const url = () => process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const anon = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
@@ -11,10 +12,12 @@ export function isSupabaseConfigured() {
 }
 
 /** 로그인 세션(쿠키)을 사용하는 클라이언트. RLS 가 적용됩니다. */
-export async function createSupabaseServerClient() {
+/** viewAs: 관리자가 회원 화면을 읽기 전용으로 볼 때의 회원 id (supabase/migrations/0006_view_as.sql) */
+export async function createSupabaseServerClient(opts: { viewAs?: string } = {}) {
   const cookieStore = await cookies();
   return createServerClient(url(), anon(), {
     db: { schema: DB_SCHEMA },
+    ...(opts.viewAs ? { global: { headers: { [VIEW_AS_HEADER]: opts.viewAs }, fetch: viewOnlyFetch } } : {}),
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll(list) {

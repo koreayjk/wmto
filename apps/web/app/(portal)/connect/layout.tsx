@@ -4,6 +4,11 @@ import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { BottomNav, type NavItem } from "@/components/connect/BottomNav";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { VIEW_AS_COOKIE } from "@/lib/viewas";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { demoModes, pickDemoMember, type DemoMode } from "@/lib/demo";
 import { Sidebar, type SideGroup } from "@/components/connect/Sidebar";
 import { ContentFrame } from "@/components/connect/ContentFrame";
 
@@ -17,6 +22,36 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#16130f", viewportFit: "cover" };
 // 로그인 상태에 따라 달라지므로 정적 생성 금지
 export const dynamic = "force-dynamic";
+
+async function exitViewAs() {
+  "use server";
+  (await cookies()).delete(VIEW_AS_COOKIE);
+  redirect("/admin/view-as");
+}
+
+/** 공개 데모: 사업가 / 선교사 / 후원자 모드 바꾸기 */
+async function switchDemoMode(fd: FormData) {
+  "use server";
+  const mode = String(fd.get("mode") ?? "") as DemoMode;
+  if (!(demoModes as readonly string[]).includes(mode)) return;
+  const supabase = await createSupabaseServerClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return;
+  const { data: dv } = await supabase.from("demo_viewers").select("user_id").eq("user_id", auth.user.id).maybeSingle();
+  if (!dv) return;
+  const id = await pickDemoMember(mode);
+  if (!id) return;
+  (await cookies()).set(VIEW_AS_COOKIE, id, { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 8 });
+  redirect("/connect");
+}
+
+async function exitDemo() {
+  "use server";
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.signOut();
+  (await cookies()).delete(VIEW_AS_COOKIE);
+  redirect("/connect/demo");
+}
 
 export default async function ConnectLayout({ children }: { children: React.ReactNode }) {
   const locale = await getPortalLocale();
@@ -60,11 +95,34 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   const stageName = active?.stage ? m.stageNames[active.stage as keyof typeof m.stageNames] : null;
 
   return (
-    <div className="connect min-h-svh lg:flex">
+    <div className={`connect min-h-svh lg:flex ${r?.demo ? "pt-[3.25rem]" : r?.viewAs ? "pt-9" : ""}`}>
       <ServiceWorker />
+      {r?.demo && (
+        <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 bg-ink px-4 py-1.5 text-[13px] text-white">
+          <span className="hidden sm:inline">{m.demo.bar}</span>
+          <form action={switchDemoMode} className="flex gap-1 rounded-full bg-white/10 p-1" aria-label={m.demo.modes}>
+            {demoModes.map((k) => (
+              <button key={k} name="mode" value={k} aria-pressed={r.viewAs?.role === k}
+                className={`rounded-full px-3.5 py-1 font-medium transition-colors duration-500 ${r.viewAs?.role === k ? "bg-white text-ink" : "text-white/80 hover:bg-white/15"}`}>
+                {getMessages(locale).apply.options.role[k]}
+              </button>
+            ))}
+          </form>
+          <form action={exitDemo}><button className="rounded-full px-3 py-1 text-white/70 hover:text-white">{m.demo.exit}</button></form>
+        </div>
+      )}
+      {r?.viewAs && !r.demo && (
+        <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 bg-ink px-4 py-2 text-[13px] text-white">
+          <span>
+            관리자 보기 중: <b>{r.viewAs.name}</b>
+            {r.viewAs.role ? ` (${getMessages(locale).apply.options.role[r.viewAs.role]})` : ""} · 읽기 전용입니다. 저장은 되지 않습니다.
+          </span>
+          <form action={exitViewAs}><button className="rounded-full bg-white/15 px-3 py-1 font-medium hover:bg-white/25">나가기</button></form>
+        </div>
+      )}
       {active && (
         <aside className="hidden w-72 shrink-0 lg:block">
-          <div className="sticky top-0 flex h-svh flex-col overflow-y-auto px-5 py-8">
+          <div className={`sticky flex flex-col overflow-y-auto px-5 py-8 ${r?.demo ? "top-[3.25rem] h-[calc(100svh-3.25rem)]" : r?.viewAs ? "top-9 h-[calc(100svh-2.25rem)]" : "top-0 h-svh"}`}>
             <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={32} height={32} className="h-8 w-8" />

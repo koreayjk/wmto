@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { Role } from "@/lib/codes";
+import { getViewAsId } from "@/lib/viewas";
+import { pickDemoMember } from "@/lib/demo";
 
 export type Me = {
   id: string;
@@ -21,19 +23,56 @@ export async function getMe() {
   const supabase = await createSupabaseServerClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return null;
+
+  // 관리자의 "회원 화면 보기": 그 회원 시점으로, 읽기 전용으로 보여 줍니다(관리자에게만 효력).
+  const viewId = await getViewAsId();
+  if (viewId) {
+    const { data: adm } = await supabase.from("admins").select("user_id").eq("user_id", auth.user.id).maybeSingle();
+    if (adm) {
+      const { data: vm } = await supabase.from("members").select("id,role,name,email,phone,country,status").eq("id", viewId).maybeSingle();
+      if (vm) {
+        let vp: Record<string, unknown> | null = null;
+        if (vm.role) {
+          const { data } = await supabase.from(`${vm.role}_profiles`).select("*").eq("member_id", vm.id).maybeSingle();
+          vp = data;
+        }
+        const viewMe: Me = { ...(vm as Omit<Me, "profile" | "stage">), profile: vp, stage: (vp?.stage as string) ?? null };
+        return { me: viewMe, supabase: await createSupabaseServerClient({ viewAs: viewId }), viewAs: { id: viewId, name: vm.name, role: vm.role as Role | null }, demo: false };
+      }
+    }
+  }
+
   const { data: m } = await supabase
     .from("members")
     .select("id,role,name,email,phone,country,status")
     .eq("auth_user_id", auth.user.id)
     .maybeSingle();
-  if (!m) return null;
+  if (!m) {
+    // 공개 데모 계정: 가상 회원의 시점으로 읽기 전용 화면을 보여 줍니다(데이터베이스가 데모 회원만 허용).
+    const { data: dv } = await supabase.from("demo_viewers").select("user_id").eq("user_id", auth.user.id).maybeSingle();
+    if (!dv) return null;
+    const candidates = [viewId, await pickDemoMember("mentor")].filter(Boolean) as string[];
+    for (const id of candidates) {
+      const vc = await createSupabaseServerClient({ viewAs: id });
+      const { data: vm } = await vc.from("members").select("id,role,name,email,phone,country,status").eq("id", id).maybeSingle();
+      if (!vm) continue;
+      let vp: Record<string, unknown> | null = null;
+      if (vm.role) {
+        const { data } = await vc.from(`${vm.role}_profiles`).select("*").eq("member_id", vm.id).maybeSingle();
+        vp = data;
+      }
+      const demoMe: Me = { ...(vm as Omit<Me, "profile" | "stage">), profile: vp, stage: (vp?.stage as string) ?? null };
+      return { me: demoMe, supabase: vc, viewAs: { id, name: vm.name, role: vm.role as Role | null }, demo: true };
+    }
+    return null;
+  }
   let profile: Record<string, unknown> | null = null;
   if (m.role) {
     const { data } = await supabase.from(`${m.role}_profiles`).select("*").eq("member_id", m.id).maybeSingle();
     profile = data;
   }
   const me: Me = { ...(m as Omit<Me, "profile" | "stage">), profile, stage: (profile?.stage as string) ?? null };
-  return { me, supabase };
+  return { me, supabase, viewAs: null as { id: string; name: string; role: Role | null } | null, demo: false };
 }
 
 /** 앱 페이지 가드. 활성 회원이 아니면 로그인 화면으로. */

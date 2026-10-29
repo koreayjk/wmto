@@ -23,6 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin/stages", label: "성장 단계" },
     { href: "/admin/academy", label: "아카데미" },
     { href: "/admin/donations", label: "후원·기금" },
+    { href: "/admin/view-as", label: "앱 화면 보기" },
     { href: "/admin/events", label: m.events },
     { href: "/admin/stories", label: m.stories },
   ];

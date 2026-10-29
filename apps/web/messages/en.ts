@@ -868,6 +868,23 @@ export const en: Messages = {
         giveHint: "Start 1:1 support and you will receive news of that missionary here.",
       },
     },
+    demo: {
+      title: "Try WMTO Connect",
+      sub: "Look around the screens of a business owner, a missionary, and a sponsor with sample data.",
+      points: [
+        "Enter with one click. No sign-up or login.",
+        "Use the bar at the top to switch between Mentor, Partner, and Sponsor.",
+        "It holds sample activity for 50 business owners and 20 missionaries: matchings, mentoring logs, referrals, thank-you letters, and giving.",
+        "It is read-only. Nothing you press is saved or changed.",
+      ],
+      enter: "Start the demo",
+      note: "Every name and detail is sample data made for the demo.",
+      empty: "The demo data is not ready yet. Please contact the administrator.",
+      failed: "We could not open the demo. Please try again in a moment.",
+      bar: "Demo (read-only)",
+      modes: "View mode",
+      exit: "Exit",
+    },
     today: {
       title: "Today",
       report: "You have not written this month's self-reliance report yet", reportCta: "Write the report",
