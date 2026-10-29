@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { L } from "@/components/L";
 import { useActionState, useEffect, useRef, type ReactNode } from "react";
 import { getMessages, localeFromPathname } from "@/lib/i18n";
-import { campTracks, contributionTypes, roles, sponsorKinds, sponsorTypes, type ApplicationType } from "@/lib/codes";
+import { campTracks, contributionTypes, krRegions, roles, sponsorKinds, sponsorTypes, type ApplicationType } from "@/lib/codes";
 import { submitApplication, type ApplyState } from "./actions";
 
 const initial: ApplyState = { ok: false };
@@ -82,6 +82,8 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
         <Field label={f.email} required>{input("email", { type: "email", required: true, autoComplete: "email" })}</Field>
         <Field label={f.phone}>{input("phone", { type: "tel", autoComplete: "tel" })}</Field>
         <Field label={f.country}>{input("country", { autoComplete: "country-name" })}</Field>
+        <Field label={f.region}><Select name="region" values={krRegions} labels={m.options.region} placeholder={m.regionPlaceholder} /></Field>
+        <Field label={f.district}>{input("district")}</Field>
       </div>
 
       {type === "observe" && (

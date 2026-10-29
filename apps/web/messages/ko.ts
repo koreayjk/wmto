@@ -586,6 +586,8 @@ export const ko = {
       email: "이메일",
       phone: "연락처",
       country: "거주 국가",
+      region: "지역 (한국 거주 시 시·도)",
+      district: "시·군·구 (해외는 도시)",
       message: "메시지",
       role: "역할",
       preferredSchedule: "희망 일정",
@@ -602,7 +604,9 @@ export const ko = {
       churchName: "교회명",
       interestedKinds: "관심 후원 방식 (복수 선택)",
     },
+    regionPlaceholder: "선택 (한국 거주 시)",
     options: {
+      region: { 서울: "서울", 경기도: "경기도", 충청남도: "충청남도", 충청북도: "충청북도", 강원도: "강원도", 전라남도: "전라남도", 전라북도: "전라북도", 경상남도: "경상남도", 경상북도: "경상북도", 제주도: "제주도", 부산: "부산광역시", 대구: "대구광역시", 인천: "인천광역시", 광주: "광주광역시", 대전: "대전광역시", 울산: "울산광역시", 세종: "세종특별자치시" },
       role: { mentor: "사업가", partner: "선교사", sponsor: "후원자" },
       contribution: {
         skill: "기술 전수",
@@ -737,6 +741,7 @@ export const ko = {
       reliance: "자립도",
     },
     profile: {
+      locationNote: "계신 지역(시·도, 시·군·구)에 맞는 텐트에 자동으로 들어갑니다. 지역을 바꾸면 새 지역의 텐트로 옮겨집니다.",
       title: "내 정보",
       save: "저장",
       saved: "저장되었습니다.",
@@ -760,6 +765,7 @@ export const ko = {
     },
     tent: {
       title: "텐트", sub: "지역(또는 온라인)에서 정기적으로 만나는 우리 모임입니다.",
+      capacity: "사업가 {n}명 / {max}명", splitNote: "텐트는 계신 지역(시·도, 나라)별로 자동으로 만들어지고, 사업가가 12명을 넘으면 시·군·구를 기준으로 둘로 나뉩니다.",
       mine: "내 텐트", viaOwn: "내 텐트", viaMentor: "멘토의 텐트", online: "온라인",
       partnerNote: "선교사는 따로 신청하지 않아도 됩니다. 텐트의 사업가가 \"우리 텐트로 모시기\"를 하면 텐트의 가족이 되고, 그중 멘토가 되고 싶은 분이 직접 \"멘토로 함께하기\"를 해 주십니다.",
       noTent: "아직 속한 텐트가 없습니다. 운영진이 배정하면 이곳에 나타납니다. 선교사는 텐트의 사업가가 모시면 그 텐트에 들어옵니다.",
@@ -858,7 +864,7 @@ export const ko = {
       profileHint: "서로를 더 잘 알 수 있도록 아래 항목을 채워 주세요.",
       profileCta: "내 정보 수정",
       profileFields: {
-        phone: "연락처", country: "거주 국가", business_name: "사업체 이름", industry: "업종", contribution_types: "기여 방식",
+        phone: "연락처", country: "거주 국가", region: "지역 (시·도)", district: "시·군·구 (해외는 도시)", business_name: "사업체 이름", industry: "업종", contribution_types: "기여 방식",
         mission_field: "선교지", sending_org: "파송 기관", business_idea: "사업 아이디어", sponsor_type: "후원자 유형", church_name: "교회 이름",
       },
       shortcuts: "바로가기",

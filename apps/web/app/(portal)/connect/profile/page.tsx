@@ -6,7 +6,7 @@ import { getPortalLocale } from "@/lib/locale";
 import { cookies } from "next/headers";
 import { isLocale, LOCALE_COOKIE } from "@/lib/i18n";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { contributionTypes, sponsorTypes } from "@/lib/codes";
+import { contributionTypes, krRegions, sponsorTypes } from "@/lib/codes";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
 
 const opt = (fd: FormData, k: string, max = 300) => String(fd.get(k) ?? "").trim().slice(0, max) || null;
@@ -17,7 +17,7 @@ async function saveProfile(fd: FormData) {
   const name = String(fd.get("name") ?? "").trim().slice(0, 100);
   if (!name) return;
   // 변경 가능한 컬럼은 DB 권한(column grant)으로도 제한됩니다. role/status/stage 는 수정할 수 없습니다.
-  await supabase.from("members").update({ name, phone: opt(fd, "phone", 50), country: opt(fd, "country", 100) }).eq("id", me.id);
+  await supabase.from("members").update({ name, phone: opt(fd, "phone", 50), country: opt(fd, "country", 100), region: (krRegions as readonly string[]).includes(String(fd.get("region"))) ? String(fd.get("region")) : null, district: opt(fd, "district", 100) }).eq("id", me.id);
   if (me.role === "mentor") {
     const types = fd.getAll("contribution_types").map(String).filter((v) => (contributionTypes as readonly string[]).includes(v));
     await supabase.from("mentor_profiles").update({ business_name: opt(fd, "business_name"), industry: opt(fd, "industry"), contribution_types: types }).eq("member_id", me.id);
@@ -48,12 +48,13 @@ async function setLanguage(fd: FormData) {
 
 export default async function Profile({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
   const locale = await getPortalLocale();
-  const { me } = await requireMe();
+  const { me, supabase } = await requireMe();
   const c = getMessages(locale).connect;
   const t = c.profile;
   const f = getMessages(locale).apply;
   const p = (me.profile ?? {}) as Record<string, string | string[] | null>;
   const { saved } = await searchParams;
+  const { data: loc } = await supabase.from("members").select("region,district").eq("id", me.id).maybeSingle();
   const roleLabel = me.role ? f.options.role[me.role] : "-";
 
   return (
@@ -69,6 +70,17 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           <label className="block"><span className={labelCls}>{f.fields.name}</span><input name="name" required defaultValue={me.name} className="field" /></label>
           <label className="block"><span className={labelCls}>{f.fields.phone}</span><input name="phone" type="tel" defaultValue={me.phone ?? ""} className="field" /></label>
           <label className="block"><span className={labelCls}>{f.fields.country}</span><input name="country" defaultValue={me.country ?? ""} className="field" /></label>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block">
+              <span className={labelCls}>{f.fields.region}</span>
+              <select name="region" defaultValue={loc?.region ?? ""} className="field">
+                <option value="">{c.select}</option>
+                {krRegions.map((v) => <option key={v} value={v}>{f.options.region[v]}</option>)}
+              </select>
+            </label>
+            <label className="block"><span className={labelCls}>{f.fields.district}</span><input name="district" defaultValue={loc?.district ?? ""} className="field" /></label>
+          </div>
+          {(me.role === "mentor" || me.role === "sponsor") && <p className="text-xs text-soft">{t.locationNote}</p>}
 
           {me.role === "mentor" && (
             <>

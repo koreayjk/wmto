@@ -11,6 +11,13 @@ async function addTent(fd: FormData) {
   revalidatePath("/admin/tents");
 }
 
+async function autoAssign() {
+  "use server";
+  const { supabase } = await requireAdmin();
+  await supabase.rpc("assign_unassigned_tents");
+  revalidatePath("/admin/tents");
+}
+
 async function assign(fd: FormData) {
   "use server";
   await requireAdmin();
@@ -33,7 +40,9 @@ export default async function AdminTents() {
   return (
     <>
       <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">텐트</h1>
-      <p className="max-w-2xl text-soft">지역(또는 온라인)별 모임입니다. 사업가·후원자는 여기서 텐트를 배정합니다. 선교사는 텐트의 사업가가 "우리 텐트로 모시기"를 하면 그 텐트에 들어오고, 멘토는 텐트원이 이어서 직접 맡습니다.</p>
+      <p className="max-w-2xl text-soft">지역별 모임입니다. 사업가·후원자는 계신 지역(시·도, 나라)에 맞는 텐트에 자동으로 들어가고, 사업가가 12명을 넘으면 시·군·구 기준으로 둘로 나뉩니다. 지역 정보가 없는 분만 여기서 직접 배정합니다. 선교사는 텐트의 사업가가 "우리 텐트로 모시기"를 하면 그 텐트에 들어오고, 멘토는 텐트원이 이어서 직접 맡습니다.</p>
+
+      <form action={autoAssign} className="mt-6"><button className="cbtn cbtn-quiet">지역 정보로 자동 배정 (텐트 없는 사업가·후원자)</button></form>
 
       <form action={addTent} className="mt-8 flex flex-wrap gap-3">
         <input name="name" required placeholder="텐트 이름 (예: 부산 텐트)" className="field !w-64" />

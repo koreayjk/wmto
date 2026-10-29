@@ -15,7 +15,7 @@ type Person = {
 };
 type Ev = { id: string; type: string; title: string; start_at: string; location: string | null; meeting_url: string | null; attended: number; me_attended: boolean };
 type Post = { id: string; kind: "notice" | "recap"; title: string; body: string; created_at: string; author: string | null };
-type Overview = { tent: { id: string; name: string; region: string | null }; members: Person[]; events: Ev[]; posts: Post[]; activity: { matchings: number; logs_30d: number } };
+type Overview = { tent: { id: string; name: string; region: string | null; districts: string[] | null }; members: Person[]; events: Ev[]; posts: Post[]; activity: { matchings: number; logs_30d: number } };
 
 async function addPost(fd: FormData) {
   "use server";
@@ -117,6 +117,12 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-4">
       <PageTitle sub={t.sub}>{o.tent.name}</PageTitle>
+
+      <p className="col-span-full -mt-4 max-w-3xl text-sm leading-relaxed text-soft">
+        {o.tent.region ? `${o.tent.region}` : ""}{o.tent.districts?.length ? ` · ${o.tent.districts.join(" · ")}` : ""}
+        {" · "}{t.capacity.replace("{n}", String(mentors.length)).replace("{max}", "12")}
+        <span className="block">{t.splitNote}</span>
+      </p>
 
       {tents.length > 1 && (
         <nav className="col-span-full flex flex-wrap gap-2" aria-label={t.mine}>

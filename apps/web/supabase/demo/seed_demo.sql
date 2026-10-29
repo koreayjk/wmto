@@ -42,6 +42,9 @@ declare
   v_types contribution_type[];
   v_stage text;
   v_country text;
+  v_combo text;
+  combos text[] := array['대한민국|서울|강남구','대한민국|서울|서초구','대한민국|서울|마포구','대한민국|서울|송파구','대한민국|서울|강서구','대한민국|서울|성북구','대한민국|서울|강동구','대한민국|서울|영등포구','대한민국|경기도|성남시','대한민국|경기도|수원시','대한민국|경기도|용인시','대한민국|경기도|고양시','대한민국|경기도|부천시','대한민국|경기도|안양시','대한민국|부산|해운대구','대한민국|부산|수영구','대한민국|대구|수성구','대한민국|인천|연수구','대한민국|대전|유성구','대한민국|광주|북구','대한민국|충청남도|천안시','대한민국|전라북도|전주시','대한민국|경상남도|창원시','대한민국|제주도|제주시','대한민국|강원도|춘천시','미국||달라스','미국||LA','캐나다||토론토','필리핀||마닐라'];
+  sp_combos text[] := array['대한민국|서울|서초구','대한민국|경기도|성남시','미국||달라스','대한민국|부산|해운대구','대한민국|서울|강남구','미국||LA','대한민국|경기도|수원시','대한민국|대구|수성구'];
   m1 int; m2 int;
   r record;
   mt contribution_type;
@@ -54,11 +57,7 @@ begin
   end if;
   perform setseed(0.37);
 
-  -- ───────── 텐트(지역·온라인 모임) ─────────
-  for r in select * from (values ('[데모] 서울 텐트','한국'),('[데모] 미주 텐트','미주'),('[데모] 아시아 온라인 텐트','온라인')) t(name, region) loop
-    insert into chapters (name, region) values (r.name, r.region) returning id into v_id;
-    ch := ch || v_id;
-  end loop;
+  -- 텐트는 지역 정보를 가진 사업가·후원자가 들어올 때 자동으로 만들어집니다(12명이 넘으면 둘로 나뉩니다).
 
   -- ───────── 사업가 50명 (단계: Seed 20 · Sower 18 · Harvester 8 · Elder 4) ─────────
   for i in 1..50 loop
@@ -69,14 +68,13 @@ begin
       when i % 3 = 0               then '{skill,coach}'::contribution_type[]
       else '{skill}'::contribution_type[] end;
     v_stage := case when i <= 20 then 'seed' when i <= 38 then 'sower' when i <= 46 then 'harvester' else 'elder' end;
-    v_country := case when i % 3 = 2 then '미국' else '대한민국' end;
-    insert into members (role, name, email, phone, country, status, created_at)
+    v_combo := combos[1 + ((i - 1) % 29)];
+    insert into members (role, name, email, phone, country, region, district, status, created_at)
     values ('mentor', surnames[1 + ((i * 7) % 20)] || givens[1 + ((i * 11) % 40)],
             'demo.mentor' || lpad(i::text, 2, '0') || '@demo.wmto.invalid',
             '010-' || lpad((1000 + i * 37)::text, 4, '0') || '-' || lpad((2000 + i * 53)::text, 4, '0'),
-            v_country, 'active', now() - (60 + random() * 200) * interval '1 day')
+            split_part(v_combo, '|', 1), nullif(split_part(v_combo, '|', 2), ''), split_part(v_combo, '|', 3), 'active', now() - (60 + random() * 200) * interval '1 day')
     returning id into v_id;
-    update members set chapter = (select name from chapters where id = ch[1 + (i % 3)]), chapter_id = ch[1 + (i % 3)] where id = v_id;
     insert into mentor_profiles (member_id, business_name, industry, contribution_types, stage)
     values (v_id, prefixes[1 + (i % 10)] || ' ' || industries[ind_idx], industries[ind_idx], v_types, v_stage::mentor_stage);
     mentor_ids := mentor_ids || v_id;
@@ -99,15 +97,15 @@ begin
 
   -- ───────── 후원자 8명 ─────────
   for i in 1..8 loop
-    insert into members (role, name, email, phone, country, status, created_at)
+    insert into members (role, name, email, phone, country, region, district, status, created_at)
     values ('sponsor', case when i % 2 = 0 then surnames[1 + (i * 3 % 20)] || givens[1 + (i * 17 % 40)] else surnames[1 + (i * 5 % 20)] || givens[1 + (i * 19 % 40)] end,
-            'demo.sponsor' || lpad(i::text, 2, '0') || '@demo.wmto.invalid', null, case when i % 2 = 0 then '대한민국' else '미국' end,
+            'demo.sponsor' || lpad(i::text, 2, '0') || '@demo.wmto.invalid', null,
+            split_part(sp_combos[i], '|', 1), nullif(split_part(sp_combos[i], '|', 2), ''), split_part(sp_combos[i], '|', 3),
             'active', now() - (20 + random() * 120) * interval '1 day')
     returning id into v_id;
     insert into sponsor_profiles (member_id, sponsor_type, church_name)
     values (v_id, case when i % 2 = 0 then 'individual' else 'church' end::sponsor_type,
             case when i % 2 = 0 then null else (array['사랑의교회','푸른숲교회','은혜한인교회','소망교회'])[1 + (i % 4)] end);
-    update members set chapter = (select name from chapters where id = ch[1 + (i % 3)]), chapter_id = ch[1 + (i % 3)] where id = v_id;
     sponsor_ids := sponsor_ids || v_id;
   end loop;
 
@@ -195,8 +193,6 @@ begin
             'pending', now() - (j * 1.5) * interval '1 day');
   end loop;
   -- 텐트에 모셔진 선교사(멘토를 기다림)와 아직 텐트가 없는 선교사(픽업을 기다림)
-  update members set chapter_id = ch[1], chapter = (select name from chapters where id = ch[1]) where id in (partner_ids[1], partner_ids[2], partner_ids[4], partner_ids[6]);
-  update members set chapter_id = ch[2], chapter = (select name from chapters where id = ch[2]) where id = partner_ids[5];
   insert into matching_requests (partner_id, contribution_type, message, status, created_at) values
     (partner_ids[7], 'skill', '현지 청년들에게 가르칠 수 있도록 제과 기술을 배우고 싶습니다.', 'pending', now() - interval '2 days'),
     (partner_ids[9], 'coach', '사업을 시작하기 전에 계획서를 함께 봐 주실 분이 필요합니다.', 'pending', now() - interval '3 days');
@@ -230,31 +226,6 @@ begin
     ('offline', '[데모] 미주 오프라인 모임', (current_date + 26)::timestamptz + interval '18 hours', (current_date + 26)::timestamptz + interval '21 hours', '달라스 모임 장소'),
     ('camp', '[데모] 1기 필리핀 훈련 캠프 (3주)', (current_date + 60)::timestamptz, (current_date + 80)::timestamptz, '필리핀 선교본부'),
     ('conference', '[데모] 글로벌 컨퍼런스', (current_date + 150)::timestamptz + interval '9 hours', (current_date + 151)::timestamptz + interval '17 hours', '서울');
-
-  -- ───────── 텐트별 정기 모임과 공지·후기 ─────────
-  for i in 1..3 loop
-    for k in 1..4 loop
-      insert into events (type, title, start_at, end_at, location, chapter_id, meeting_provider, meeting_url)
-      values ('offline', '[데모] ' || (array['서울','미주','아시아 온라인'])[i] || ' 텐트 정기 모임 #' || (5 - k),
-              (current_date - k * 28 + i)::timestamptz + interval '19 hours', (current_date - k * 28 + i)::timestamptz + interval '21 hours',
-              (array['서울 강남 모임 장소','달라스 모임 장소','온라인'])[i], ch[i],
-              case when i = 3 then 'zoom'::meeting_provider end, case when i = 3 then 'https://zoom.us/j/demo-tent' || k end);
-    end loop;
-    for k in 0..1 loop
-      insert into events (type, title, start_at, end_at, location, chapter_id, meeting_provider, meeting_url)
-      values ('offline', '[데모] ' || (array['서울','미주','아시아 온라인'])[i] || ' 텐트 정기 모임 #' || (5 + k),
-              (current_date + k * 28 + 6 + i)::timestamptz + interval '19 hours', (current_date + k * 28 + 6 + i)::timestamptz + interval '21 hours',
-              (array['서울 강남 모임 장소','달라스 모임 장소','온라인'])[i], ch[i],
-              case when i = 3 then 'zoom'::meeting_provider end, case when i = 3 then 'https://zoom.us/j/demo-tent-next' || k end);
-    end loop;
-    insert into tent_posts (chapter_id, author_id, kind, title, body, created_at) values
-      (ch[i], (select id from members where role = 'mentor' and chapter_id = ch[i] order by created_at limit 1), 'notice', '이번 달 모임 안내',
-       '이번 달 모임에서는 선교사 두 분의 자립 리포트를 함께 보고, 필요한 도움을 나누겠습니다. 간단한 저녁을 준비합니다. 편하게 오세요.', now() - interval '6 days'),
-      (ch[i], (select id from members where role = 'mentor' and chapter_id = ch[i] order by created_at desc limit 1), 'recap', '지난 모임 후기',
-       '로스팅 카페를 준비하는 선교사님의 이야기를 들었습니다. 사업가 세 분이 가격 계산과 거래처 소개를 돕겠다고 손을 들어 주셨습니다. 이번 달에 각자 한 가지씩 실천하기로 했습니다.', now() - interval '24 days'),
-      (ch[i], (select id from members where role = 'mentor' and chapter_id = ch[i] order by created_at limit 1), 'notice', '새로 오신 분들을 환영합니다',
-       '이번 달에 새 사업가와 선교사가 함께하게 되었습니다. 인사하고 서로의 이야기를 들어 주세요.', now() - interval '45 days');
-  end loop;
 
   -- ───────── 출석 (지난 모임마다 회원의 일부가 참석) ─────────
   insert into attendance (event_id, member_id, attended_at)
@@ -320,21 +291,28 @@ begin
 
 
   -- ───────── 체험 모드의 주인공 3명 (모든 기능이 가득 채워진 대표 회원) ─────────
-  insert into members (role, name, email, phone, country, chapter, chapter_id, status, created_at)
-  values ('mentor', '김은혜', 'demo.showcase.mentor@demo.wmto.invalid', '010-1000-0001', '대한민국', (select name from chapters where id = ch[1]), ch[1], 'active', now() - interval '240 days')
+  insert into members (role, name, email, phone, country, region, district, status, created_at)
+  values ('mentor', '김은혜', 'demo.showcase.mentor@demo.wmto.invalid', '010-1000-0001', '대한민국', '서울', '강남구', 'active', now() - interval '240 days')
   returning id into sc_mentor;
   insert into mentor_profiles (member_id, business_name, industry, contribution_types, stage)
   values (sc_mentor, '온유 카페', '카페', '{skill,coach}', 'harvester');
-  insert into members (role, name, email, phone, country, chapter, chapter_id, status, created_at)
-  values ('partner', '이소망', 'demo.showcase.partner@demo.wmto.invalid', '+855-10-000-001', '캄보디아', null, null, 'active', now() - interval '200 days')
+  insert into members (role, name, email, phone, country, status, created_at)
+  values ('partner', '이소망', 'demo.showcase.partner@demo.wmto.invalid', '+855-10-000-001', '캄보디아', 'active', now() - interval '200 days')
   returning id into sc_partner;
   insert into partner_profiles (member_id, mission_field, sending_org, business_idea, stage)
   values (sc_partner, '캄보디아 프놈펜', 'IM선교회', '작은 커피 로스팅 카페와 현지 청년 바리스타 교육', 'growing');
-  insert into members (role, name, email, country, status, created_at)
-  values ('sponsor', '최은성', 'demo.showcase.sponsor@demo.wmto.invalid', '미국', 'active', now() - interval '180 days')
+  insert into members (role, name, email, country, district, status, created_at)
+  values ('sponsor', '최은성', 'demo.showcase.sponsor@demo.wmto.invalid', '미국', '달라스', 'active', now() - interval '180 days')
   returning id into sc_sponsor;
   insert into sponsor_profiles (member_id, sponsor_type) values (sc_sponsor, 'individual');
-  update members set chapter = (select name from chapters where id = ch[1]), chapter_id = ch[1] where id = sc_sponsor;
+
+  -- 텐트에 모셔진 선교사(멘토를 기다림): 대표 사업가의 텐트와 경기도 텐트
+  update members set chapter_id = x.cid, chapter = x.cname
+    from (select c.id as cid, c.name as cname from chapters c join members mm on mm.chapter_id = c.id where mm.id = sc_mentor) x
+   where members.id in (partner_ids[1], partner_ids[2], partner_ids[4], partner_ids[6]);
+  update members set chapter_id = x.cid, chapter = x.cname
+    from (select c.id as cid, c.name as cname from chapters c join members mm on mm.chapter_id = c.id where mm.id = mentor_ids[11]) x
+   where members.id = partner_ids[5];
 
   insert into stage_history (member_id, role, from_stage, to_stage, note, created_at) values
     (sc_mentor, 'mentor', 'seed', 'sower', '운영위원회 승인', now() - interval '200 days'),
@@ -408,6 +386,38 @@ begin
     (sc_sponsor, 'one_to_one', partner_ids[15], 1500000, current_date - 25);
   insert into donations (sponsor_id, kind, amount, donated_at) values
     (sc_sponsor, 'camp', 500000, current_date - 30), (sc_sponsor, 'fund', 1000000, current_date - 80);
+
+  -- ───────── 텐트별 정기 모임과 공지·후기 ─────────
+  for r in select id, name, region_key from chapters where name like '[데모]%' order by name loop
+    for k in 1..4 loop
+      insert into events (type, title, start_at, end_at, location, chapter_id, meeting_provider, meeting_url)
+      values ('offline', r.name || ' 정기 모임 #' || (5 - k),
+              (current_date - k * 28 + (k % 5))::timestamptz + interval '19 hours', (current_date - k * 28 + (k % 5))::timestamptz + interval '21 hours',
+              case when r.region_key like 'DEMO:KR:%' then replace(r.name, '[데모] ', '') || ' 모임 장소' else '온라인' end, r.id,
+              case when r.region_key like 'DEMO:KR:%' then null else 'zoom'::meeting_provider end,
+              case when r.region_key like 'DEMO:KR:%' then null else 'https://zoom.us/j/demo-tent-' || substr(r.id::text, 1, 6) || k end);
+    end loop;
+    for k in 0..1 loop
+      insert into events (type, title, start_at, end_at, location, chapter_id, meeting_provider, meeting_url)
+      values ('offline', r.name || ' 정기 모임 #' || (5 + k),
+              (current_date + k * 28 + 6 + (k % 3))::timestamptz + interval '19 hours', (current_date + k * 28 + 6 + (k % 3))::timestamptz + interval '21 hours',
+              case when r.region_key like 'DEMO:KR:%' then replace(r.name, '[데모] ', '') || ' 모임 장소' else '온라인' end, r.id,
+              case when r.region_key like 'DEMO:KR:%' then null else 'zoom'::meeting_provider end,
+              case when r.region_key like 'DEMO:KR:%' then null else 'https://zoom.us/j/demo-tent-next-' || substr(r.id::text, 1, 6) || k end);
+    end loop;
+    insert into tent_posts (chapter_id, author_id, kind, title, body, created_at)
+    select r.id, a.id, p.kind, p.title, p.body, now() - p.ago
+    from (select id from members where role = 'mentor' and chapter_id = r.id order by created_at limit 1) a,
+         (values ('notice', '이번 달 모임 안내', '이번 달 모임에서는 선교사 두 분의 자립 리포트를 함께 보고, 필요한 도움을 나누겠습니다. 간단한 저녁을 준비합니다. 편하게 오세요.', interval '6 days'),
+                 ('recap', '지난 모임 후기', '로스팅 카페를 준비하는 선교사님의 이야기를 들었습니다. 사업가 세 분이 가격 계산과 거래처 소개를 돕겠다고 손을 들어 주셨습니다. 이번 달에 각자 한 가지씩 실천하기로 했습니다.', interval '24 days'),
+                 ('notice', '새로 오신 분들을 환영합니다', '이번 달에 새 사업가와 선교사가 함께하게 되었습니다. 인사하고 서로의 이야기를 들어 주세요.', interval '45 days')) p(kind, title, body, ago);
+    -- 지난 정기 모임의 출석: 텐트 구성원의 대부분이 참석
+    insert into attendance (event_id, member_id, attended_at)
+    select e.id, m.id, e.start_at + interval '5 minutes'
+    from events e join members m on m.chapter_id = r.id and m.status = 'active'
+    where e.chapter_id = r.id and e.start_at < now() and random() < 0.72
+    on conflict do nothing;
+  end loop;
 
   -- ───────── 실제로 로그인할 수 있는 회원의 화면도 채우기 ─────────
   for r in select m.id, m.role from members m

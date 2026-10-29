@@ -23,7 +23,7 @@ export async function submitApplication(_prev: ApplyState, fd: FormData): Promis
     // 같은 이메일(대소문자 무시)이면 기존 회원을 재사용하고 applications 만 추가
     const { data: existing, error: findErr } = await db
       .from("members")
-      .select("id, role, phone, country")
+      .select("id, role, phone, country, region, district")
       .ilike("email", input.email)
       .maybeSingle();
     if (findErr) throw findErr;
@@ -38,6 +38,8 @@ export async function submitApplication(_prev: ApplyState, fd: FormData): Promis
           email: input.email,
           phone: input.phone ?? null,
           country: input.country ?? null,
+          region: input.region ?? null,
+          district: input.district ?? null,
         })
         .select("id")
         .single();
@@ -50,6 +52,8 @@ export async function submitApplication(_prev: ApplyState, fd: FormData): Promis
       if (!existing.role && role) patch.role = role;
       if (!existing.phone && input.phone) patch.phone = input.phone;
       if (!existing.country && input.country) patch.country = input.country;
+      if (!existing.region && input.region) patch.region = input.region;
+      if (!existing.district && input.district) patch.district = input.district;
       if (Object.keys(patch).length) {
         const { error } = await db.from("members").update(patch).eq("id", memberId);
         if (error) throw error;

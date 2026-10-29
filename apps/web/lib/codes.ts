@@ -27,3 +27,6 @@ export type EventType = (typeof eventTypes)[number];
 export function isApplicationType(v: unknown): v is ApplicationType {
   return typeof v === "string" && (applicationTypes as readonly string[]).includes(v);
 }
+
+/** 한국의 시·도 (텐트는 이 단위로 자동 배정됩니다). 광역시는 따로 둡니다. */
+export const krRegions = ["서울", "경기도", "충청남도", "충청북도", "강원도", "전라남도", "전라북도", "경상남도", "경상북도", "제주도", "부산", "대구", "인천", "광주", "대전", "울산", "세종"] as const;

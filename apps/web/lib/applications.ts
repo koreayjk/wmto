@@ -3,6 +3,7 @@ import {
   applicationTypes,
   campTracks,
   contributionTypes,
+  krRegions,
   roles,
   sponsorKinds,
   sponsorTypes,
@@ -20,6 +21,8 @@ const base = {
   email: z.string().trim().toLowerCase().email().max(200),
   phone: optional(50),
   country: optional(100),
+  region: optional(50).refine((v) => v === undefined || (krRegions as readonly string[]).includes(v)),
+  district: optional(100),
   message: optional(3000),
   consent: z.literal("on"),
 };

@@ -582,6 +582,8 @@ export const en: Messages = {
       email: "Email",
       phone: "Phone",
       country: "Country of residence",
+      region: "Region (province, if in Korea)",
+      district: "City or district (city, if abroad)",
       message: "Message",
       role: "Role",
       preferredSchedule: "Preferred schedule",
@@ -598,7 +600,9 @@ export const en: Messages = {
       churchName: "Church name",
       interestedKinds: "Ways of giving you are interested in (select all that apply)",
     },
+    regionPlaceholder: "Select (if in Korea)",
     options: {
+      region: { 서울: "Seoul", 경기도: "Gyeonggi", 충청남도: "South Chungcheong", 충청북도: "North Chungcheong", 강원도: "Gangwon", 전라남도: "South Jeolla", 전라북도: "North Jeolla", 경상남도: "South Gyeongsang", 경상북도: "North Gyeongsang", 제주도: "Jeju", 부산: "Busan", 대구: "Daegu", 인천: "Incheon", 광주: "Gwangju", 대전: "Daejeon", 울산: "Ulsan", 세종: "Sejong" },
       role: { mentor: "Business owner", partner: "Missionary", sponsor: "Sponsor" },
       contribution: {
         skill: "Teach a skill",
@@ -726,6 +730,7 @@ export const en: Messages = {
       reliance: "Self-reliance",
     },
     profile: {
+      locationNote: "You are placed in the tent for your area automatically. If you change your area, you move to the tent of the new area.",
       title: "Profile",
       save: "Save",
       saved: "Saved.",
@@ -749,6 +754,7 @@ export const en: Messages = {
     },
     tent: {
       title: "Tent", sub: "Our gathering that meets regularly, by region or online.",
+      capacity: "{n} of {max} business owners", splitNote: "Tents form automatically by region (province or country). When a tent grows past 12 business owners, it splits in two by district.",
       mine: "My tents", viaOwn: "My tent", viaMentor: "Mentor's tent", online: "Online",
       partnerNote: "Missionaries do not need to apply. When a business owner welcomes you into their tent, you become part of it, and whoever wants to mentor you steps forward with \"Mentor this missionary\".",
       noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join a tent when a business owner there welcomes them.",
@@ -847,7 +853,7 @@ export const en: Messages = {
       profileHint: "Fill in the items below so that we can know each other better.",
       profileCta: "Edit my profile",
       profileFields: {
-        phone: "Phone", country: "Country of residence", business_name: "Business name", industry: "Industry", contribution_types: "Ways you contribute",
+        phone: "Phone", country: "Country of residence", region: "Region (province)", district: "City or district", business_name: "Business name", industry: "Industry", contribution_types: "Ways you contribute",
         mission_field: "Mission field", sending_org: "Sending organization", business_idea: "Business idea", sponsor_type: "Sponsor type", church_name: "Church name",
       },
       shortcuts: "Shortcuts",
