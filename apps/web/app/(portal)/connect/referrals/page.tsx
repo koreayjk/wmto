@@ -48,7 +48,7 @@ export default async function Referrals() {
   ]);
   const mentors = (dir ?? []) as DirMentor[];
   const cm = getMessages(locale).connect;
-  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames, regions: getMessages(locale).apply.options.region, regionOrder: krRegions };
+  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames, regions: getMessages(locale).apply.options.region, regionOrder: krRegions, dateLocale: locale === "en" ? "en-US" : "ko-KR" };
   const name = new Map(mentors.map((x) => [x.id, x.name]));
   const all = (refs ?? []) as Ref[];
   const received = all.filter((r) => r.receiver_id === me.id);

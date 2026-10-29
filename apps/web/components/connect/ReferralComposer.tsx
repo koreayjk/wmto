@@ -14,7 +14,7 @@ export type ComposerText = {
   find: string; search: string; byIndustry: string; byRegion: string; allIndustry: string; allRegion: string;
   noResult: string; chosen: string; choose: string; none: string; mentees: string; people: string; since: string;
   ways: Record<string, string>; stages: Record<string, string>;
-  regions: Record<string, string>; regionOrder: readonly string[];
+  regions: Record<string, string>; regionOrder: readonly string[]; dateLocale: string;
 };
 
 /** 받을 사업가를 업종·지역별로 묶어 보면서 고르고, 같은 카드 안에서 소개 내용을 씁니다. */
@@ -94,7 +94,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
                           {ways && ` · ${ways}`}
                         </span>
                         <span className="mt-1 block text-xs text-soft">
-                          {t.mentees.replace("{n}", String(m.mentee_count))} · {t.since.replace("{d}", new Date(m.joined_at).toLocaleDateString("ko-KR", { year: "numeric", month: "short" }))}
+                          {t.mentees.replace("{n}", String(m.mentee_count))} · {t.since.replace("{d}", new Date(m.joined_at).toLocaleDateString(t.dateLocale, { year: "numeric", month: "short" }))}
                         </span>
                       </button>
                     </li>
