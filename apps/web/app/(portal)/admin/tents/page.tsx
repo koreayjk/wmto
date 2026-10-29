@@ -33,7 +33,7 @@ export default async function AdminTents() {
   return (
     <>
       <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">텐트</h1>
-      <p className="max-w-2xl text-soft">지역(또는 온라인)별 모임입니다. 사업가·후원자는 여기서 텐트를 배정하고, 선교사는 멘토에게 픽업되면 그 멘토의 텐트에 자동으로 함께합니다.</p>
+      <p className="max-w-2xl text-soft">지역(또는 온라인)별 모임입니다. 사업가·후원자는 여기서 텐트를 배정합니다. 선교사는 텐트의 사업가가 "우리 텐트로 모시기"를 하면 그 텐트에 들어오고, 멘토는 텐트원이 이어서 직접 맡습니다.</p>
 
       <form action={addTent} className="mt-8 flex flex-wrap gap-3">
         <input name="name" required placeholder="텐트 이름 (예: 부산 텐트)" className="field !w-64" />

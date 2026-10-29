@@ -750,16 +750,19 @@ export const en: Messages = {
     tent: {
       title: "Tent", sub: "Our gathering that meets regularly, by region or online.",
       mine: "My tents", viaOwn: "My tent", viaMentor: "Mentor's tent", online: "Online",
-      partnerNote: "Missionaries do not need to apply. When a business-owner mentor picks you up, you automatically join that mentor's tent.",
-      noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join their mentor's tent automatically once connected.",
+      partnerNote: "Missionaries do not need to apply. When a business owner welcomes you into their tent, you become part of it, and whoever wants to mentor you steps forward with \"Mentor this missionary\".",
+      noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join a tent when a business owner there welcomes them.",
       stats: { members: "Members", mentors: "Business owners", partners: "Missionaries", sponsors: "Sponsors", accompany: "Walking together", logs: "Mentoring, last 30 days" },
       next: "Next gathering", noNext: "No gathering is scheduled yet.", join: "Join", past: "Past gatherings", attended: "{n} attended", meAttended: "I attended",
       posts: "Notices and recaps", noPosts: "No posts yet.", notice: "Notice", recap: "Recap",
       write: "Write a post", postTitle: "Title", postBody: "Message", postKind: "Type", post: "Post",
       people: "People in this tent", via: "Joined through a mentor", mentees: "Mentoring {n} missionaries", since: "Joined {d}",
-      pickup: "Missionaries waiting to be picked up",
-      pickupSub: "When a business owner in our tent picks a missionary up, that missionary becomes part of this tent and joins its gatherings.",
-      pickupBtn: "Welcome into our tent", pickupEmpty: "No missionary is waiting right now.", pickupHint: "One-to-one mentoring begins and the missionary joins this tent.",
+      pickup: "Missionaries to welcome (step 1)",
+      seek: "Missionaries waiting for a mentor (step 2)",
+      seekSub: "These missionaries have been welcomed into our tent. Whoever in the tent wants to mentor one presses \"Mentor this missionary\" and one-to-one mentoring begins. Being welcomed does not make everyone in the tent a mentor.",
+      seekEmpty: "No missionary is waiting for a mentor right now.", seekBtn: "Mentor this missionary", seekHint: "Only requests matching how you help are shown. Pressing it makes you this missionary's mentor.",
+      pickupSub: "Missionaries without a tent yet. When one business owner welcomes a missionary, they become part of this tent. No mentor is chosen yet.",
+      pickupBtn: "Welcome into our tent", pickupEmpty: "No missionary is waiting right now.", pickupHint: "They only join the tent. Tent members choose a mentor next.",
       roles: { mentor: "Business owner", partner: "Missionary", sponsor: "Sponsor" },
     },
     growth: {
@@ -939,7 +942,7 @@ export const en: Messages = {
       saveToast: "This is a demo, so nothing is saved. In the real service it would be saved here and reach the other person right away.",
       hints: {
         mentor: {
-          "/connect/tent": "See your tent's gatherings, members, notices and recaps. You can also welcome waiting missionaries into your tent below.",
+          "/connect/tent": "See your tent's gatherings, members, notices and recaps. You can also welcome missionaries into your tent (step 1) and mentor the ones in it (step 2) below.",
           "/connect/matching": "Only help requests that match your field appear. Press \"I will take this\" to begin a 1:1 walk.",
           "/connect/mentoring": "Record what you shared, what to do next, and prayer requests after meeting a missionary. The missionary sees the same record.",
           "/connect/referrals": "Introduce customers to other business owners and update the status of introductions you received.",
@@ -953,7 +956,7 @@ export const en: Messages = {
           "/connect/more": "The way to every other screen.",
         },
         partner: {
-          "/connect/tent": "You join your mentors' tents automatically. See gatherings, business owners, fellow missionaries, notices and recaps.",
+          "/connect/tent": "You join a tent when a business owner there welcomes you. See gatherings, business owners, fellow missionaries, notices and recaps.",
           "/connect/matching": "Choose the area you need and send a request. A matching business owner sees it and takes it. You can follow its status here.",
           "/connect/mentoring": "Mentoring records your mentor left, with next steps and prayer requests.",
           "/connect/report": "Write revenue, self-reliance (1 to 5), difficulties, and prayer requests each month. Your mentor and the team read it and help.",
@@ -977,7 +980,7 @@ export const en: Messages = {
       },
       tour: {
         mentor: [
-          { href: "/connect/tent", name: "Tent", text: "Your local gathering. Pick up missionaries and share notices." },
+          { href: "/connect/tent", name: "Tent", text: "Your local gathering. Welcome and mentor missionaries, share notices." },
           { href: "/connect/matching", name: "Matching requests", text: "Where missionaries' requests gather. Press \"I will take this\" to begin." },
           { href: "/connect/mentoring", name: "Mentoring log", text: "Record what you shared, what to do next, and prayer requests." },
           { href: "/connect/referrals", name: "Referrals", text: "Introduce customers to other owners and see introductions you received." },

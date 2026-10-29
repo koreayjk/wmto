@@ -29,7 +29,17 @@ async function addPost(fd: FormData) {
   revalidatePath("/connect/tent");
 }
 
-async function pickup(fd: FormData) {
+/** 텐트에 모시기: 선교사가 텐트의 구성원이 됩니다. 멘토는 이어서 텐트원이 직접 고릅니다. */
+async function welcome(fd: FormData) {
+  "use server";
+  const { me, supabase } = await requireMe();
+  if (me.role !== "mentor") return;
+  await supabase.rpc("tent_welcome", { p_request: String(fd.get("id")) });
+  revalidatePath("/connect/tent");
+}
+
+/** 멘토로 함께하기: 1:1 동행이 시작됩니다. */
+async function take(fd: FormData) {
   "use server";
   const { me, supabase } = await requireMe();
   if (me.role !== "mentor") return;
@@ -62,7 +72,9 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   ]);
   const o = ov as Overview | null;
   if (!o) redirect("/connect");
-  const waiting = (pk.data ?? []) as { id: string; partner_name: string; mission_field: string | null; contribution_type: keyof typeof m.contribution; message: string | null; created_at: string }[];
+  const waiting = (pk.data ?? []) as { id: string; partner_name: string; mission_field: string | null; contribution_type: keyof typeof m.contribution; message: string | null; created_at: string; partner_chapter: string | null }[];
+  const pool = waiting.filter((r) => !r.partner_chapter);
+  const seeking = waiting.filter((r) => r.partner_chapter === cur.id);
 
   const by = (r: Person["role"]) => o.members.filter((p) => p.role === r);
   const mentors = by("mentor"), partners = by("partner"), sponsors = by("sponsor");
@@ -183,16 +195,38 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
       </Card>
 
       {me.role === "mentor" && (
-        <Card title={t.pickup} className="lg:col-span-full">
-          <p className="mb-4 max-w-3xl text-sm leading-relaxed text-soft">{t.pickupSub}</p>
-          {waiting.length === 0 ? <p className="text-soft">{t.pickupEmpty}</p> : (
+        <Card title={t.seek} className="lg:col-span-full">
+          <p className="mb-4 max-w-3xl text-sm leading-relaxed text-soft">{t.seekSub}</p>
+          {seeking.length === 0 ? <p className="text-soft">{t.seekEmpty}</p> : (
             <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {waiting.map((r) => (
+              {seeking.map((r) => (
                 <li key={r.id} className="rounded-2xl bg-white p-4 ring-1 ring-black/[0.06]">
                   <p className="text-xs text-clay">{m.contribution[r.contribution_type]} · {fmtDate(r.created_at, locale)}</p>
                   <p className="mt-1 font-display font-semibold">{r.partner_name}{r.mission_field && <span className="ml-2 text-sm font-normal text-soft">{r.mission_field}</span>}</p>
                   {r.message && <p className="mt-1 text-sm leading-relaxed text-soft">{r.message}</p>}
-                  <form action={pickup} className="mt-3">
+                  <form action={take} className="mt-3">
+                    <input type="hidden" name="id" value={r.id} />
+                    <button className="cbtn cbtn-sm">{t.seekBtn}</button>
+                    <p className="mt-2 text-xs text-soft">{t.seekHint}</p>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      )}
+
+      {me.role === "mentor" && (
+        <Card title={t.pickup} className="lg:col-span-full">
+          <p className="mb-4 max-w-3xl text-sm leading-relaxed text-soft">{t.pickupSub}</p>
+          {pool.length === 0 ? <p className="text-soft">{t.pickupEmpty}</p> : (
+            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {pool.map((r) => (
+                <li key={r.id} className="rounded-2xl bg-white p-4 ring-1 ring-black/[0.06]">
+                  <p className="text-xs text-clay">{m.contribution[r.contribution_type]} · {fmtDate(r.created_at, locale)}</p>
+                  <p className="mt-1 font-display font-semibold">{r.partner_name}{r.mission_field && <span className="ml-2 text-sm font-normal text-soft">{r.mission_field}</span>}</p>
+                  {r.message && <p className="mt-1 text-sm leading-relaxed text-soft">{r.message}</p>}
+                  <form action={welcome} className="mt-3">
                     <input type="hidden" name="id" value={r.id} />
                     <button className="cbtn cbtn-sm">{t.pickupBtn}</button>
                     <p className="mt-2 text-xs text-soft">{t.pickupHint}</p>

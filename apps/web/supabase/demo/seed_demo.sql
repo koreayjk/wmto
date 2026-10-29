@@ -194,6 +194,12 @@ begin
             (array['커피 로스팅 기술을 배우고 싶습니다.','사업 계획서와 가격 책정을 도와주실 분을 찾습니다.','현지 생산품을 한국에서 판매할 거래처가 필요합니다.','현지 법인 설립과 세무에 대해 상담이 필요합니다.','제빵 기술을 가르쳐 주실 분을 찾습니다.','회계 장부를 처음 쓰는 방법을 알고 싶습니다.'])[j],
             'pending', now() - (j * 1.5) * interval '1 day');
   end loop;
+  -- 텐트에 모셔진 선교사(멘토를 기다림)와 아직 텐트가 없는 선교사(픽업을 기다림)
+  update members set chapter_id = ch[1], chapter = (select name from chapters where id = ch[1]) where id in (partner_ids[1], partner_ids[2], partner_ids[4], partner_ids[6]);
+  update members set chapter_id = ch[2], chapter = (select name from chapters where id = ch[2]) where id = partner_ids[5];
+  insert into matching_requests (partner_id, contribution_type, message, status, created_at) values
+    (partner_ids[7], 'skill', '현지 청년들에게 가르칠 수 있도록 제과 기술을 배우고 싶습니다.', 'pending', now() - interval '2 days'),
+    (partner_ids[9], 'coach', '사업을 시작하기 전에 계획서를 함께 봐 주실 분이 필요합니다.', 'pending', now() - interval '3 days');
   insert into matching_requests (partner_id, contribution_type, message, status, created_at)
   values (partner_ids[3], 'advisor', '비자 문제로 법률 자문을 구합니다.', 'pending', now() - interval '1 day'),
          (partner_ids[5], 'channel', '이전 요청은 다른 길을 찾아 취소했습니다.', 'cancelled', now() - interval '20 days');
