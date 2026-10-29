@@ -62,6 +62,7 @@ export function Header() {
             >
               {m.nav.switchTo}
             </Link>
+            <a href="/connect/demo" className="ml-1 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold text-accent ring-1 ring-inset ring-accent/30 transition-colors duration-300 hover:bg-tint">{m.nav.app.demo}</a>
             <Link href={localizeHref(locale, m.nav.cta.href)} className={`ml-2 whitespace-nowrap rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition duration-500 ${EASE} hover:bg-[var(--accent-hover)] active:scale-[0.97]`}>
               {m.nav.cta.label}
             </Link>
@@ -108,6 +109,10 @@ export function Header() {
           >
             {m.nav.cta.label}
           </Link>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <a href="/connect/demo" tabIndex={open ? 0 : -1} className="block rounded-full py-3.5 text-center font-semibold text-accent ring-1 ring-inset ring-accent/30">{m.nav.app.demo}</a>
+            <a href="/connect/login" tabIndex={open ? 0 : -1} className="block rounded-full py-3.5 text-center font-medium text-ink ring-1 ring-inset ring-black/10">{m.nav.app.login}</a>
+          </div>
           <Link
             href={switchHref}
             hrefLang={other}

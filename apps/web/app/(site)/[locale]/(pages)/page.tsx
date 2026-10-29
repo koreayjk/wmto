@@ -7,6 +7,7 @@ import { photos } from "@/lib/photos";
 import { Bezel } from "@/components/Bezel";
 import { Photo, PhotoFrame } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
+import { ConnectShowcase } from "@/components/ConnectShowcase";
 import { Plus } from "@phosphor-icons/react/dist/ssr";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -56,6 +57,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           steps={h.how.steps.map((st, i) => ({ ...st, src: photos[(["story1", "camp", "how", "story4", "story5"] as const)[i]] }))}
         />
       </Section>
+
+      {/* WMTO Connect: 회원 앱 소개와 체험 */}
+      <ConnectShowcase
+        eyebrow={h.connect.eyebrow} title={h.connect.title} body={h.connect.body} screens={h.connect.screens} roles={h.connect.roles}
+        demo={h.connect.demo} login={h.connect.login} note={h.connect.note} frameAlt={h.connect.frameAlt}
+      />
 
       {/* 5. 캠프: 사진 위에 정보 카드가 겹친다 */}
       <Section title={h.camp.title}>

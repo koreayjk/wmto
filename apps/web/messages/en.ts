@@ -36,6 +36,7 @@ export const en: Messages = {
       { href: "/events", label: "Events" },
     ],
     cta: { href: "/apply?type=observe", label: "Observe a meeting" },
+    app: { demo: "Try the app", login: "Member login" },
     menu: "Menu",
     close: "Close",
     main: "Main menu",
@@ -81,6 +82,26 @@ export const en: Messages = {
   },
 
   home: {
+    connect: {
+      eyebrow: "WMTO Connect",
+      title: "One place for the road we walk together: WMTO Connect",
+      body: "The app for WMTO members. Meet in a regional tent, walk with the missionaries you mentor, and exchange mentoring notes, thank-you letters, and giving news. Try it with sample data before you join.",
+      screens: [
+        { key: "tent", label: "Tent", title: "Our local gathering", text: "You join the tent for your area automatically and share regular gatherings, notices, and recaps. When a tent passes 12 business owners it splits in two by district." },
+        { key: "mentoring", label: "Mentoring log", title: "Every meeting, in order", text: "Record what you shared, the next steps, and prayer topics. Notes are shared by default with other mentors helping the same missionary, or kept between the two of you if personal." },
+        { key: "letters", label: "Thank-you letters", title: "Words on real stationery", text: "Missionaries write to the mentors who helped them, and business owners read each letter as it arrives." },
+        { key: "referrals", label: "Referrals", title: "Find by industry and region", text: "See photos and business details to find a business owner and refer a client. Helping one another, BNI style." },
+      ],
+      roles: [
+        { name: "Business owners", text: "welcome missionaries into the tent and walk with them as mentors." },
+        { name: "Missionaries", text: "ask for help, learn, and share their growth in a monthly report." },
+        { name: "Sponsors", text: "follow the news of the missionaries they support and the flow of the revolving fund." },
+      ],
+      demo: "Try the app",
+      login: "Member login",
+      note: "The demo is read-only with sample data and needs no login. Login is for approved members only.",
+      frameAlt: "WMTO Connect screen",
+    },
     hero: {
       eyebrow: "WMTO Self-Sustaining Mission Business Network",
       title: "Christian business owners teach.\nMissionaries stand on their own.",

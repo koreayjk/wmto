@@ -29,6 +29,8 @@ export function Footer() {
               <li key={i.href}><Link href={href(i.href)} className="inline-block py-2 hover:text-accent">{i.label}</Link></li>
             ))}
             <li><Link href={href("/fund")} className="inline-block py-2 hover:text-accent">{m.footer.fund}</Link></li>
+            <li><a href="/connect/demo" className="inline-block py-2 hover:text-accent">{m.nav.app.demo}</a></li>
+            <li><a href="/connect/login" className="inline-block py-2 hover:text-accent">{m.nav.app.login}</a></li>
             <li><Link href={href("/apply?type=contact")} className="inline-block py-2 hover:text-accent">{m.footer.contact}</Link></li>
             <li><Link href={href("/privacy")} className="inline-block py-2 hover:text-accent">{m.site.privacy}</Link></li>
             <li>

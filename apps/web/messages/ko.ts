@@ -37,6 +37,7 @@ export const ko = {
       { href: "/events", label: "일정" },
     ],
     cta: { href: "/apply?type=observe", label: "참관 신청" },
+    app: { demo: "앱 체험", login: "회원 로그인" },
     menu: "메뉴",
     close: "닫기",
     main: "주 메뉴",
@@ -82,6 +83,26 @@ export const ko = {
   },
 
   home: {
+    connect: {
+      eyebrow: "WMTO Connect",
+      title: "함께하는 길을 한 곳에서, WMTO Connect",
+      body: "WMTO 회원을 위한 앱입니다. 지역 텐트에서 만나고, 선교사를 맡아 동행하고, 멘토링과 감사 편지와 후원 소식이 오갑니다. 가입하기 전에 가상 데이터로 직접 눌러 보세요.",
+      screens: [
+        { key: "tent", label: "텐트", title: "우리 지역의 모임", text: "사는 곳에 맞는 텐트에 자동으로 들어가 정기 모임, 공지, 후기를 나눕니다. 사업가가 12명을 넘으면 시·군·구를 기준으로 텐트가 둘로 나뉘어요." },
+        { key: "mentoring", label: "멘토링 기록", title: "만남을 시간 순서대로", text: "선교사와 나눈 이야기, 다음에 할 것, 기도제목을 남깁니다. 같은 선교사를 돕는 다른 멘토와 기본으로 나누고, 개인적인 내용은 둘만 볼 수 있어요." },
+        { key: "letters", label: "감사 편지", title: "편지지에 마음을 담아", text: "선교사는 도움을 준 멘토에게 편지를 쓰고, 사업가는 받은 편지를 한 장씩 읽습니다." },
+        { key: "referrals", label: "리퍼럴", title: "업종과 지역으로 찾아 소개", text: "사진과 사업 정보를 보고 사업가를 찾아 고객을 소개합니다. 서로 돕는 BNI식 소개입니다." },
+      ],
+      roles: [
+        { name: "사업가", text: "선교사를 텐트로 모시고 멘토가 되어 동행합니다." },
+        { name: "선교사", text: "도움을 요청하고, 배우고, 자립 리포트로 성장을 나눕니다." },
+        { name: "후원자", text: "후원한 선교사의 소식과 순환 기금의 흐름을 봅니다." },
+      ],
+      demo: "앱 체험하기",
+      login: "회원 로그인",
+      note: "체험은 로그인 없이 가상 데이터로 둘러보는 읽기 전용입니다. 로그인은 승인된 회원만 가능합니다.",
+      frameAlt: "WMTO Connect 화면",
+    },
     hero: {
       eyebrow: "WMTO 자립선교 비즈니스 네트워크",
       title: "크리스천 사업가가 가르치고,\n선교사가 일어섭니다",
