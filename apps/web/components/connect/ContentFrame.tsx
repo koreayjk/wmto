@@ -2,8 +2,8 @@
 
 import { usePathname } from "next/navigation";
 
-/** 홈(대시보드)은 넓게, 나머지 화면은 읽기 좋은 폭으로 둡니다. */
+/** 휴대폰은 한 줄로, 컴퓨터(lg 이상)는 화면 폭을 모두 씁니다. 홈 외 화면은 카드를 여러 열로 배치합니다. */
 export function ContentFrame({ children }: { children: React.ReactNode }) {
   const home = usePathname() === "/connect";
-  return <div className={`mx-auto max-w-xl ${home ? "lg:max-w-5xl" : ""}`}>{children}</div>;
+  return <div className={`mx-auto max-w-xl lg:max-w-[100rem] ${home ? "" : "connect-wide"}`}>{children}</div>;
 }

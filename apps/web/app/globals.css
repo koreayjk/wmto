@@ -200,3 +200,14 @@ img, svg, video { max-width: 100%; }
     box-shadow: 0 0 0 6px rgba(22, 24, 29, 0.035), 0 0 0 7px rgba(22, 24, 29, 0.045), 0 26px 44px -34px rgba(14, 70, 58, 0.35);
   }
 }
+
+/* 컴퓨터 화면: 카드를 여러 열로 배치해 화면 폭을 모두 씁니다 */
+@media (min-width: 1024px) {
+  .connect-wide > .space-y-4 {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr)); gap: 1.25rem; align-items: start;
+  }
+  .connect-wide > .space-y-4 > * { margin: 0; }
+  .connect-wide > .space-y-4 > header,
+  .connect-wide > .space-y-4 > h2,
+  .connect-wide > .space-y-4 > p { grid-column: 1 / -1; }
+}

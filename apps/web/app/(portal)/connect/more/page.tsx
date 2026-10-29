@@ -16,7 +16,7 @@ export default async function More() {
   if (me.role === "mentor" || me.role === "partner") links.push({ href: "/connect/growth", ...it.growth });
   links.push({ href: "/connect/profile", ...it.profile });
   return (
-    <div>
+    <div className="space-y-4">
       <PageTitle>{m.title}</PageTitle>
       <ul className="divide-y divide-black/[0.06]">
         {links.map((l) => (
