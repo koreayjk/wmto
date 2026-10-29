@@ -19,6 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const links = [
     { href: "/admin", label: m.applications },
     { href: "/admin/members", label: "회원" },
+    { href: "/admin/tents", label: "텐트" },
     { href: "/admin/matchings", label: "매칭" },
     { href: "/admin/stages", label: "성장 단계" },
     { href: "/admin/academy", label: "아카데미" },

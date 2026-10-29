@@ -20,6 +20,7 @@ async function addEvent(fd: FormData) {
     location: String(fd.get("location") ?? "") || null,
     meeting_provider: String(fd.get("meeting_url") ?? "") ? (fd.get("meeting_provider") === "bbb" ? "bbb" : "zoom") : null,
     meeting_url: String(fd.get("meeting_url") ?? "") || null,
+    chapter_id: String(fd.get("chapter_id") ?? "") || null,
   });
   revalidatePath("/admin/events");
   revalidatePath("/events");
@@ -37,6 +38,7 @@ export default async function AdminEvents() {
   const { supabase } = await requireAdmin();
   const t = getMessages().events.types;
   const { data } = await supabase.from("events").select("*").order("start_at", { ascending: false }).limit(100);
+  const { data: tents } = await supabase.from("chapters").select("id,name").order("name");
   return (
     <>
       <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">{getMessages().admin.events}</h1>
@@ -48,6 +50,7 @@ export default async function AdminEvents() {
         <label className="text-sm text-soft">시작 (KST)<input name="start_at" type="datetime-local" required className="field mt-1" /></label>
         <label className="text-sm text-soft">종료 (KST)<input name="end_at" type="datetime-local" className="field mt-1" /></label>
         <input name="location" placeholder="장소" className="field" />
+        <select name="chapter_id" className="field" defaultValue=""><option value="">전체 모임 (텐트 없음)</option>{(tents ?? []).map((t) => <option key={t.id} value={t.id}>{t.name} 모임</option>)}</select>
         <select name="meeting_provider" className="field"><option value="zoom">Zoom</option><option value="bbb">BigBlueButton</option></select>
         <input name="meeting_url" type="url" placeholder="회의 링크 (회원에게만 공개)" className="field md:col-span-2" />
         <button className="cbtn w-full md:col-span-2">일정 등록</button>

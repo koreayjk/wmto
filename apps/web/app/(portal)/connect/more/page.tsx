@@ -9,7 +9,7 @@ export default async function More() {
   const { me } = await requireMe();
   const m = getMessages(locale).connect.more;
   const it = m.items;
-  const links: { href: string; name: string; text: string }[] = [];
+  const links: { href: string; name: string; text: string }[] = [{ href: "/connect/tent", name: getMessages(locale).connect.tent.title, text: getMessages(locale).connect.tent.sub }];
   if (me.role === "partner") links.push({ href: "/connect/matching", ...it.matching }, { href: "/connect/thanks", ...it.thanks });
   if (me.role === "mentor") links.push({ href: "/connect/matching", ...it.requests }, { href: "/connect/referrals", ...it.referrals }, { href: "/connect/thanks", ...it.thanks });
   if (me.role === "sponsor") {

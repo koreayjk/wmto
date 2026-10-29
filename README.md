@@ -18,7 +18,7 @@ npm run dev                                     # http://localhost:3000
 ### Supabase 설정
 > 처음 하시는 분은 **[docs/06-setup-guide.md](docs/06-setup-guide.md)** (Supabase·Vercel·이메일 설정 단계별 안내서)를 보세요.
 
-1. Supabase 프로젝트 생성 → SQL Editor에서 `apps/web/supabase/migrations/` 의 `0001_init.sql`, `0002_app_phase1.sql`, `0003_app_phase2.sql`, `0004_mentoring_followup.sql`, `0005_sponsor.sql`, `0006_view_as.sql`, `0007_demo_viewer.sql`, `0008_mentor_directory_detail.sql` 을 순서대로 실행
+1. Supabase 프로젝트 생성 → SQL Editor에서 `apps/web/supabase/migrations/` 의 `0001_init.sql`, `0002_app_phase1.sql`, `0003_app_phase2.sql`, `0004_mentoring_followup.sql`, `0005_sponsor.sql`, `0006_view_as.sql`, `0007_demo_viewer.sql`, `0008_mentor_directory_detail.sql`, `0009_tents.sql` 을 순서대로 실행
 2. Auth에서 관리자 계정 생성 후 `insert into wmto.admins (user_id) values ('<auth user id>');`
 3. Dashboard > Project Settings > API > **Exposed schemas** 에 `wmto` 추가 (WMTO 표는 SVM 등과 겹치지 않도록 `wmto` 스키마에 만들어집니다)
 4. `.env.local`에 URL / anon key / service role key 입력 (service role key는 서버 전용)

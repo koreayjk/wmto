@@ -55,7 +55,7 @@ export default async function AdminStages() {
       </ul>
 
       <h2 className="mt-14 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">직접 변경</h2>
-      <p className="mt-1 text-xs text-soft">캠프 수료(Launch)나 챕터 리더십(Elder)처럼 자동 기준이 없는 경우에 사용합니다.</p>
+      <p className="mt-1 text-xs text-soft">캠프 수료(Launch)나 텐트 리더십(Elder)처럼 자동 기준이 없는 경우에 사용합니다.</p>
       <ul className="mt-2 alist divide-y divide-black/[0.06]">
         {(members ?? []).map((m) => {
           const stages = m.role === "mentor" ? mentorStages : partnerStages;

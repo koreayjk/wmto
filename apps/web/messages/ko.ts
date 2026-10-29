@@ -243,7 +243,7 @@ export const ko = {
     },
     ops: {
       title: "운영",
-      body: "WMTO는 크리스천 사업가들이 운영위원회를 이끌고, IM선교회와 함께 세워갑니다. 한국에서 시작하여 미주와 아시아로 챕터를 넓혀갑니다.",
+      body: "WMTO는 크리스천 사업가들이 운영위원회를 이끌고, IM선교회와 함께 세워갑니다. 한국에서 시작하여 미주와 아시아로 텐트를 넓혀갑니다.",
     },
     final: {
       title: "이 비전에 함께하시겠습니까?",
@@ -320,7 +320,7 @@ export const ko = {
         { name: "Seed", text: "오리엔테이션과 함께 시작합니다" },
         { name: "Sower", text: "선교사 한 분의 멘토가 됩니다" },
         { name: "Harvester", text: "선교사의 자립에 함께합니다" },
-        { name: "Elder", text: "챕터를 이끌고 다음 멘토를 세웁니다" },
+        { name: "Elder", text: "텐트를 이끌고 다음 멘토를 세웁니다" },
       ],
     },
     fee: {
@@ -556,9 +556,9 @@ export const ko = {
     // docs/00-wmto-overview.md 7~8장
     regular: [
       { name: "격주 온라인 모임", text: "60분. 60초 자기소개, 선교사 현장 보고, 사업가 강의로 진행합니다." },
-      { name: "월 1회 오프라인 모임", text: "챕터별로 만나 교제하고 실습 워크숍을 함께합니다." },
+      { name: "월 1회 오프라인 모임", text: "텐트별로 만나 교제하고 실습 워크숍을 함께합니다." },
       { name: "필리핀 훈련 캠프", text: "연 2회, 3주 집중 과정. 선교지에 맞는 사업을 준비합니다." },
-      { name: "글로벌 컨퍼런스", text: "연 1회. 챕터와 나라를 넘어 한자리에 모입니다." },
+      { name: "글로벌 컨퍼런스", text: "연 1회. 텐트와 나라를 넘어 한자리에 모입니다." },
     ],
     types: {
       online: "온라인 모임",
@@ -676,7 +676,7 @@ export const ko = {
     },
     stageDesc: {
       seed: "오리엔테이션과 함께 시작합니다", sower: "선교사 한 분의 멘토가 됩니다",
-      harvester: "선교사의 자립에 함께합니다", elder: "챕터를 이끌고 다음 멘토를 세웁니다",
+      harvester: "선교사의 자립에 함께합니다", elder: "텐트를 이끌고 다음 멘토를 세웁니다",
       ready: "나에게 맞는 사업을 찾고 준비합니다", launch: "캠프에서 배우고 사업을 시작합니다",
       growing: "첫 매출이 생기고 사업이 자랍니다", self_sustaining: "자립을 이루고 다음 선교사의 멘토가 됩니다",
     },
@@ -757,6 +757,21 @@ export const ko = {
         growth: { name: "활동·성장", text: "이번 달 나눔과 성장 단계 기록" },
         profile: { name: "내 정보", text: "연락처와 프로필을 수정합니다" },
       },
+    },
+    tent: {
+      title: "텐트", sub: "지역(또는 온라인)에서 정기적으로 만나는 우리 모임입니다.",
+      mine: "내 텐트", viaOwn: "내 텐트", viaMentor: "멘토의 텐트", online: "온라인",
+      partnerNote: "선교사는 따로 신청하지 않아도 됩니다. 사업가 멘토가 선교사를 픽업하면, 그 멘토의 텐트에 자동으로 함께합니다.",
+      noTent: "아직 속한 텐트가 없습니다. 운영진이 배정하면 이곳에 나타납니다. 선교사는 멘토와 연결되면 그 멘토의 텐트에 자동으로 함께합니다.",
+      stats: { members: "구성원", mentors: "사업가", partners: "선교사", sponsors: "후원자", accompany: "동행 중", logs: "최근 30일 멘토링" },
+      next: "다음 모임", noNext: "예정된 모임이 아직 없습니다.", join: "참여하기", past: "지난 모임", attended: "{n}명 참석", meAttended: "내가 참석함",
+      posts: "공지와 모임 후기", noPosts: "아직 글이 없습니다.", notice: "공지", recap: "모임 후기",
+      write: "글 남기기", postTitle: "제목", postBody: "내용", postKind: "종류", post: "올리기",
+      people: "함께하는 사람들", via: "멘토를 따라 합류", mentees: "선교사 {n}명과 동행", since: "{d} 합류",
+      pickup: "함께할 선교사를 기다립니다",
+      pickupSub: "우리 텐트의 사업가가 픽업하면, 그 선교사는 이 텐트의 가족이 되어 함께 모임에 참여합니다.",
+      pickupBtn: "우리 텐트로 모시기", pickupEmpty: "지금 픽업을 기다리는 선교사가 없습니다.", pickupHint: "맡으면 1:1 동행이 시작되고, 선교사가 이 텐트에 합류합니다.",
+      roles: { mentor: "사업가", partner: "선교사", sponsor: "후원자" },
     },
     growth: {
       title: "활동·성장",
@@ -935,6 +950,7 @@ export const ko = {
       saveToast: "체험 모드라 저장되지 않아요. 실제 서비스에서는 여기서 저장되어 상대에게 바로 전달됩니다.",
       hints: {
         mentor: {
+          "/connect/tent": "우리 텐트의 모임 일정, 함께하는 사람들, 공지와 후기를 봅니다. 아래에서 픽업을 기다리는 선교사를 \"우리 텐트로 모시기\"로 맡을 수도 있어요.",
           "/connect/matching": "선교사들이 올린 도움 요청 중 내 분야와 맞는 것만 보입니다. \"맡겠습니다\"를 누르면 1:1 동행이 시작돼요.",
           "/connect/mentoring": "선교사를 만난 뒤 나눈 내용, 다음에 할 것, 기도제목을 남기는 곳입니다. 선교사도 같은 기록을 봅니다.",
           "/connect/referrals": "다른 사업가에게 고객을 소개하고, 받은 소개의 진행 상태를 바꿉니다. 사업가끼리 서로 돕는 BNI식 소개입니다.",
@@ -948,6 +964,7 @@ export const ko = {
           "/connect/more": "그 밖의 모든 화면으로 가는 길입니다.",
         },
         partner: {
+          "/connect/tent": "멘토가 속한 텐트에 자동으로 함께합니다. 모임 일정과 함께하는 사업가·선교사, 공지와 후기를 볼 수 있어요.",
           "/connect/matching": "필요한 분야를 고르고 요청을 보내면, 맞는 사업가가 보고 맡아 줍니다. 요청의 진행 상태도 여기서 봅니다.",
           "/connect/mentoring": "멘토가 남긴 멘토링 기록입니다. 다음에 할 것과 기도제목까지 함께 볼 수 있어요.",
           "/connect/report": "매달 매출, 자립도(1~5), 어려움, 기도제목을 적는 자립 리포트입니다. 멘토와 운영진이 함께 보고 돕습니다.",
@@ -959,6 +976,7 @@ export const ko = {
           "/connect/more": "그 밖의 모든 화면으로 가는 길입니다.",
         },
         sponsor: {
+          "/connect/tent": "내가 속한 텐트의 모임과 구성원, 공지를 봅니다.",
           "/connect/giving": "내 후원 내역입니다. 정기 후원, 선교사 1:1 후원, 캠프 장학금, 순환 기금을 한눈에 봅니다.",
           "/connect/news": "후원한 선교사의 성장 단계, 이번 달 자립도, 기도제목을 전해 드립니다. 매출 금액처럼 민감한 정보는 보이지 않아요.",
           "/connect/fund": "빌려드린 기금이 갚아져 다음 선교사의 시작이 되는 흐름을 투명하게 보여 줍니다.",
@@ -970,6 +988,7 @@ export const ko = {
       },
       tour: {
         mentor: [
+          { href: "/connect/tent", name: "텐트", text: "우리 지역 모임. 선교사를 픽업하고 공지·후기를 나눠요." },
           { href: "/connect/matching", name: "매칭 요청함", text: "선교사들의 도움 요청이 모이는 곳. \"맡겠습니다\"로 동행을 시작해요." },
           { href: "/connect/mentoring", name: "멘토링 기록", text: "만난 뒤 나눈 내용과 다음에 할 것, 기도제목을 남깁니다." },
           { href: "/connect/referrals", name: "리퍼럴", text: "사업가끼리 고객을 소개하고 받은 소개를 확인합니다." },
@@ -978,6 +997,7 @@ export const ko = {
           { href: "/connect/fund", name: "순환 기금", text: "도운 선교사들의 기금이 다음 사람에게 흘러가는 모습." },
         ],
         partner: [
+          { href: "/connect/tent", name: "텐트", text: "멘토가 속한 모임에 함께하는 사람들과 일정." },
           { href: "/connect/matching", name: "멘토 요청", text: "필요한 분야의 사업가에게 도움을 요청해 보세요." },
           { href: "/connect/mentoring", name: "멘토링 기록", text: "멘토가 남긴 기록과 다음에 할 것을 봅니다." },
           { href: "/connect/report", name: "자립 리포트", text: "매달 매출과 자립도를 적어 자라는 모습을 나눕니다." },
@@ -986,6 +1006,7 @@ export const ko = {
           { href: "/connect/academy", name: "아카데미", text: "사업 기초부터 기술 실습까지 무료 강의." },
         ],
         sponsor: [
+          { href: "/connect/tent", name: "텐트", text: "내 텐트의 모임과 소식." },
           { href: "/connect/news", name: "선교사 소식", text: "후원한 선교사의 단계, 자립도, 기도제목." },
           { href: "/connect/giving", name: "후원 내역", text: "정기 후원, 1:1 후원, 캠프 장학금, 순환 기금." },
           { href: "/connect/fund", name: "순환 기금 흐름", text: "갚은 기금이 다음 선교사의 시작이 됩니다." },

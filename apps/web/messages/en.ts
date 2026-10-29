@@ -241,7 +241,7 @@ export const en: Messages = {
     },
     ops: {
       title: "How we are run",
-      body: "WMTO is led by a committee of Christian business owners and built together with IM Mission. We began in Korea and are expanding chapters to the Americas and Asia.",
+      body: "WMTO is led by a committee of Christian business owners and built together with IM Mission. We began in Korea and are expanding tents to the Americas and Asia.",
     },
     final: {
       title: "Will you join this vision?",
@@ -318,7 +318,7 @@ export const en: Messages = {
         { name: "Seed", text: "Begin with orientation" },
         { name: "Sower", text: "Become a mentor to one missionary" },
         { name: "Harvester", text: "Be part of a missionary's self-reliance" },
-        { name: "Elder", text: "Lead a chapter and raise up the next mentors" },
+        { name: "Elder", text: "Lead a tent and raise up the next mentors" },
       ],
     },
     fee: {
@@ -552,9 +552,9 @@ export const en: Messages = {
     regularTitle: "Regular gatherings",
     regular: [
       { name: "Online meeting every two weeks", text: "60 minutes: a 60-second self-introduction, a missionary's field report, and a business owner's lecture." },
-      { name: "Offline meeting once a month", text: "Meet by chapter for fellowship and a hands-on workshop." },
+      { name: "Offline meeting once a month", text: "Meet by tent for fellowship and a hands-on workshop." },
       { name: "Philippines training camp", text: "Twice a year, a three-week intensive course. Prepare a business that fits the field." },
-      { name: "Global conference", text: "Once a year. We gather in one place across chapters and countries." },
+      { name: "Global conference", text: "Once a year. We gather in one place across tents and countries." },
     ],
     types: {
       online: "Online meeting",
@@ -665,7 +665,7 @@ export const en: Messages = {
     },
     stageDesc: {
       seed: "Begin with orientation", sower: "Become a mentor to one missionary",
-      harvester: "Be part of a missionary's self-reliance", elder: "Lead a chapter and raise up the next mentors",
+      harvester: "Be part of a missionary's self-reliance", elder: "Lead a tent and raise up the next mentors",
       ready: "Find and prepare a business that fits you", launch: "Learn at the camp and start your business",
       growing: "The first sales arrive and the business grows", self_sustaining: "Reach self-reliance and become a mentor to the next missionary",
     },
@@ -746,6 +746,21 @@ export const en: Messages = {
         growth: { name: "Activity and growth", text: "This month's giving and your stage history" },
         profile: { name: "Profile", text: "Edit your contact details and profile" },
       },
+    },
+    tent: {
+      title: "Tent", sub: "Our gathering that meets regularly, by region or online.",
+      mine: "My tents", viaOwn: "My tent", viaMentor: "Mentor's tent", online: "Online",
+      partnerNote: "Missionaries do not need to apply. When a business-owner mentor picks you up, you automatically join that mentor's tent.",
+      noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join their mentor's tent automatically once connected.",
+      stats: { members: "Members", mentors: "Business owners", partners: "Missionaries", sponsors: "Sponsors", accompany: "Walking together", logs: "Mentoring, last 30 days" },
+      next: "Next gathering", noNext: "No gathering is scheduled yet.", join: "Join", past: "Past gatherings", attended: "{n} attended", meAttended: "I attended",
+      posts: "Notices and recaps", noPosts: "No posts yet.", notice: "Notice", recap: "Recap",
+      write: "Write a post", postTitle: "Title", postBody: "Message", postKind: "Type", post: "Post",
+      people: "People in this tent", via: "Joined through a mentor", mentees: "Mentoring {n} missionaries", since: "Joined {d}",
+      pickup: "Missionaries waiting to be picked up",
+      pickupSub: "When a business owner in our tent picks a missionary up, that missionary becomes part of this tent and joins its gatherings.",
+      pickupBtn: "Welcome into our tent", pickupEmpty: "No missionary is waiting right now.", pickupHint: "One-to-one mentoring begins and the missionary joins this tent.",
+      roles: { mentor: "Business owner", partner: "Missionary", sponsor: "Sponsor" },
     },
     growth: {
       title: "Activity and growth",
@@ -924,6 +939,7 @@ export const en: Messages = {
       saveToast: "This is a demo, so nothing is saved. In the real service it would be saved here and reach the other person right away.",
       hints: {
         mentor: {
+          "/connect/tent": "See your tent's gatherings, members, notices and recaps. You can also welcome waiting missionaries into your tent below.",
           "/connect/matching": "Only help requests that match your field appear. Press \"I will take this\" to begin a 1:1 walk.",
           "/connect/mentoring": "Record what you shared, what to do next, and prayer requests after meeting a missionary. The missionary sees the same record.",
           "/connect/referrals": "Introduce customers to other business owners and update the status of introductions you received.",
@@ -937,6 +953,7 @@ export const en: Messages = {
           "/connect/more": "The way to every other screen.",
         },
         partner: {
+          "/connect/tent": "You join your mentors' tents automatically. See gatherings, business owners, fellow missionaries, notices and recaps.",
           "/connect/matching": "Choose the area you need and send a request. A matching business owner sees it and takes it. You can follow its status here.",
           "/connect/mentoring": "Mentoring records your mentor left, with next steps and prayer requests.",
           "/connect/report": "Write revenue, self-reliance (1 to 5), difficulties, and prayer requests each month. Your mentor and the team read it and help.",
@@ -948,6 +965,7 @@ export const en: Messages = {
           "/connect/more": "The way to every other screen.",
         },
         sponsor: {
+          "/connect/tent": "See the gatherings, members and notices of your tent.",
           "/connect/giving": "Your giving records: monthly, 1:1 missionary support, camp scholarships, and the Pass-It-On Fund at a glance.",
           "/connect/news": "The stage, this month's self-reliance, and prayer requests of the missionaries you support. Sensitive figures such as revenue are not shown.",
           "/connect/fund": "Shows openly how lent funds are repaid and become the start of the next missionary.",
@@ -959,6 +977,7 @@ export const en: Messages = {
       },
       tour: {
         mentor: [
+          { href: "/connect/tent", name: "Tent", text: "Your local gathering. Pick up missionaries and share notices." },
           { href: "/connect/matching", name: "Matching requests", text: "Where missionaries' requests gather. Press \"I will take this\" to begin." },
           { href: "/connect/mentoring", name: "Mentoring log", text: "Record what you shared, what to do next, and prayer requests." },
           { href: "/connect/referrals", name: "Referrals", text: "Introduce customers to other owners and see introductions you received." },
@@ -967,6 +986,7 @@ export const en: Messages = {
           { href: "/connect/fund", name: "Pass-It-On Fund", text: "See the fund pass on to the next person." },
         ],
         partner: [
+          { href: "/connect/tent", name: "Tent", text: "People and gatherings of your mentor's tent." },
           { href: "/connect/matching", name: "Request a mentor", text: "Ask a business owner in the area you need." },
           { href: "/connect/mentoring", name: "Mentoring log", text: "See your mentor's records and next steps." },
           { href: "/connect/report", name: "Self-reliance report", text: "Write revenue and self-reliance each month." },
@@ -975,6 +995,7 @@ export const en: Messages = {
           { href: "/connect/academy", name: "Academy", text: "Free lessons from business basics to skills." },
         ],
         sponsor: [
+          { href: "/connect/tent", name: "Tent", text: "Gatherings and news of your tent." },
           { href: "/connect/news", name: "Missionary news", text: "Stage, self-reliance, and prayer requests of those you support." },
           { href: "/connect/giving", name: "Your giving", text: "Monthly, 1:1, camp scholarship, and fund giving." },
           { href: "/connect/fund", name: "Fund flow", text: "Repaid funds become the next missionary's start." },
