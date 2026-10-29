@@ -793,6 +793,12 @@ export const ko = {
       client: "소개할 고객·업체",
       contact: "연락처 (선택)",
       note: "소개 내용",
+      picker: {
+        find: "사업가 찾기", search: "이름·사업체 검색", byIndustry: "업종별", byRegion: "지역별",
+        allIndustry: "모든 업종", allRegion: "모든 지역", noResult: "조건에 맞는 사업가가 없습니다.",
+        chosen: "선택됨", choose: "받을 사업가를 먼저 골라 주세요", none: "왼쪽에서 사업가를 골라 주세요",
+        mentees: "선교사 {n}명과 동행", people: "{n}명", since: "{d} 합류",
+      },
       send: "소개 보내기",
       received: "받은 소개",
       sent: "보낸 소개",

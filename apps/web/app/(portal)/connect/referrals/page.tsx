@@ -4,7 +4,8 @@ import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate } from "@/lib/format";
-import { Card, PageTitle, labelCls } from "@/components/connect/ui";
+import { Card, PageTitle } from "@/components/connect/ui";
+import { ReferralComposer, type ComposerText, type DirMentor } from "@/components/connect/ReferralComposer";
 
 const STATUSES = ["sent", "contacted", "closed"] as const;
 
@@ -44,7 +45,9 @@ export default async function Referrals() {
     supabase.rpc("mentor_directory"),
     supabase.from("referrals").select("*").order("created_at", { ascending: false }).limit(100),
   ]);
-  const mentors = (dir ?? []) as { id: string; name: string; industry: string | null; business_name: string | null }[];
+  const mentors = (dir ?? []) as DirMentor[];
+  const cm = getMessages(locale).connect;
+  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames };
   const name = new Map(mentors.map((x) => [x.id, x.name]));
   const all = (refs ?? []) as Ref[];
   const received = all.filter((r) => r.receiver_id === me.id);
@@ -55,23 +58,11 @@ export default async function Referrals() {
   return (
     <div className="space-y-4">
       <PageTitle>{t.title}</PageTitle>
-      <Card title={t.new}>
+      <Card title={t.new} className="lg:col-span-full">
         {mentors.length === 0 ? (
           <p className="text-soft">{t.noMentors}</p>
         ) : (
-          <form action={send} className="space-y-4">
-            <label className="block">
-              <span className={labelCls}>{t.receiver}</span>
-              <select name="receiver_id" required defaultValue="" className="field">
-                <option value="" disabled>{getMessages(locale).connect.select}</option>
-                {mentors.map((x) => <option key={x.id} value={x.id}>{x.name}{x.industry ? ` · ${x.industry}` : ""}</option>)}
-              </select>
-            </label>
-            <label className="block"><span className={labelCls}>{t.client}</span><input name="client_name" required maxLength={200} className="field" /></label>
-            <label className="block"><span className={labelCls}>{t.contact}</span><input name="client_contact" maxLength={200} className="field" /></label>
-            <label className="block"><span className={labelCls}>{t.note}</span><textarea name="note" rows={3} maxLength={3000} className="field" /></label>
-            <button className="cbtn w-full">{t.send}</button>
-          </form>
+          <ReferralComposer mentors={mentors} action={send} t={composerText} />
         )}
       </Card>
 

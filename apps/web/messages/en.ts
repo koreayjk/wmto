@@ -782,6 +782,12 @@ export const en: Messages = {
       client: "Customer or company you are introducing",
       contact: "Contact (optional)",
       note: "About the introduction",
+      picker: {
+        find: "Find a business owner", search: "Search name or business", byIndustry: "By industry", byRegion: "By region",
+        allIndustry: "All industries", allRegion: "All regions", noResult: "No business owners match.",
+        chosen: "Selected", choose: "Pick a business owner first", none: "Pick a business owner from the list",
+        mentees: "Mentoring {n} missionaries", people: "{n}", since: "Joined {d}",
+      },
       send: "Send introduction",
       received: "Introductions received",
       sent: "Introductions sent",
