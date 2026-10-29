@@ -137,7 +137,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
         </aside>
       )}
       <div className="relative min-w-0 flex-1">
-        <header className="relative z-10 pt-[env(safe-area-inset-top)]">
+        <header className="relative z-20 pt-[env(safe-area-inset-top)]">
           <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-20 lg:max-w-none lg:px-10 xl:px-14">
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -154,7 +154,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
             )}
           </div>
         </header>
-        <main className={`px-5 pt-2 lg:px-10 xl:px-14 lg:pt-4 ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
+        <main className={`relative z-10 px-5 pt-2 lg:px-10 xl:px-14 lg:pt-4 ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
           {r?.demo && active?.role && <DemoHint hints={m.demo.hints[active.role]} />}
           <ContentFrame>{children}</ContentFrame>
           {r?.demo && <DemoGuard message={m.demo.saveToast} />}
