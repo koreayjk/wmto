@@ -22,6 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin/matchings", label: "매칭" },
     { href: "/admin/stages", label: "성장 단계" },
     { href: "/admin/academy", label: "아카데미" },
+    { href: "/admin/donations", label: "후원·기금" },
     { href: "/admin/events", label: m.events },
     { href: "/admin/stories", label: m.stories },
   ];
