@@ -38,6 +38,9 @@ async function findUserId(db: Admin, email: string) {
 
 /** 데모 계정이 없으면 만들고, demo_viewers 에 등록합니다. */
 export async function ensureDemoUser(db: Admin) {
+  // 이미 등록돼 있으면 곧바로 사용합니다(사용자 목록을 뒤지지 않아 빠름).
+  const { data: known } = await db.from("demo_viewers").select("user_id").limit(1).maybeSingle();
+  if (known?.user_id) return known.user_id as string;
   let id: string | null = null;
   const created = await db.auth.admin.createUser({ email: DEMO_EMAIL, email_confirm: true, user_metadata: { wmto_demo: true } });
   id = created.data.user?.id ?? (await findUserId(db, DEMO_EMAIL));

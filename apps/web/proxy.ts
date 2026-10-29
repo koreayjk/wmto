@@ -19,7 +19,8 @@ export async function proxy(request: NextRequest) {
     headers.set("x-locale", locale);
     let response = NextResponse.next({ request: { headers } });
 
-    if (pathname.startsWith("/auth")) return response;
+    // 미리 불러오기(prefetch) 요청은 세션 갱신을 건너뛰어 서버 부담과 대기를 줄입니다. 실제 이동 때 갱신됩니다.
+    if (pathname.startsWith("/auth") || request.headers.get("next-router-prefetch")) return response;
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!url || !key) return response;

@@ -877,6 +877,7 @@ export const en: Messages = {
         "It holds sample activity for 50 business owners and 20 missionaries: matchings, mentoring logs, referrals, thank-you letters, and giving.",
         "It is read-only. Nothing you press is saved or changed.",
       ],
+      entering: "Entering…",
       enter: "Start the demo",
       note: "Every name and detail is sample data made for the demo.",
       empty: "The demo data is not ready yet. Please contact the administrator.",
