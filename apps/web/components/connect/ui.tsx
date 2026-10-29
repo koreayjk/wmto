@@ -15,7 +15,7 @@ export function Card({ title, children, className = "", tone }: { title?: string
 
 export function PageTitle({ children, sub, eyebrow }: { children: ReactNode; sub?: string; eyebrow?: string }) {
   return (
-    <header className="mb-10 mt-2">
+    <header className="mb-8 mt-2">
       {eyebrow && <p className="gilt mb-3 text-[11px] font-medium uppercase tracking-[0.3em]">{eyebrow}</p>}
       <h1 className="display text-[2rem] leading-[1.15] md:text-[2.4rem]">{children}</h1>
       {sub && <p className="mt-3 text-soft">{sub}</p>}

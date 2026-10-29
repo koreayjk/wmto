@@ -8,7 +8,7 @@ export function DemoHint({ hints }: { hints: Record<string, string> }) {
   const text = hints[path];
   if (!text || path === "/connect") return null;
   return (
-    <div className="mb-6 flex gap-3 border-l-2 border-[#b8975a]/60 py-1 pl-5 text-sm leading-relaxed text-ink/75">
+    <div className="relative z-10 mb-5 flex gap-3 border-l-2 border-[#b8975a]/60 py-1 pl-5 text-sm leading-relaxed text-ink/75">
       <p>{text}</p>
     </div>
   );

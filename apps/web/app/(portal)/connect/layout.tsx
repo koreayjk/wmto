@@ -138,8 +138,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
         </aside>
       )}
       <div className="relative min-w-0 flex-1">
-        <header className="relative z-20 pt-[env(safe-area-inset-top)]">
-          <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-20 lg:max-w-none lg:px-10 xl:px-14">
+        <header className="relative z-20 pt-[env(safe-area-inset-top)] lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-0 lg:pt-0">
+          <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-[3.6rem] lg:max-w-none lg:px-10 xl:px-14">
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
@@ -147,7 +147,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
             </span>
             {active && (
-              <span className="ml-auto flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
+              <span className="pointer-events-auto ml-auto flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
                 <Avatar name={active.name} url={active.photo_url} size={30} />
                 <span className="hidden text-ink/70 sm:inline">{active.name}</span>
                 {stageName && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
@@ -155,7 +155,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
             )}
           </div>
         </header>
-        <main className={`relative z-10 px-5 pt-2 lg:px-10 xl:px-14 lg:pt-4 ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
+        <main className={`relative z-10 px-5 pt-2 lg:px-10 xl:px-14 lg:pt-[3.6rem] ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
           {r?.demo && active?.role && <DemoHint hints={m.demo.hints[active.role]} />}
           <ContentFrame>{children}</ContentFrame>
           {r?.demo && <DemoGuard message={m.demo.saveToast} />}

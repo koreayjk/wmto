@@ -75,9 +75,10 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const roleLabel = me.role ? f.options.role[me.role] : "-";
 
   return (
-    <div className="space-y-4">
-      <PageTitle eyebrow="Profile">{t.title}</PageTitle>
-      {saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
+    <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,23rem)_minmax(0,1fr)] lg:items-start">
+      <div className="lg:col-span-full"><PageTitle eyebrow="Profile">{t.title}</PageTitle></div>
+      {saved && <p role="status" className="lg:col-span-full rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
+      <div className="space-y-5 lg:sticky lg:top-6">
       <Card>
         <AvatarUploader action={uploadAvatar} hasPhoto={!!me.photo_url} name={t.photo.title} labels={t.photo}
           preview={me.photo_url ? <Avatar name={me.name} url={me.photo_url} size={88} /> : <Avatar name={me.name} size={88} />} />
@@ -86,6 +87,22 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         <p className="text-sm text-soft">{t.role}: {roleLabel}{me.stage ? ` · ${t.stage}: ${c.stageNames[me.stage as keyof typeof c.stageNames]}` : ""}</p>
         <p className="mt-1 text-sm text-soft">{me.email}</p>
       </Card>
+      <Card>
+        <form action={setLanguage} data-demo-allow className="flex items-center justify-between gap-4">
+          <span className="text-sm font-medium">{t.language}</span>
+          <span className="flex gap-2">
+            {([["ko", "한국어"], ["en", "English"]] as const).map(([v, label]) => (
+              <button key={v} name="locale" value={v} aria-pressed={locale === v}
+                className={`rounded-full border px-4 py-2 text-sm ${locale === v ? "border-accent bg-accent text-white" : "border-black/10 text-soft"}`}>
+                {label}
+              </button>
+            ))}
+          </span>
+        </form>
+      </Card>
+      <p className="px-1 text-sm text-soft">{t.install}</p>
+      <form action={logout} data-demo-allow><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
+      </div>
       <Card>
         <form action={saveProfile} className="space-y-4">
           <label className="block"><span className={labelCls}>{f.fields.name}</span><input name="name" required defaultValue={me.name} className="field" /></label>
@@ -142,21 +159,6 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           <button className="cbtn w-full">{t.save}</button>
         </form>
       </Card>
-      <Card>
-        <form action={setLanguage} data-demo-allow className="flex items-center justify-between gap-4">
-          <span className="text-sm font-medium">{t.language}</span>
-          <span className="flex gap-2">
-            {([["ko", "한국어"], ["en", "English"]] as const).map(([v, label]) => (
-              <button key={v} name="locale" value={v} aria-pressed={locale === v}
-                className={`rounded-full border px-4 py-2 text-sm ${locale === v ? "border-accent bg-accent text-white" : "border-black/10 text-soft"}`}>
-                {label}
-              </button>
-            ))}
-          </span>
-        </form>
-      </Card>
-      <p className="px-1 text-sm text-soft">{t.install}</p>
-      <form action={logout} data-demo-allow><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
     </div>
   );
 }
