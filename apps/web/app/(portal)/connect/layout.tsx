@@ -100,6 +100,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   return (
     <div className={`connect min-h-svh lg:flex ${r?.demo ? "pt-[3.25rem]" : r?.viewAs ? "pt-9" : ""}`}>
       <ServiceWorker />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" precedence="default" />
       {r?.demo && (
         <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 bg-ink px-4 py-1.5 text-[13px] text-white">
           <span className="hidden sm:inline">{m.demo.bar}</span>
@@ -124,7 +125,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
         </div>
       )}
       {active && (
-        <aside className="relative z-10 hidden w-72 shrink-0 lg:block">
+        <aside className="relative z-20 hidden w-72 shrink-0 lg:block">
           <div className={`sticky flex flex-col overflow-y-auto px-5 py-8 ${r?.demo ? "top-[3.25rem] h-[calc(100svh-3.25rem)]" : r?.viewAs ? "top-9 h-[calc(100svh-2.25rem)]" : "top-0 h-svh"}`}>
             <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}

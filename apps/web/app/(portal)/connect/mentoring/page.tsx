@@ -68,7 +68,8 @@ export default async function Mentoring({ searchParams }: { searchParams: Promis
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-12">
       <header className="lg:col-span-2">
-        <h1 className="display text-[2rem] leading-[1.15] md:text-[2.4rem]">{t.title}</h1>
+        <p className="gilt text-[11px] font-medium uppercase tracking-[0.3em]">Mentoring</p>
+        <h1 className="display mt-3 text-[2rem] leading-[1.15] md:text-[2.4rem]">{t.title}</h1>
         <p className="mt-3 text-soft">{t.sub}</p>
       </header>
 
@@ -137,35 +138,33 @@ export default async function Mentoring({ searchParams }: { searchParams: Promis
 
         {logs.length === 0 ? <p className="text-soft">{t.empty}</p> : groups.map(([month, list]) => (
           <div key={month} className="mb-10">
-            <h2 className="mb-4 text-[12px] font-medium tracking-[0.14em] text-soft">{month}</h2>
-            <ol className="relative space-y-7 before:absolute before:bottom-2 before:left-[1.65rem] before:top-2 before:w-px before:bg-black/10">
+            <h2 className="gilt mb-1 text-[11px] font-medium uppercase tracking-[0.24em]">{month}</h2>
+            <ol>
               {list.map((l) => (
-                <li key={l.id} className="relative flex gap-4 sm:gap-5">
-                  <div className="z-10 w-[3.3rem] shrink-0 text-center">
-                    <span className="block rounded-2xl bg-white py-1.5 shadow-[0_0_0_1px_rgba(22,24,29,0.06),0_10px_20px_-14px_rgba(14,70,58,0.5)]">
-                      <span className="block font-display text-xl font-semibold leading-none tabular-nums">{day(l.held_at)}</span>
-                      <span className="mt-1 block text-[11px] text-soft">{wd(l.held_at)}</span>
-                    </span>
+                <li key={l.id} className="grid grid-cols-[3.4rem_minmax(0,1fr)] gap-x-5 border-t border-black/[0.07] py-7 sm:grid-cols-[4.4rem_minmax(0,1fr)] sm:gap-x-7">
+                  <div className="text-center sm:text-left">
+                    <span className="serif block text-[2.2rem] font-light leading-none tabular-nums">{day(l.held_at)}</span>
+                    <span className="mt-1 block text-[11px] text-soft">{wd(l.held_at)}</span>
                   </div>
-                  <article className="min-w-0 flex-1 pb-1">
+                  <article className="min-w-0">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <Avatar name={me.role === "mentor" ? l.partner_name : (l.author_name ?? "-")} url={me.role === "mentor" ? l.partner_photo : l.author_photo} size={30} />
-                      <b className="font-display text-lg">
+                      <b className="font-display text-lg font-medium tracking-tight">
                         {me.role === "mentor" ? (nameOf.get(l.partner_id) ?? l.partner_name) : `${t.withMentor} ${l.author_name ?? "-"}`}
                       </b>
                       <span className="text-xs text-soft">{fmtDateTime(l.held_at, locale).split(" ").slice(-2).join(" ")} · {l.duration_min}{t.minutes}</span>
                     </div>
-                    <p className="mt-1.5 flex flex-wrap gap-2 text-[11px]">
-                      {me.role === "mentor" && !l.mine && <span className="rounded-full bg-tint px-2.5 py-0.5 font-medium text-accent">{t.fromOther.replace("{n}", l.author_name ?? "-")}</span>}
+                    <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] tracking-wide">
+                      {me.role === "mentor" && !l.mine && <span className="gilt flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#b8975a]" />{t.fromOther.replace("{n}", l.author_name ?? "-")}</span>}
                       {l.mine && (l.shared
-                        ? <span className="rounded-full bg-black/[0.05] px-2.5 py-0.5 text-soft">{t.sharedBadge}</span>
-                        : <span className="rounded-full bg-[#f6ead9] px-2.5 py-0.5 text-[#8a5a14]">🔒 {t.privateBadge}</span>)}
+                        ? <span className="text-soft">{t.sharedBadge}</span>
+                        : <span className="text-[#8a5a14]">🔒 {t.privateBadge}</span>)}
                     </p>
-                    <p className="mt-3 whitespace-pre-line leading-relaxed text-ink/85">{l.content}</p>
+                    <p className="serif mt-3 whitespace-pre-line text-[0.98rem] font-light leading-[1.95] text-ink/90">{l.content}</p>
                     {(l.next_steps || l.prayer_topics) && (
-                      <dl className="mt-3 space-y-1.5 border-l-2 border-accent/25 pl-4 text-sm">
-                        {l.next_steps && <div><dt className="inline font-semibold">{t.nextSteps.replace(/ \(.*\)/, "")} </dt><dd className="inline text-ink/75">{l.next_steps}</dd></div>}
-                        {l.prayer_topics && <div><dt className="inline font-semibold">{t.prayer.replace(/ \(.*\)/, "")} </dt><dd className="inline text-ink/75">{l.prayer_topics}</dd></div>}
+                      <dl className="mt-4 space-y-1.5 text-sm">
+                        {l.next_steps && <div className="flex gap-3"><dt className="gilt w-16 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.nextSteps.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.next_steps}</dd></div>}
+                        {l.prayer_topics && <div className="flex gap-3"><dt className="gilt w-16 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.prayer.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.prayer_topics}</dd></div>}
                       </dl>
                     )}
                   </article>

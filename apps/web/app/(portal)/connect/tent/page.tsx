@@ -120,7 +120,11 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
 
   return (
     <div className="space-y-4">
-      <PageTitle sub={t.sub}>{o.tent.name}</PageTitle>
+      <header className="col-span-full">
+        <p className="gilt text-[11px] font-medium uppercase tracking-[0.3em]">Tent</p>
+        <h1 className="display mt-3 text-[2.2rem] leading-[1.15] md:text-[2.8rem]">{o.tent.name}</h1>
+        <p className="mt-3 text-soft">{t.sub}</p>
+      </header>
 
       <p className="col-span-full -mt-4 max-w-3xl text-sm leading-relaxed text-soft">
         {o.tent.region ? `${o.tent.region}` : ""}{o.tent.districts?.length ? ` · ${o.tent.districts.join(" · ")}` : ""}

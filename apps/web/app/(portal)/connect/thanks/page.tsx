@@ -43,46 +43,48 @@ export default async function Thanks() {
   }
   const received = letters.filter((l) => l.recipient_id === me.id);
   const sent = letters.filter((l) => l.sender_id === me.id);
-  const tilt = (i: number) => `${[-1.2, 0.9, -0.5, 1.4, -0.9, 0.4][i % 6]}deg`;
   const short = (iso: string) => fmtDate(iso, locale);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" precedence="default" />
       <header>
-        <h1 className="display text-[2rem] leading-[1.15] md:text-[2.4rem]">{t.title}</h1>
+        <p className="gilt text-[11px] font-medium uppercase tracking-[0.3em]">Letters</p>
+        <h1 className="display mt-3 text-[2rem] leading-[1.15] md:text-[2.4rem]">{t.title}</h1>
       </header>
 
       {me.role === "partner" && (
-        <section className="grid gap-10 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
+        <section className="grid gap-12 lg:grid-cols-[minmax(0,36rem)_minmax(0,1fr)]">
           {mentors.length === 0 ? (
             <p className="text-soft">{t.noMentor}</p>
           ) : (
-            <form action={send} className="paper px-5 pb-8 pt-6 sm:px-8" style={{ transform: "rotate(-0.6deg)" }}>
-              <label className="relative z-10 flex items-center gap-3 pl-10">
-                <span className="hand">{t.toShort}.</span>
-                <select name="recipient_id" required defaultValue={mentors[0].id} className="hand !w-auto !border-0 !border-b !border-dashed !border-black/25 !bg-transparent !px-2 !py-0">
+            <form action={send} className="stationery px-8 pb-9 pt-10 sm:px-12">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/logo-mark.svg" alt="" width={26} height={26} className="mx-auto h-[26px] w-[26px] opacity-70" />
+              <label className="mt-8 flex items-baseline gap-3 border-b border-black/10 pb-3">
+                <span className="gilt text-[11px] font-medium uppercase tracking-[0.24em]">{t.toShort}</span>
+                <select name="recipient_id" required defaultValue={mentors[0].id} className="serif !w-auto !border-0 !bg-transparent !p-0 text-lg outline-none">
                   {mentors.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
                 </select>
               </label>
-              <textarea name="body" required rows={9} maxLength={5000} placeholder={t.body}
-                className="hand relative z-10 mt-3 block w-full resize-none !rounded-none !border-0 !bg-transparent !p-0 !pl-10 outline-none placeholder:text-black/30" />
-              <div className="relative z-10 mt-6 flex items-center justify-between gap-4 pl-10">
-                <span className="hand text-[1.7rem]">{me.name} {t.from}</span>
-                <button className="seal !h-14 !w-14 transition-transform duration-500 [transition-timing-function:var(--ease)] hover:scale-105 active:scale-95" aria-label={t.send}>{t.seal}</button>
+              <textarea name="body" required rows={10} maxLength={5000} placeholder={t.body}
+                className="letter-body mt-6 block w-full resize-none !rounded-none !border-0 !bg-transparent !p-0 outline-none placeholder:text-black/25" />
+              <div className="hair-t mt-8 flex items-end justify-between gap-4 pt-6">
+                <span className="pen">{me.name} {t.from}</span>
+                <button className="cbtn cbtn-sm">{t.send}</button>
               </div>
             </form>
           )}
           <div>
-            <h2 className="mb-5 text-[12px] font-medium tracking-[0.14em] text-soft">{t.sent}</h2>
+            <h2 className="gilt mb-6 text-[11px] font-medium uppercase tracking-[0.24em]">{t.sent}</h2>
             {sent.length === 0 && <p className="text-soft">{t.empty}</p>}
-            <ul className="grid gap-5 sm:grid-cols-2">
-              {sent.map((l, i) => {
+            <ul className="space-y-6">
+              {sent.map((l) => {
                 const p = who.get(l.recipient_id);
                 return (
-                  <li key={l.id} className="paper px-4 pb-5 pt-4 pl-12" style={{ transform: `rotate(${tilt(i)})` }}>
-                    <p className="relative z-10 flex items-center gap-2 text-xs text-clay"><Avatar name={p?.name ?? "-"} url={p?.photo_url} size={22} />{t.to} {p?.name ?? "-"} · {short(l.created_at)}</p>
-                    <p className="hand relative z-10 mt-2 line-clamp-5 whitespace-pre-line">{l.body}</p>
+                  <li key={l.id} className="stationery px-7 pb-7 pt-6">
+                    <p className="flex items-center gap-2.5 text-xs text-soft"><Avatar name={p?.name ?? "-"} url={p?.photo_url} size={24} /><span><b className="font-medium text-ink">{p?.name ?? "-"}</b> · {short(l.created_at)}</span></p>
+                    <p className="letter-body mt-4 line-clamp-4 whitespace-pre-line text-[0.95rem]">{l.body}</p>
                   </li>
                 );
               })}
@@ -93,19 +95,21 @@ export default async function Thanks() {
 
       {me.role === "mentor" && (
         <section>
-          <h2 className="mb-5 text-[12px] font-medium tracking-[0.14em] text-soft">{t.received}</h2>
+          <h2 className="gilt mb-7 text-[11px] font-medium uppercase tracking-[0.24em]">{t.received}</h2>
           {received.length === 0 && <p className="text-soft">{t.empty}</p>}
-          <ul className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {received.map((l, i) => {
+          <ul className="columns-1 gap-8 md:columns-2 xl:columns-3 [&>li]:mb-8">
+            {received.map((l) => {
               const p = who.get(l.sender_id);
               return (
-                <li key={l.id} className="paper px-5 pb-7 pt-5 pl-14 sm:pl-16" style={{ transform: `rotate(${tilt(i)})` }}>
-                  {unread.has(l.id) && <span className="seal absolute -right-2 -top-3 rotate-12">{t.newBadge}</span>}
-                  <p className="relative z-10 flex items-center gap-2.5 text-sm text-clay">
-                    <Avatar name={p?.name ?? "-"} url={p?.photo_url} size={34} />
-                    <span><b className="block text-ink">{p?.name ?? "-"}</b><span className="text-xs">{short(l.created_at)}</span></span>
-                  </p>
-                  <p className="hand relative z-10 mt-3 whitespace-pre-line">{l.body}</p>
+                <li key={l.id} className="stationery break-inside-avoid px-8 pb-8 pt-8">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="flex items-center gap-3">
+                      <Avatar name={p?.name ?? "-"} url={p?.photo_url} size={38} />
+                      <span><b className="serif block font-medium">{p?.name ?? "-"}</b><span className="text-xs text-soft">{short(l.created_at)}</span></span>
+                    </span>
+                    {unread.has(l.id) && <span className="gilt flex items-center gap-1.5 text-[11px] font-medium tracking-[0.18em]"><span className="h-1.5 w-1.5 rounded-full bg-[#b8975a]" />{t.newBadge}</span>}
+                  </div>
+                  <p className="letter-body hair-t mt-5 whitespace-pre-line pt-5">{l.body}</p>
                 </li>
               );
             })}

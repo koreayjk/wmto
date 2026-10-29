@@ -73,29 +73,29 @@ export default async function Events() {
     const time = (d: Date) => d.toLocaleTimeString(loc, { timeZone: KST, hour: "numeric", minute: "2-digit", hour12: locale === "en" });
     const chip = live ? tl.now : isPast ? tl.ago.replace("{n}", String(Math.abs(n))) : n === 0 ? tl.today : tl.dday.replace("{n}", String(n));
     return (
-      <li key={e.id} className={`relative flex gap-4 sm:gap-6 ${isPast ? "opacity-60" : ""}`}>
-        <div className="z-10 w-[3.6rem] shrink-0 text-center">
-          <span className={`block rounded-2xl py-2 ${live ? "bg-accent text-white" : "bg-white"} shadow-[0_0_0_1px_rgba(22,24,29,0.06),0_10px_20px_-14px_rgba(14,70,58,0.5)]`}>
-            <span className={`block text-[11px] ${live ? "text-white/80" : "text-soft"}`}>{s.toLocaleDateString(loc, { month: "short", timeZone: KST })}</span>
-            <span className="block font-display text-2xl font-semibold leading-none tabular-nums">{s.toLocaleDateString("en-US", { day: "numeric", timeZone: KST })}</span>
-            <span className={`mt-1 block text-[11px] ${live ? "text-white/80" : "text-soft"}`}>{s.toLocaleDateString(loc, { weekday: "short", timeZone: KST })}</span>
-          </span>
+      <li key={e.id} className={`grid grid-cols-[4.2rem_minmax(0,1fr)] gap-x-5 border-t border-black/[0.07] py-7 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-x-8 ${isPast ? "opacity-55" : ""}`}>
+        <div className="text-center sm:text-left">
+          <span className={`block text-[10px] font-medium uppercase tracking-[0.22em] ${live ? "text-accent" : "gilt"}`}>{s.toLocaleDateString(loc, { month: "short", timeZone: KST })}</span>
+          <span className={`serif block text-[2.5rem] font-light leading-none tabular-nums ${live ? "text-accent" : ""}`}>{s.toLocaleDateString("en-US", { day: "numeric", timeZone: KST })}</span>
+          <span className="mt-1 block text-[11px] text-soft">{s.toLocaleDateString(loc, { weekday: "short", timeZone: KST })}</span>
         </div>
-        <article className="min-w-0 flex-1 pb-2">
-          <p className="flex flex-wrap items-center gap-2 text-xs">
-            <span className={`rounded-full px-2.5 py-0.5 font-semibold ${live ? "bg-accent text-white" : isPast ? "bg-black/[0.06] text-soft" : "bg-tint text-accent"}`}>{chip}</span>
-            <span className="uppercase tracking-[0.18em] text-clay">{m.events.types[e.type as keyof typeof m.events.types]}</span>
-          </p>
-          <h3 className="mt-1.5 font-display text-lg font-semibold">{e.title}</h3>
-          <p className="mt-0.5 text-sm text-soft">{time(s)} – {time(en)}{e.location ? ` · ${e.location}` : ""}</p>
-          <div className="mt-2.5 flex items-center gap-3" aria-label={tl.dayBar}>
-            <span className="relative h-1.5 w-40 overflow-hidden rounded-full bg-black/[0.07]">
-              <span className="absolute inset-y-0 rounded-full bg-accent/70" style={{ left: `${(t0 / 1440) * 100}%`, width: `${((t1 - t0) / 1440) * 100}%` }} />
+        <article className="min-w-0">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.18em]">
+            <span className={`flex items-center gap-1.5 font-semibold ${live ? "text-accent" : isPast ? "text-soft" : "gilt"}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${live ? "animate-pulse bg-accent" : isPast ? "bg-black/20" : "bg-[#b8975a]"}`} />{chip}
             </span>
-            <span className="text-[10px] tracking-wide text-soft">0 · 6 · 12 · 18 · 24</span>
+            <span className="text-soft">{m.events.types[e.type as keyof typeof m.events.types]}</span>
+          </p>
+          <h3 className="mt-2 font-display text-xl font-medium tracking-tight">{e.title}</h3>
+          <p className="mt-1 text-sm text-soft">{time(s)} – {time(en)}{e.location ? ` · ${e.location}` : ""}</p>
+          <div className="mt-3 flex items-center gap-3" aria-label={tl.dayBar}>
+            <span className="relative h-px w-44 bg-black/15">
+              <span className="absolute -top-[2px] h-[5px] rounded-full bg-accent/70" style={{ left: `${(t0 / 1440) * 100}%`, width: `${Math.max(2, ((t1 - t0) / 1440) * 100)}%` }} />
+            </span>
+            <span className="text-[10px] tracking-[0.2em] text-soft/80">0 · 6 · 12 · 18 · 24</span>
           </div>
           {!isPast && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               {e.meeting_url && <a href={e.meeting_url} target="_blank" rel="noopener noreferrer" className="cbtn cbtn-sm">{m.connect.join}</a>}
               {attended.has(e.id) ? (
                 <span className="text-sm text-soft">✓ {c.checkedIn}</span>
@@ -115,21 +115,22 @@ export default async function Events() {
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-14">
       <header className="lg:col-span-2">
-        <h1 className="display text-[2rem] leading-[1.15] md:text-[2.4rem]">{c.title}</h1>
+        <p className="gilt text-[11px] font-medium uppercase tracking-[0.3em]">Schedule</p>
+        <h1 className="display mt-3 text-[2rem] leading-[1.15] md:text-[2.4rem]">{c.title}</h1>
         <p className="mt-3 text-soft">{tl.sub}</p>
       </header>
 
       <aside className="lg:sticky lg:top-6 lg:self-start">
-        <div className="cbezel c-rise"><div className="cbezel-in dark p-7">
+        <div className="cbezel c-rise"><div className="cbezel-in dark p-8" style={{ background: "linear-gradient(160deg,#0f4a40,#082b25)" }}>
           <p className="text-[12px] tracking-[0.14em] text-white/60">{tl.until}</p>
           {next && countdown ? (
             <>
               <p className="mt-4 flex items-end gap-1 font-display font-light leading-none tabular-nums">
                 {countdown.live ? <span className="text-3xl">{tl.now}</span> : (
                   <>
-                    <span className="text-[4rem]">{countdown.d}</span><span className="pb-2 pr-3 text-lg text-white/60">{tl.d}</span>
-                    <span className="text-[2.4rem]">{countdown.h}</span><span className="pb-1 pr-3 text-base text-white/60">{tl.h}</span>
-                    <span className="text-[2.4rem]">{countdown.mi}</span><span className="pb-1 text-base text-white/60">{tl.m}</span>
+                    <span className="serif text-[4.2rem]">{countdown.d}</span><span className="pb-2 pr-3 text-lg text-white/60">{tl.d}</span>
+                    <span className="serif text-[2.4rem]">{countdown.h}</span><span className="pb-1 pr-3 text-base text-white/60">{tl.h}</span>
+                    <span className="serif text-[2.4rem]">{countdown.mi}</span><span className="pb-1 text-base text-white/60">{tl.m}</span>
                   </>
                 )}
               </p>
@@ -144,14 +145,14 @@ export default async function Events() {
         {groups.length === 0 && <p className="text-soft">{c.empty}</p>}
         {groups.map(([name, evs]) => (
           <div key={name} className="mb-10">
-            <h2 className="mb-5 text-[12px] font-medium tracking-[0.14em] text-soft">{name}</h2>
-            <ol className="relative space-y-8 before:absolute before:bottom-2 before:left-[1.8rem] before:top-2 before:w-px before:bg-black/10">{evs.map((e) => entry(e, false))}</ol>
+            <h2 className="gilt mb-1 text-[11px] font-medium uppercase tracking-[0.24em]">{name}</h2>
+            <ol>{evs.map((e) => entry(e, false))}</ol>
           </div>
         ))}
         {past.length > 0 && (
           <div className="mt-4">
-            <h2 className="mb-5 text-[12px] font-medium tracking-[0.14em] text-soft">{c.past}</h2>
-            <ol className="relative space-y-7 before:absolute before:bottom-2 before:left-[1.8rem] before:top-2 before:w-px before:bg-black/10">{past.map((e) => entry(e, true))}</ol>
+            <h2 className="gilt mb-1 text-[11px] font-medium uppercase tracking-[0.24em]">{c.past}</h2>
+            <ol>{past.map((e) => entry(e, true))}</ol>
           </div>
         )}
       </section>
