@@ -28,10 +28,13 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   if (active?.role === "mentor" || active?.role === "partner") {
     items.push({ href: "/connect/mentoring", label: m.nav.mentoring }, { href: "/connect/report", label: m.nav.report });
   }
+  if (active?.role === "sponsor") {
+    items.push({ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews });
+  }
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile"],
+    also: ["/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
@@ -46,6 +49,10 @@ export default async function ConnectLayout({ children }: { children: React.Reac
     reports.push({ href: "/connect/report", label: m.report.title }, { href: "/connect/growth", label: it.growth.name });
   }
   const groups: SideGroup[] = [{ items: [{ href: "/connect", label: m.nav.home }] }];
+  if (role === "sponsor") {
+    groups.push({ title: m.sponsor.group, items: [{ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews }, { href: "/connect/fund", label: m.sponsor.navFund }] });
+  }
+  if (role === "mentor") network.push({ href: "/connect/fund", label: m.sponsor.navFund });
   if (network.length) groups.push({ title: m.side.network, items: network });
   groups.push({ title: m.side.activity, items: activity });
   if (reports.length) groups.push({ title: m.side.report, items: reports });

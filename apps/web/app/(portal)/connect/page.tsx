@@ -8,6 +8,8 @@ import { Card, PageTitle, StageBar } from "@/components/connect/ui";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { ActivityChart } from "@/components/connect/ActivityChart";
 import { catsFor, monthlyActivity } from "@/lib/activity";
+import { fmtMoney } from "@/lib/format";
+import type { FeedRow, FundRow } from "@/lib/sponsor";
 
 type Ev = { id: string; title: string; start_at: string; meeting_url: string | null };
 
@@ -57,6 +59,7 @@ export default async function ConnectHome() {
   const t = m.today;
   let today: Today = { text: t.rest };
   let body: React.ReactNode;
+  let sponsorStats: [string, string][] = [];
 
   if (me.role === "partner") {
     const [{ data: ms }, { data: rep }] = await Promise.all([
@@ -173,12 +176,61 @@ export default async function ConnectHome() {
       </>
     );
   } else {
-    if (eventSoon) today = { text: t.event, cta: t.eventCta, href: "/connect/events" };
+    const sp = m.sponsor;
+    const [{ data: feedData }, { data: ovData }, { data: fundData }] = await Promise.all([
+      supabase.rpc("sponsor_partner_feed"),
+      supabase.rpc("sponsor_overview"),
+      supabase.rpc("fund_overview"),
+    ]);
+    const feed = (feedData ?? []) as FeedRow[];
+    const ov = ((ovData ?? []) as { total_given: number; given_this_year: number; partners_supported: number }[])[0];
+    const fund = ((fundData ?? []) as FundRow[])[0];
+    const thisMonthKey = currentMonthKst().slice(0, 7);
+    const fresh = feed.filter((r) => r.report_month?.slice(0, 7) === thisMonthKey).length;
+    today = fresh > 0
+      ? { text: fill(sp.home.newsLine, fresh), cta: sp.home.newsCta, href: "/connect/news" }
+      : eventSoon
+        ? { text: t.event, cta: t.eventCta, href: "/connect/events" }
+        : feed.length === 0 && Number(ov?.total_given ?? 0) === 0
+          ? { text: sp.home.giveHint }
+          : { text: t.rest };
+    const lent = Number(fund?.total_lent ?? 0);
+    const repaid = Number(fund?.total_repaid ?? 0);
     body = (
       <>
-        <Card><p className="text-soft">{m.sponsorHome}</p></Card>
+        <Card title={sp.home.latest}>
+          {feed.length === 0 ? (
+            <p className="text-soft">{sp.news.empty}</p>
+          ) : (
+            <ul className="divide-y divide-black/[0.06]">
+              {feed.slice(0, 3).map((r) => (
+                <li key={r.partner_name} className="py-4 first:pt-0 last:pb-0">
+                  <p className="font-display text-lg font-semibold">
+                    {r.partner_name}
+                    {r.stage && <span className="ml-2 text-xs font-normal text-clay">{m.stageNames[r.stage as keyof typeof m.stageNames] ?? r.stage}</span>}
+                  </p>
+                  <p className="text-sm text-soft">{r.mission_field ?? ""}</p>
+                  {r.prayer_topics && <p className="mt-1 text-sm leading-relaxed">&ldquo;{r.prayer_topics}&rdquo;</p>}
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link href="/connect/news" className="mt-4 inline-block text-sm font-medium text-clay underline">{d.seeAll}</Link>
+        </Card>
+        {lent > 0 && (
+          <Card title={sp.home.fundTitle}>
+            <p className="leading-relaxed">{sp.home.fundLine.replace("{a}", fmtMoney(repaid, locale)).replace("{b}", fmtMoney(Number(fund?.reflowed ?? 0), locale))}</p>
+            <div className="mt-4 h-1.5 rounded-full bg-black/10"><div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, Math.round((repaid / lent) * 100))}%` }} /></div>
+            <Link href="/connect/fund" className="mt-4 inline-block text-sm font-medium text-clay underline">{d.seeAll}</Link>
+          </Card>
+        )}
       </>
     );
+    sponsorStats = [
+      [sp.giving.thisYear, fmtMoney(Number(ov?.given_this_year ?? 0), locale)],
+      [sp.giving.total, fmtMoney(Number(ov?.total_given ?? 0), locale)],
+      [sp.giving.partners, String(ov?.partners_supported ?? 0)],
+    ];
   }
 
   // 이번 달 숫자와 최근 6개월 그래프 (사업가·선교사)
@@ -209,7 +261,7 @@ export default async function ConnectHome() {
       ? [{ href: "/connect/report", label: d.sc.report }, { href: "/connect/mentoring", label: d.sc.mentoring }, { href: "/connect/growth", label: d.sc.growth }]
       : me.role === "mentor"
         ? [{ href: "/connect/mentoring", label: d.sc.mentoring }, { href: "/connect/referrals", label: d.sc.referral }, { href: "/connect/growth", label: d.sc.growth }]
-        : [{ href: "/connect/academy", label: d.sc.academy }, { href: "/connect/events", label: m.nav.events }];
+        : [{ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews }, { href: "/connect/fund", label: m.sponsor.navFund }];
 
   return (
     <div className="space-y-4">
@@ -240,6 +292,19 @@ export default async function ConnectHome() {
               </Link>
             ))}
           </div>
+        </div>
+      )}
+
+      {sponsorStats.length > 0 && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {sponsorStats.map(([label, value]) => (
+            <div key={label} className="cbezel c-rise">
+              <div className="cbezel-in flex min-h-32 flex-col justify-between p-5">
+                <p className="text-[13px] text-soft">{label}</p>
+                <p className="font-display text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

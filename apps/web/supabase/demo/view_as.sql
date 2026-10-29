@@ -42,6 +42,7 @@ begin
   delete from attendance where member_id = v_id and event_id in (select id from events where title like '[데모]%');
   delete from self_reports where partner_id = v_id and difficulties like '[데모]%';
   delete from matching_requests where partner_id = v_id and message like '[데모]%';
+  delete from donations where sponsor_id = v_id and note like '[데모]%';
 
   -- 2) 역할 변경과 프로필 준비
   update members set role = v_role, status = 'active' where id = v_id;
@@ -86,6 +87,19 @@ begin
     end loop;
     insert into matching_requests (partner_id, contribution_type, message, status, created_at)
     values (v_id, 'channel', '[데모] 현지 생산품을 한국에서 판매할 거래처를 찾고 있습니다.', 'pending', now() - interval '2 days');
+  end if;
+
+  if v_role = 'sponsor' then
+    -- 후원 내역: 정기 후원 6개월 + 선교사 1:1 후원 2건 + 캠프 장학금 + 순환 기금
+    for k in 0..5 loop
+      insert into donations (sponsor_id, kind, amount, donated_at, note) values (v_id, 'monthly', 30000, current_date - k * 30 - 3, '[데모]');
+    end loop;
+    insert into donations (sponsor_id, kind, partner_id, amount, donated_at, note)
+    select v_id, 'one_to_one', m.id, a.amount, current_date - a.days, '[데모]'
+    from (values ('demo.partner08@demo.wmto.invalid', 1800000, 45), ('demo.partner15@demo.wmto.invalid', 2000000, 25), ('demo.partner18@demo.wmto.invalid', 1500000, 12)) a(email, amount, days)
+    join members m on m.email = a.email;
+    insert into donations (sponsor_id, kind, amount, donated_at, note) values
+      (v_id, 'camp', 500000, current_date - 30, '[데모]'), (v_id, 'fund', 1000000, current_date - 60, '[데모]');
   end if;
 
   if v_role in ('mentor', 'partner') then

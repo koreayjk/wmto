@@ -12,6 +12,14 @@ export default async function More() {
   const links: { href: string; name: string; text: string }[] = [];
   if (me.role === "partner") links.push({ href: "/connect/matching", ...it.matching }, { href: "/connect/thanks", ...it.thanks });
   if (me.role === "mentor") links.push({ href: "/connect/matching", ...it.requests }, { href: "/connect/referrals", ...it.referrals }, { href: "/connect/thanks", ...it.thanks });
+  if (me.role === "sponsor") {
+    const sp = getMessages(locale).connect.sponsor;
+    links.push({ href: "/connect/giving", name: sp.navGiving, text: sp.giving.sub }, { href: "/connect/news", name: sp.navNews, text: sp.news.sub }, { href: "/connect/fund", name: sp.navFund, text: sp.fund.sub });
+  }
+  if (me.role === "mentor") {
+    const sp = getMessages(locale).connect.sponsor;
+    links.push({ href: "/connect/fund", name: sp.navFund, text: sp.fund.sub });
+  }
   links.push({ href: "/connect/academy", ...it.academy });
   if (me.role === "mentor" || me.role === "partner") links.push({ href: "/connect/growth", ...it.growth });
   links.push({ href: "/connect/profile", ...it.profile });

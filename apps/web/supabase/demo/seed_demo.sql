@@ -35,6 +35,7 @@ declare
   ch uuid[] := '{}';
   mentor_ids uuid[] := '{}';
   partner_ids uuid[] := '{}';
+  sponsor_ids uuid[] := '{}';
   v_id uuid;
   i int; j int; k int; n int;
   ind_idx int;
@@ -105,6 +106,35 @@ begin
     insert into sponsor_profiles (member_id, sponsor_type, church_name)
     values (v_id, case when i % 2 = 0 then 'individual' else 'church' end::sponsor_type,
             case when i % 2 = 0 then null else (array['사랑의교회','푸른숲교회','은혜한인교회','소망교회'])[1 + (i % 4)] end);
+    sponsor_ids := sponsor_ids || v_id;
+  end loop;
+
+
+  -- ───────── 후원 내역 (정기 후원, 선교사 1:1 후원, 캠프 장학금, 순환 기금) ─────────
+  for i in 1..8 loop
+    for k in 0..(2 + (i % 4)) loop
+      insert into donations (sponsor_id, kind, amount, donated_at)
+      values (sponsor_ids[i], 'monthly', (array[10000, 30000, 50000, 100000])[1 + (i % 4)], current_date - k * 30 - (i % 9));
+    end loop;
+    if i <= 6 then
+      insert into donations (sponsor_id, kind, partner_id, amount, donated_at)
+      values (sponsor_ids[i], 'one_to_one', partner_ids[6 + i], (array[1500000, 1800000, 2000000, 2500000, 1500000, 2000000])[i], current_date - (20 + i * 11));
+    end if;
+    if i % 2 = 1 then
+      insert into donations (sponsor_id, kind, amount, donated_at) values (sponsor_ids[i], 'camp', 300000 + i * 100000, current_date - (15 + i * 6));
+    end if;
+    if i % 3 = 0 then
+      insert into donations (sponsor_id, kind, amount, donated_at) values (sponsor_ids[i], 'fund', 1000000 + i * 200000, current_date - (40 + i * 5));
+    end if;
+  end loop;
+
+  -- ───────── 순환 기금 대여 (캠프를 마친 Launch 이상 선교사) ─────────
+  for j in 7..20 loop
+    insert into fund_loans (partner_id, amount, repaid, funded_by_repayment, status, issued_at)
+    values (partner_ids[j], (array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)],
+            case when j >= 19 then (array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)]
+                 when j >= 14 then round(((array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)] * 0.45)::numeric, -3) else 0 end,
+            j % 4 = 0, case when j >= 19 then 'repaid' else 'active' end, current_date - (60 + j * 9));
   end loop;
 
   -- ───────── 신청자 8명과 신청서 (관리자 신청 목록 시연용) ─────────
@@ -310,4 +340,6 @@ select
   (select count(*) from referrals)        as referrals,
   (select count(*) from thanks_letters)   as thanks_letters,
   (select count(*) from events where title like '[데모]%') as events,
-  (select count(*) from attendance)       as attendance;
+  (select count(*) from attendance)       as attendance,
+  (select count(*) from donations)        as donations,
+  (select count(*) from fund_loans)       as fund_loans;

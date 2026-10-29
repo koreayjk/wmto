@@ -23,6 +23,7 @@ delete from chapters       where name like '[데모]%';
 -- 실제 선교사 화면을 채우려고 넣은 자립 리포트(내용이 [데모] 로 시작)도 지웁니다.
 delete from self_reports   where difficulties like '[데모]%';
 delete from matching_requests where message like '[데모]%';
+delete from donations      where note like '[데모]%';
 
 -- 확인: 아래 두 숫자가 모두 0 이어야 합니다.
 select

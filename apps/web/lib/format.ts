@@ -12,6 +12,10 @@ export const fmtMonth = (isoDate: string, locale: Locale = "ko") =>
     ? new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", timeZone: "UTC" }).format(new Date(`${isoDate.slice(0, 7)}-01T00:00:00Z`))
     : `${isoDate.slice(0, 4)}년 ${Number(isoDate.slice(5, 7))}월`;
 
+/** 금액 표기. 원화 기준(docs/00 10장). */
+export const fmtMoney = (n: number, locale: Locale = "ko") =>
+  locale === "en" ? `KRW ${Math.round(n).toLocaleString("en-US")}` : `${Math.round(n).toLocaleString("ko-KR")}원`;
+
 /** 한국 시간 기준 이번 달 1일 (YYYY-MM-01) */
 export function currentMonthKst(): string {
   return new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 7) + "-01";

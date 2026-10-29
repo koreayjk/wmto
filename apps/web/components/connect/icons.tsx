@@ -1,6 +1,6 @@
 "use client";
 
-import { House, HandHeart, ShareNetwork, Envelope, CalendarBlank, ChatsCircle, Notebook, Plant, PlayCircle, UserCircle, DotsThree } from "@phosphor-icons/react";
+import { House, HandHeart, ShareNetwork, Envelope, CalendarBlank, ChatsCircle, Notebook, Plant, PlayCircle, UserCircle, DotsThree, HandCoins, Newspaper, ArrowsClockwise } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 
 type Icon = ComponentType<{ size?: number; weight?: "light" | "regular"; "aria-hidden"?: boolean }>;
@@ -16,6 +16,9 @@ const map: Record<string, Icon> = {
   "/connect/academy": PlayCircle,
   "/connect/profile": UserCircle,
   "/connect/more": DotsThree,
+  "/connect/giving": HandCoins,
+  "/connect/news": Newspaper,
+  "/connect/fund": ArrowsClockwise,
 };
 
 /** 아주 가는 선의 아이콘. 경로에 맞는 아이콘이 없으면 아무것도 그리지 않습니다. */
