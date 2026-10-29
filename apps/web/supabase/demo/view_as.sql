@@ -67,15 +67,15 @@ begin
     for k in 1..5 loop
       insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
       select m.id, v_id, clients[k], '꼭 한번 만나 보시길 권합니다.', (array['sent','sent','contacted','closed','sent'])[k]::referral_status, now() - k * interval '4 days'
-      from members m where m.email = 'demo.mentor' || lpad((10 + k * 7)::text, 2, '0') || '@demo.wmto.invalid';
+      from members m where m.email = 'demo.mentor' || lpad((10 + k * 7)::text, 3, '0') || '@demo.wmto.invalid';
     end loop;
     for k in 1..3 loop
       insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
       select v_id, m.id, clients[k + 1], '도움이 필요하다고 하셔서 소개합니다.', (array['sent','contacted','closed'])[k]::referral_status, now() - k * interval '9 days'
-      from members m where m.email = 'demo.mentor' || lpad((14 + k * 9)::text, 2, '0') || '@demo.wmto.invalid';
+      from members m where m.email = 'demo.mentor' || lpad((14 + k * 9)::text, 3, '0') || '@demo.wmto.invalid';
     end loop;
   elsif v_role = 'partner' then
-    for r in select id, email from members where email in ('demo.mentor40@demo.wmto.invalid','demo.mentor25@demo.wmto.invalid') order by email desc loop
+    for r in select id, email from members where email in ('demo.mentor040@demo.wmto.invalid','demo.mentor025@demo.wmto.invalid') order by email desc loop
       mt := (select contribution_types[1] from mentor_profiles where member_id = r.id);
       insert into matchings (mentor_id, partner_id, contribution_type, started_at) values (r.id, v_id, mt, current_date - 70) on conflict do nothing;
     end loop;

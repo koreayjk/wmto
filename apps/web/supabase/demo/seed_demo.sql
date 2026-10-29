@@ -1,4 +1,4 @@
--- WMTO 데모 데이터: 사업가 50명, 선교사 20명, 후원자 8명, 신청자 8명과
+-- WMTO 데모 데이터: 사업가 100명, 선교사 50명(전 세계 선교지), 후원자 30명, 신청자 8명과
 -- 매칭, 멘토링 기록, 자립 리포트, 리퍼럴, 감사 편지, 모임·출석, 성장 단계, 스토리, 아카데미 영상.
 -- 앱이 활발하게 돌아가는 모습을 시연하기 위한 가상 데이터입니다.
 --
@@ -19,7 +19,7 @@ declare
   givens text[] := array['민준','서연','지훈','하은','도윤','수빈','예준','지우','현우','채원','주원','소영','태양','은지','성민','유진','동현','미래','재현','나연','승우','혜진','준서','다은','시우','가영','건우','보람','영호','지은','상훈','민서','진우','세린','태호','은서','용준','하린','기범','소희'];
   industries text[] := array['카페','제과제빵','미용실','사진·영상 스튜디오','홈페이지·앱 제작','회계사무소','인쇄·디자인','한식당','무역회사','법률·세무 자문','의류 제조','경영 컨설팅','IT 컨설팅','농산물 유통','교육 서비스'];
   prefixes text[] := array['온유','새벽','소망','감람','다윗','은혜','푸른','나눔','믿음','샘물'];
-  fields text[] := array['캄보디아 프놈펜','필리핀 민다나오','태국 치앙마이','케냐 나이로비','우간다 캄팔라','인도네시아 족자','네팔 카트만두','몽골 울란바토르','페루 쿠스코','베트남 하노이','라오스 비엔티안','미얀마 양곤','탄자니아 아루샤','인도 푸네','키르기스스탄 비슈케크','카자흐스탄 알마티','에티오피아 아디스아바바','모잠비크 마푸투','튀르키예 이스탄불','볼리비아 라파스'];
+  fields text[] := array['캄보디아 프놈펜','필리핀 민다나오','태국 치앙마이','케냐 나이로비','우간다 캄팔라','인도네시아 족자','네팔 카트만두','몽골 울란바토르','페루 쿠스코','베트남 하노이','라오스 비엔티안','미얀마 양곤','탄자니아 아루샤','인도 푸네','키르기스스탄 비슈케크','카자흐스탄 알마티','에티오피아 아디스아바바','모잠비크 마푸투','튀르키예 이스탄불','볼리비아 라파스','방글라데시 다카','스리랑카 콜롬보','파키스탄 라호르','일본 오사카','말레이시아 쿠알라룸푸르','동티모르 딜리','파푸아뉴기니 포트모르즈비','가나 아크라','나이지리아 라고스','콩고민주공화국 고마','말라위 릴롱궤','잠비아 루사카','짐바브웨 불라와요','마다가스카르 안타나나리보','세네갈 다카르','모로코 카사블랑카','이집트 카이로','요르단 암만','우즈베키스탄 타슈켄트','러시아 블라디보스토크','우크라이나 리비우','불가리아 소피아','과테말라 과테말라시티','에콰도르 키토','콜롬비아 메데인','브라질 상파울루','아이티 포르토프랭스','도미니카공화국 산토도밍고','피지 수바','중국 쿤밍'];
   orgs text[] := array['IM선교회','열방선교회','소망선교회','푸른초장선교회','새벽이슬선교회','바나바선교회'];
   ideas text[] := array['작은 커피 로스팅 카페','현지 청년을 위한 제빵 교실','한국식 미용 서비스와 교육','현지 농산물 가공과 판매','재봉과 의류 소품 제작','홈페이지·디자인 외주 팀','소규모 게스트하우스','한국어 학원','공방과 수공예 판매','중고 컴퓨터 수리점'];
   clients text[] := array['동네 카페 사장님','이웃 교회 장로님','거래처 대표님','같은 상가 미용실 원장님','지인의 온라인 쇼핑몰','학부모 모임 대표','식자재 납품 업체','신규 개업 한식당','사진 촬영이 필요한 스타트업','홈페이지가 필요한 병원'];
@@ -44,7 +44,7 @@ declare
   v_country text;
   v_combo text;
   combos text[] := array['대한민국|서울|강남구','대한민국|서울|서초구','대한민국|서울|마포구','대한민국|서울|송파구','대한민국|서울|강서구','대한민국|서울|성북구','대한민국|서울|강동구','대한민국|서울|영등포구','대한민국|경기도|성남시','대한민국|경기도|수원시','대한민국|경기도|용인시','대한민국|경기도|고양시','대한민국|경기도|부천시','대한민국|경기도|안양시','대한민국|부산|해운대구','대한민국|부산|수영구','대한민국|대구|수성구','대한민국|인천|연수구','대한민국|대전|유성구','대한민국|광주|북구','대한민국|충청남도|천안시','대한민국|전라북도|전주시','대한민국|경상남도|창원시','대한민국|제주도|제주시','대한민국|강원도|춘천시','미국||달라스','미국||LA','캐나다||토론토','필리핀||마닐라'];
-  sp_combos text[] := array['대한민국|서울|서초구','대한민국|경기도|성남시','미국||달라스','대한민국|부산|해운대구','대한민국|서울|강남구','미국||LA','대한민국|경기도|수원시','대한민국|대구|수성구'];
+  sp_combos text[] := array['대한민국|서울|서초구','대한민국|경기도|성남시','미국||달라스','대한민국|부산|해운대구','대한민국|서울|강남구','미국||LA','대한민국|경기도|수원시','대한민국|대구|수성구','대한민국|서울|마포구','대한민국|경기도|용인시','대한민국|인천|연수구','캐나다||토론토','대한민국|대전|유성구','대한민국|서울|송파구','미국||시애틀','호주||시드니'];
   m1 int; m2 int;
   r record;
   mt contribution_type;
@@ -59,19 +59,19 @@ begin
 
   -- 텐트는 지역 정보를 가진 사업가·후원자가 들어올 때 자동으로 만들어집니다(12명이 넘으면 둘로 나뉩니다).
 
-  -- ───────── 사업가 50명 (단계: Seed 20 · Sower 18 · Harvester 8 · Elder 4) ─────────
-  for i in 1..50 loop
+  -- ───────── 사업가 100명 (단계: Seed 40 · Sower 36 · Harvester 16 · Elder 8) ─────────
+  for i in 1..100 loop
     ind_idx := 1 + ((i * 3) % 15);
     v_types := case
       when ind_idx in (6,10,12,13) then '{coach,advisor}'::contribution_type[]
       when ind_idx in (9,14)       then '{channel,coach}'::contribution_type[]
       when i % 3 = 0               then '{skill,coach}'::contribution_type[]
       else '{skill}'::contribution_type[] end;
-    v_stage := case when i <= 20 then 'seed' when i <= 38 then 'sower' when i <= 46 then 'harvester' else 'elder' end;
+    v_stage := case when i <= 40 then 'seed' when i <= 76 then 'sower' when i <= 92 then 'harvester' else 'elder' end;
     v_combo := combos[1 + ((i - 1) % 29)];
     insert into members (role, name, email, phone, country, region, district, status, created_at)
-    values ('mentor', surnames[1 + ((i * 7) % 20)] || givens[1 + ((i * 11) % 40)],
-            'demo.mentor' || lpad(i::text, 2, '0') || '@demo.wmto.invalid',
+    values ('mentor', surnames[1 + ((i * 7 + i / 20) % 20)] || givens[1 + ((i * 11 + i / 10) % 40)],
+            'demo.mentor' || lpad(i::text, 3, '0') || '@demo.wmto.invalid',
             '010-' || lpad((1000 + i * 37)::text, 4, '0') || '-' || lpad((2000 + i * 53)::text, 4, '0'),
             split_part(v_combo, '|', 1), nullif(split_part(v_combo, '|', 2), ''), split_part(v_combo, '|', 3), 'active', now() - (60 + random() * 200) * interval '1 day')
     returning id into v_id;
@@ -80,11 +80,11 @@ begin
     mentor_ids := mentor_ids || v_id;
   end loop;
 
-  -- ───────── 선교사 20명 (Ready 6 · Launch 7 · Growing 5 · Self-Sustaining 2) ─────────
-  for i in 1..20 loop
-    v_stage := case when i <= 6 then 'ready' when i <= 13 then 'launch' when i <= 18 then 'growing' else 'self_sustaining' end;
+  -- ───────── 선교사 50명, 전 세계 선교지 (Ready 15 · Launch 17 · Growing 13 · Self-Sustaining 5) ─────────
+  for i in 1..50 loop
+    v_stage := case when i <= 15 then 'ready' when i <= 32 then 'launch' when i <= 45 then 'growing' else 'self_sustaining' end;
     insert into members (role, name, email, phone, country, status, created_at)
-    values ('partner', surnames[1 + ((i * 9) % 20)] || givens[1 + ((i * 13 + 5) % 40)],
+    values ('partner', surnames[1 + ((i * 9 + i / 20) % 20)] || givens[1 + ((i * 13 + 5 + i / 7) % 40)],
             'demo.partner' || lpad(i::text, 2, '0') || '@demo.wmto.invalid',
             '+' || (800 + i) || '-' || lpad((100000 + i * 731)::text, 6, '0'),
             split_part(fields[i], ' ', 1), 'active', now() - (40 + random() * 160) * interval '1 day')
@@ -95,12 +95,12 @@ begin
     partner_ids := partner_ids || v_id;
   end loop;
 
-  -- ───────── 후원자 8명 ─────────
-  for i in 1..8 loop
+  -- ───────── 후원자 30명 ─────────
+  for i in 1..30 loop
     insert into members (role, name, email, phone, country, region, district, status, created_at)
-    values ('sponsor', case when i % 2 = 0 then surnames[1 + (i * 3 % 20)] || givens[1 + (i * 17 % 40)] else surnames[1 + (i * 5 % 20)] || givens[1 + (i * 19 % 40)] end,
+    values ('sponsor', surnames[1 + ((i * 3 + i / 4) % 20)] || givens[1 + ((i * 17 + i / 3) % 40)],
             'demo.sponsor' || lpad(i::text, 2, '0') || '@demo.wmto.invalid', null,
-            split_part(sp_combos[i], '|', 1), nullif(split_part(sp_combos[i], '|', 2), ''), split_part(sp_combos[i], '|', 3),
+            split_part(sp_combos[1 + ((i - 1) % 16)], '|', 1), nullif(split_part(sp_combos[1 + ((i - 1) % 16)], '|', 2), ''), split_part(sp_combos[1 + ((i - 1) % 16)], '|', 3),
             'active', now() - (20 + random() * 120) * interval '1 day')
     returning id into v_id;
     insert into sponsor_profiles (member_id, sponsor_type, church_name)
@@ -111,14 +111,14 @@ begin
 
 
   -- ───────── 후원 내역 (정기 후원, 선교사 1:1 후원, 캠프 장학금, 순환 기금) ─────────
-  for i in 1..8 loop
-    for k in 0..(2 + (i % 4)) loop
+  for i in 1..30 loop
+    for k in 0..(3 + (i % 5)) loop
       insert into donations (sponsor_id, kind, amount, donated_at)
       values (sponsor_ids[i], 'monthly', (array[10000, 30000, 50000, 100000])[1 + (i % 4)], current_date - k * 30 - (i % 9));
     end loop;
-    if i <= 6 then
+    if i <= 24 then
       insert into donations (sponsor_id, kind, partner_id, amount, donated_at)
-      values (sponsor_ids[i], 'one_to_one', partner_ids[6 + i], (array[1500000, 1800000, 2000000, 2500000, 1500000, 2000000])[i], current_date - (20 + i * 11));
+      values (sponsor_ids[i], 'one_to_one', partner_ids[15 + i], (array[1500000, 1800000, 2000000, 2500000, 1500000, 2000000])[1 + (i % 6)], current_date - (5 + i * 6));
     end if;
     if i % 2 = 1 then
       insert into donations (sponsor_id, kind, amount, donated_at) values (sponsor_ids[i], 'camp', 300000 + i * 100000, current_date - (15 + i * 6));
@@ -129,12 +129,12 @@ begin
   end loop;
 
   -- ───────── 순환 기금 대여 (캠프를 마친 Launch 이상 선교사) ─────────
-  for j in 7..20 loop
+  for j in 16..50 loop
     insert into fund_loans (partner_id, amount, repaid, funded_by_repayment, status, issued_at)
     values (partner_ids[j], (array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)],
-            case when j >= 19 then (array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)]
-                 when j >= 14 then round(((array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)] * 0.45)::numeric, -3) else 0 end,
-            j % 4 = 0, case when j >= 19 then 'repaid' else 'active' end, current_date - (60 + j * 9));
+            case when j >= 46 then (array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)]
+                 when j >= 33 then round(((array[1000000, 1500000, 2000000, 3000000, 2500000])[1 + (j % 5)] * 0.45)::numeric, -3) else 0 end,
+            j % 4 = 0, case when j >= 46 then 'repaid' else 'active' end, current_date - (30 + (j - 15) * 7));
   end loop;
 
   -- ───────── 신청자 8명과 신청서 (관리자 신청 목록 시연용) ─────────
@@ -166,13 +166,13 @@ begin
   end loop;
 
   -- ───────── 매칭 (Launch 이상 선교사는 담당 멘토가 있음. Growing 이상은 2명) ─────────
-  for j in 7..20 loop
-    m1 := 21 + ((j * 5) % 30);
+  for j in 16..50 loop
+    m1 := 41 + ((j * 5) % 60);
     mt := (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[m1]);
     insert into matchings (mentor_id, partner_id, contribution_type, started_at)
     values (mentor_ids[m1], partner_ids[j], mt, current_date - (40 + (random() * 150)::int));
-    if j >= 14 then
-      m2 := 21 + ((j * 7 + 3) % 30);
+    if j >= 33 then
+      m2 := 41 + ((j * 7 + 3) % 60);
       if m2 <> m1 then
         mt := (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[m2]);
         insert into matchings (mentor_id, partner_id, contribution_type, started_at)
@@ -186,24 +186,20 @@ begin
   end loop;
 
   -- 아직 매칭을 기다리는 요청 (Ready 선교사)
-  for j in 1..6 loop
+  for j in 1..15 loop
     insert into matching_requests (partner_id, contribution_type, message, status, created_at)
-    values (partner_ids[j], (array['skill','coach','channel','advisor','skill','coach'])[j]::contribution_type,
-            (array['커피 로스팅 기술을 배우고 싶습니다.','사업 계획서와 가격 책정을 도와주실 분을 찾습니다.','현지 생산품을 한국에서 판매할 거래처가 필요합니다.','현지 법인 설립과 세무에 대해 상담이 필요합니다.','제빵 기술을 가르쳐 주실 분을 찾습니다.','회계 장부를 처음 쓰는 방법을 알고 싶습니다.'])[j],
-            'pending', now() - (j * 1.5) * interval '1 day');
+    values (partner_ids[j], (array['skill','coach','channel','advisor','skill','coach'])[1 + ((j - 1) % 6)]::contribution_type,
+            (array['커피 로스팅 기술을 배우고 싶습니다.','사업 계획서와 가격 책정을 도와주실 분을 찾습니다.','현지 생산품을 한국에서 판매할 거래처가 필요합니다.','현지 법인 설립과 세무에 대해 상담이 필요합니다.','제빵 기술을 가르쳐 주실 분을 찾습니다.','회계 장부를 처음 쓰는 방법을 알고 싶습니다.'])[1 + ((j - 1) % 6)],
+            'pending', now() - (j * 0.7) * interval '1 day');
   end loop;
-  -- 텐트에 모셔진 선교사(멘토를 기다림)와 아직 텐트가 없는 선교사(픽업을 기다림)
-  insert into matching_requests (partner_id, contribution_type, message, status, created_at) values
-    (partner_ids[7], 'skill', '현지 청년들에게 가르칠 수 있도록 제과 기술을 배우고 싶습니다.', 'pending', now() - interval '2 days'),
-    (partner_ids[9], 'coach', '사업을 시작하기 전에 계획서를 함께 봐 주실 분이 필요합니다.', 'pending', now() - interval '3 days');
-  insert into matching_requests (partner_id, contribution_type, message, status, created_at)
+    insert into matching_requests (partner_id, contribution_type, message, status, created_at)
   values (partner_ids[3], 'advisor', '비자 문제로 법률 자문을 구합니다.', 'pending', now() - interval '1 day'),
          (partner_ids[5], 'channel', '이전 요청은 다른 길을 찾아 취소했습니다.', 'cancelled', now() - interval '20 days');
 
   -- ───────── 일정: 지난 모임 11개 + 다가오는 모임 9개 ─────────
-  for k in 1..8 loop
+  for k in 1..12 loop
     insert into events (type, title, start_at, end_at, location, meeting_provider, meeting_url)
-    values ('online', '[데모] 격주 온라인 모임 #' || (9 - k), (current_date - k * 14)::timestamptz + interval '11 hours', (current_date - k * 14)::timestamptz + interval '12 hours',
+    values ('online', '[데모] 격주 온라인 모임 #' || (13 - k), (current_date - k * 14)::timestamptz + interval '11 hours', (current_date - k * 14)::timestamptz + interval '12 hours',
             '온라인', 'zoom', 'https://zoom.us/j/demo' || k);
   end loop;
   for k in 1..3 loop
@@ -218,9 +214,12 @@ begin
   end loop;
   for k in 0..4 loop
     insert into events (type, title, start_at, end_at, location, meeting_provider, meeting_url)
-    values ('online', '[데모] 격주 온라인 모임 #' || (9 + k), (current_date + (k * 14 + 3))::timestamptz + interval '11 hours', (current_date + (k * 14 + 3))::timestamptz + interval '12 hours',
+    values ('online', '[데모] 격주 온라인 모임 #' || (13 + k), (current_date + (k * 14 + 3))::timestamptz + interval '11 hours', (current_date + (k * 14 + 3))::timestamptz + interval '12 hours',
             '온라인', 'zoom', 'https://zoom.us/j/demo' || (20 + k));
   end loop;
+  insert into events (type, title, start_at, end_at, location, meeting_provider, meeting_url) values
+    ('online', '[데모] 오늘 저녁 온라인 모임', now() + interval '2 hours', now() + interval '3 hours', '온라인', 'zoom', 'https://zoom.us/j/demo-today'),
+    ('online', '[데모] 선교사 기도 모임', current_date::timestamptz + interval '1 day 20 hours', current_date::timestamptz + interval '1 day 21 hours', '온라인', 'zoom', 'https://zoom.us/j/demo-prayer');
   insert into events (type, title, start_at, end_at, location) values
     ('offline', '[데모] 서울 오프라인 모임', (current_date + 12)::timestamptz + interval '10 hours', (current_date + 12)::timestamptz + interval '13 hours', '서울 강남 모임 장소'),
     ('offline', '[데모] 미주 오프라인 모임', (current_date + 26)::timestamptz + interval '18 hours', (current_date + 26)::timestamptz + interval '21 hours', '달라스 모임 장소'),
@@ -236,15 +235,15 @@ begin
 
   -- ───────── 멘토링 기록 ─────────
   for r in select id, mentor_id from matchings where mentor_id = any (mentor_ids) and partner_id = any (partner_ids) loop
-    n := 3 + floor(random() * 4)::int;
+    n := 6 + floor(random() * 7)::int;
     for k in 1..n loop
       insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics, created_at)
-      values (r.id, now() - (case when k = 1 then random() * 18 else random() * 115 end) * interval '1 day',
+      values (r.id, now() - (case when k = 1 then random() * 3 when k <= 3 then random() * 14 else random() * 150 end) * interval '1 day',
               (array[30,45,60,60,90])[1 + floor(random() * 5)::int], pg_temp.pick(log_content), r.mentor_id,
               case when random() < 0.65 then pg_temp.pick(log_next) end, case when random() < 0.5 then pg_temp.pick(log_pray) end, now());
     end loop;
     -- 감사 편지 1~2통
-    for k in 1..(1 + floor(random() * 2)::int) loop
+    for k in 1..(2 + floor(random() * 3)::int) loop
       insert into thanks_letters (sender_id, recipient_id, body, read_at, created_at)
       select partner_id, mentor_id, pg_temp.pick(thanks_body), case when random() < 0.7 then now() - random() * interval '10 days' end, now() - random() * 70 * interval '1 day'
       from matchings where id = r.id;
@@ -252,24 +251,24 @@ begin
   end loop;
 
   -- ───────── 자립 리포트 (Launch 이상 선교사, 최근 5개월) ─────────
-  for j in 7..20 loop
-    for k in 0..4 loop
+  for j in 16..50 loop
+    for k in 0..5 loop
       insert into self_reports (partner_id, month, revenue_amount, currency, self_reliance, difficulties, prayer_topics)
       values (partner_ids[j], date_trunc('month', now() - k * interval '1 month')::date,
-              round((case when j <= 13 then random() * 300000 when j <= 18 then 600000 + random() * 2400000 else 3000000 + random() * 3000000 end)::numeric * (1.0 - k * 0.12), -3),
-              'KRW', greatest(1, least(5, (case when j <= 13 then 2 when j <= 18 then 3 else 5 end) + (case when k >= 3 then -1 else 0 end) + (case when random() < 0.3 then 1 else 0 end))),
+              round((case when j <= 32 then random() * 300000 when j <= 45 then 600000 + random() * 2400000 else 3000000 + random() * 3000000 end)::numeric * (1.0 - k * 0.12), -3),
+              'KRW', greatest(1, least(5, (case when j <= 32 then 2 when j <= 45 then 3 else 5 end) + (case when k >= 3 then -1 else 0 end) + (case when random() < 0.3 then 1 else 0 end))),
               pg_temp.pick(difficulties), pg_temp.pick(pray_r));
     end loop;
   end loop;
 
-  -- ───────── 리퍼럴 60건 (사업가끼리 고객 소개) ─────────
-  for k in 1..60 loop
-    i := 1 + floor(random() * 50)::int;
-    j := ((i - 1 + 1 + floor(random() * 49)::int) % 50) + 1;
+  -- ───────── 리퍼럴 400건 (사업가끼리 고객 소개) ─────────
+  for k in 1..400 loop
+    i := 1 + floor(random() * 100)::int;
+    j := ((i - 1 + 1 + floor(random() * 99)::int) % 100) + 1;
     insert into referrals (giver_id, receiver_id, client_name, client_contact, note, status, created_at)
     values (mentor_ids[i], mentor_ids[j], pg_temp.pick(clients), '010-' || lpad((3000 + k * 17)::text, 4, '0') || '-' || lpad((5000 + k * 29)::text, 4, '0'),
             pg_temp.pick(array['도움이 필요하다고 하셔서 소개합니다.','가격 협의가 가능하다고 전해 두었습니다.','먼저 전화 드려 보시면 좋겠습니다.','꼭 한번 만나 보시길 권합니다.']),
-            (array['sent','sent','contacted','closed'])[1 + floor(random() * 4)::int]::referral_status, now() - random() * 90 * interval '1 day');
+            (array['sent','sent','contacted','closed'])[1 + floor(random() * 4)::int]::referral_status, now() - (case when random() < 0.3 then random() * 10 else random() * 150 end) * interval '1 day');
   end loop;
 
   -- ───────── 스토리와 아카데미 영상 ─────────
@@ -309,10 +308,10 @@ begin
   -- 텐트에 모셔진 선교사(멘토를 기다림): 대표 사업가의 텐트와 경기도 텐트
   update members set chapter_id = x.cid, chapter = x.cname
     from (select c.id as cid, c.name as cname from chapters c join members mm on mm.chapter_id = c.id where mm.id = sc_mentor) x
-   where members.id in (partner_ids[1], partner_ids[2], partner_ids[4], partner_ids[6]);
+   where members.id in (partner_ids[1], partner_ids[2], partner_ids[4], partner_ids[6], partner_ids[8], partner_ids[10], partner_ids[12]);
   update members set chapter_id = x.cid, chapter = x.cname
     from (select c.id as cid, c.name as cname from chapters c join members mm on mm.chapter_id = c.id where mm.id = mentor_ids[11]) x
-   where members.id = partner_ids[5];
+   where members.id in (partner_ids[5], partner_ids[11], partner_ids[13]);
 
   insert into stage_history (member_id, role, from_stage, to_stage, note, created_at) values
     (sc_mentor, 'mentor', 'seed', 'sower', '운영위원회 승인', now() - interval '200 days'),
@@ -323,10 +322,10 @@ begin
   -- 매칭: 대표 사업가는 선교사 4명과, 대표 선교사는 멘토 2명과 동행
   insert into matchings (mentor_id, partner_id, contribution_type, started_at) values
     (sc_mentor, sc_partner, 'skill', current_date - 150),
-    (sc_mentor, partner_ids[8], 'coach', current_date - 120),
-    (sc_mentor, partner_ids[10], 'skill', current_date - 95),
-    (sc_mentor, partner_ids[15], 'coach', current_date - 70),
-    (mentor_ids[40], sc_partner, (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[40]), current_date - 100);
+    (sc_mentor, partner_ids[20], 'coach', current_date - 120),
+    (sc_mentor, partner_ids[24], 'skill', current_date - 95),
+    (sc_mentor, partner_ids[28], 'coach', current_date - 70),
+    (mentor_ids[61], sc_partner, (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[61]), current_date - 100);
   insert into matching_requests (partner_id, mentor_id, contribution_type, message, status, created_at, responded_at)
   values (sc_partner, sc_mentor, 'skill', '로스팅 기술을 가르쳐 주실 분을 찾고 있습니다.', 'accepted', now() - interval '153 days', now() - interval '150 days');
   insert into matching_requests (partner_id, contribution_type, message, status, created_at)
@@ -355,7 +354,7 @@ begin
   end loop;
   for k in 1..3 loop
     insert into thanks_letters (sender_id, recipient_id, body, read_at, created_at)
-    values (partner_ids[(array[8, 10, 15])[k]], sc_mentor, thanks_body[1 + ((k + 2) % 6)], case when k = 1 then null else now() - interval '5 days' end, now() - (k * 9) * interval '1 day');
+    values (partner_ids[(array[20, 24, 28])[k]], sc_mentor, thanks_body[1 + ((k + 2) % 6)], case when k = 1 then null else now() - interval '5 days' end, now() - (k * 9) * interval '1 day');
   end loop;
 
   -- 리퍼럴: 대표 사업가가 6건 받고 5건 보냄
@@ -382,8 +381,8 @@ begin
   end loop;
   insert into donations (sponsor_id, kind, partner_id, amount, donated_at) values
     (sc_sponsor, 'one_to_one', sc_partner, 2000000, current_date - 60),
-    (sc_sponsor, 'one_to_one', partner_ids[12], 1800000, current_date - 40),
-    (sc_sponsor, 'one_to_one', partner_ids[15], 1500000, current_date - 25);
+    (sc_sponsor, 'one_to_one', partner_ids[25], 1800000, current_date - 40),
+    (sc_sponsor, 'one_to_one', partner_ids[30], 1500000, current_date - 25);
   insert into donations (sponsor_id, kind, amount, donated_at) values
     (sc_sponsor, 'camp', 500000, current_date - 30), (sc_sponsor, 'fund', 1000000, current_date - 80);
 
@@ -425,7 +424,7 @@ begin
     if r.role = 'mentor' then
       update mentor_profiles set contribution_types = '{skill,coach}' where member_id = r.id and coalesce(array_length(contribution_types, 1), 0) = 0;
       -- 담당 선교사 3명
-      for j in select * from unnest(array[8, 10, 15]) loop
+      for j in select * from unnest(array[20, 24, 28]) loop
         mt := (select (contribution_types)[1 + (j % array_length(contribution_types, 1))] from mentor_profiles where member_id = r.id);
         insert into matchings (mentor_id, partner_id, contribution_type, started_at) values (r.id, partner_ids[j], mt, current_date - (30 + j * 3))
         on conflict do nothing;
@@ -440,7 +439,7 @@ begin
         values (r.id, mentor_ids[5 + k * 9], pg_temp.pick(clients), '도움이 필요하다고 하셔서 소개합니다.', (array['sent','contacted','closed'])[k]::referral_status, now() - k * interval '9 days');
       end loop;
     else
-      for j in select * from unnest(array[40, 25]) loop
+      for j in select * from unnest(array[61, 50]) loop
         mt := (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[j]);
         insert into matchings (mentor_id, partner_id, contribution_type, started_at) values (mentor_ids[j], r.id, mt, current_date - (60 + j))
         on conflict do nothing;
