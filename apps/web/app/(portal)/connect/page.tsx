@@ -6,6 +6,7 @@ import { currentMonthKst, fmtDate, fmtDateTime, fmtMonth } from "@/lib/format";
 import { mentorStages, partnerStages } from "@/lib/stages";
 import { Card, PageTitle, StageBar } from "@/components/connect/ui";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { DemoPersona } from "@/components/connect/DemoPersona";
 import { ActivityChart } from "@/components/connect/ActivityChart";
 import { catsFor, monthlyActivity } from "@/lib/activity";
 import { fmtMoney } from "@/lib/format";
@@ -266,6 +267,7 @@ export default async function ConnectHome() {
   return (
     <div className="space-y-4">
       <PageTitle>{me.name}{m.greeting}</PageTitle>
+      {demo && <DemoPersona me={me} db={supabase} locale={locale} />}
       {demo && me.role && (
         <Card title={m.demo.tourTitle}>
           <ol className="grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">

@@ -896,6 +896,24 @@ export const en: Messages = {
         { name: "Missionary (Partner)", text: "Learns, starts a business, and keeps the ministry going on their own." },
         { name: "Sponsor", text: "Joins one person's self-reliance and receives the fruit as news." },
       ],
+      persona: {
+        title: "Who you are viewing",
+        role: { mentor: "Business owner · Mentor", partner: "Missionary", sponsor: "Sponsor" },
+        joined: "Joined {n} months ago",
+        story: {
+          mentor: "A business owner who has run the small cafe \"Onyu Cafe\" in Seoul for ten years. She joined WMTO to share her roasting skills and management know-how with missionaries. Today she meets four missionaries once a month, teaches skills, coaches their business, and records what they shared and prayed about.",
+          partner: "A missionary serving in Phnom Penh, Cambodia, with IM Mission. Her dream is to open a small coffee roasting cafe and train local young baristas. She prepared her business at camp, made her first sales with the help of her mentor Eunhye Kim, and is now moving step by step toward self-reliance.",
+          sponsor: "An individual sponsor living in the United States. He gives monthly, supports three missionaries one-to-one, and has joined camp scholarships and the revolving fund. He receives missionary updates to see what his giving becomes.",
+        },
+        facts: {
+          joined: "Time with WMTO", months: "{n} months",
+          business: "Business", ways: "How they help",
+          mentees: "Missionaries mentored", people: "{n}", logs: "Mentoring records", times: "{n}",
+          stage: "Growth stage", field: "Mission field", org: "Sending organization", idea: "Business idea",
+          mentors: "Mentors", revenue: "Latest monthly sales", reliance: "Self-reliance",
+          type: "Sponsor type", total: "Total giving", partners: "Missionaries supported", gifts: "Gifts",
+        },
+      },
       tourTitle: "Try these",
       saveToast: "This is a demo, so nothing is saved. In the real service it would be saved here and reach the other person right away.",
       hints: {
