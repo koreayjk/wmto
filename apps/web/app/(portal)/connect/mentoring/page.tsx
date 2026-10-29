@@ -163,8 +163,8 @@ export default async function Mentoring({ searchParams }: { searchParams: Promis
                     <p className="serif mt-3 whitespace-pre-line text-[0.98rem] font-light leading-[1.95] text-ink/90">{l.content}</p>
                     {(l.next_steps || l.prayer_topics) && (
                       <dl className="mt-4 space-y-1.5 text-sm">
-                        {l.next_steps && <div className="flex gap-3"><dt className="gilt w-16 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.nextSteps.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.next_steps}</dd></div>}
-                        {l.prayer_topics && <div className="flex gap-3"><dt className="gilt w-16 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.prayer.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.prayer_topics}</dd></div>}
+                        {l.next_steps && <div className="flex gap-3"><dt className="gilt w-24 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.nextSteps.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.next_steps}</dd></div>}
+                        {l.prayer_topics && <div className="flex gap-3"><dt className="gilt w-24 shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] pt-0.5">{t.prayer.replace(/ \(.*\)/, "")}</dt><dd className="text-ink/75">{l.prayer_topics}</dd></div>}
                       </dl>
                     )}
                   </article>

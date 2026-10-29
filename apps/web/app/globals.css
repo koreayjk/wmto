@@ -213,6 +213,13 @@ img, svg, video { max-width: 100%; }
 }
 
 /* ───── 화면별 배경 장면: 은은하게, 사진이 말을 걸되 글을 방해하지 않게 ───── */
+/* WMTO Connect 글꼴: 제목·숫자는 명조(Noto Serif KR), 본문은 IBM Plex Sans KR */
+.connect {
+  --font-display: "Noto Serif KR", "Nanum Myeongjo", Batang, serif;
+  --font-sans: "IBM Plex Sans KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--font-sans);
+}
+.connect .display { font-weight: 500; letter-spacing: -0.015em; }
 .serif { font-family: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif; }
 .scene-hero {
   position: absolute; inset: -5rem 0 auto 0; height: 28rem; z-index: 0; pointer-events: none;

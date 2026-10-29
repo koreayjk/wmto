@@ -100,7 +100,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   return (
     <div className={`connect min-h-svh lg:flex ${r?.demo ? "pt-[3.25rem]" : r?.viewAs ? "pt-9" : ""}`}>
       <ServiceWorker />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" precedence="default" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" precedence="default" />
       {r?.demo && (
         <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 bg-ink px-4 py-1.5 text-[13px] text-white">
           <span className="hidden sm:inline">{m.demo.bar}</span>

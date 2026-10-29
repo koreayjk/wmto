@@ -181,7 +181,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         )}
       </Card>
 
-      <Card title={t.posts} className="lg:col-span-2">
+      <Card title={t.posts}>
         {o.posts.length === 0 ? <p className="text-soft">{t.noPosts}</p> : (
           <ul className="space-y-5">
             {o.posts.map((p) => (
