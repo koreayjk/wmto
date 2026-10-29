@@ -4,6 +4,7 @@ import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate } from "@/lib/format";
+import { krRegions } from "@/lib/codes";
 import { Card, PageTitle } from "@/components/connect/ui";
 import { ReferralComposer, type ComposerText, type DirMentor } from "@/components/connect/ReferralComposer";
 
@@ -47,7 +48,7 @@ export default async function Referrals() {
   ]);
   const mentors = (dir ?? []) as DirMentor[];
   const cm = getMessages(locale).connect;
-  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames };
+  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames, regions: getMessages(locale).apply.options.region, regionOrder: krRegions };
   const name = new Map(mentors.map((x) => [x.id, x.name]));
   const all = (refs ?? []) as Ref[];
   const received = all.filter((r) => r.receiver_id === me.id);

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 export type DirMentor = {
   id: string; name: string; industry: string | null; business_name: string | null;
-  country: string | null; region: string | null; chapter: string | null;
+  country: string | null; region: string | null; district: string | null; chapter: string | null;
   contribution_types: string[]; stage: string | null; mentee_count: number; joined_at: string;
 };
 
@@ -13,6 +13,7 @@ export type ComposerText = {
   find: string; search: string; byIndustry: string; byRegion: string; allIndustry: string; allRegion: string;
   noResult: string; chosen: string; choose: string; none: string; mentees: string; people: string; since: string;
   ways: Record<string, string>; stages: Record<string, string>;
+  regions: Record<string, string>; regionOrder: readonly string[];
 };
 
 /** 받을 사업가를 업종·지역별로 묶어 보면서 고르고, 같은 카드 안에서 소개 내용을 씁니다. */
@@ -24,9 +25,11 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
   const [picked, setPicked] = useState<string>("");
 
   const regionOf = (m: DirMentor) => m.region || m.country || "-";
+  const regionLabel = (k: string) => t.regions[k] ?? k;
+  const rank = (k: string) => { const i = t.regionOrder.indexOf(k); return i < 0 ? 1000 : i; };
   const industryOf = (m: DirMentor) => m.industry || "-";
   const industries = useMemo(() => [...new Set(mentors.map(industryOf))].sort((a, b) => a.localeCompare(b, "ko")), [mentors]);
-  const regions = useMemo(() => [...new Set(mentors.map(regionOf))].sort((a, b) => a.localeCompare(b, "ko")), [mentors]);
+  const regions = useMemo(() => [...new Set(mentors.map(regionOf))].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, "ko")), [mentors]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const shown = mentors.filter((m) =>
     (!industry || industryOf(m) === industry) && (!region || regionOf(m) === region) &&
@@ -34,7 +37,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
   const groups = useMemo(() => {
     const map = new Map<string, DirMentor[]>();
     for (const m of shown) { const k = group === "industry" ? industryOf(m) : regionOf(m); map.set(k, [...(map.get(k) ?? []), m]); }
-    return [...map.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], "ko"));
+    return [...map.entries()].sort((a, b) => group === "region" ? rank(a[0]) - rank(b[0]) || a[0].localeCompare(b[0], "ko") : b[1].length - a[1].length || a[0].localeCompare(b[0], "ko"));
   }, [shown, group]); // eslint-disable-line react-hooks/exhaustive-deps
   const chosen = mentors.find((m) => m.id === picked);
 
@@ -57,7 +60,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
           </select>
           <select value={region} onChange={(e) => setRegion(e.target.value)} className="field !w-auto !py-1.5 !text-sm" aria-label={t.allRegion}>
             <option value="">{t.allRegion}</option>
-            {regions.map((x) => <option key={x}>{x}</option>)}
+            {regions.map((x) => <option key={x} value={x}>{regionLabel(x)}</option>)}
           </select>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.search} className="field !w-44 !py-1.5 !text-sm" />
         </div>
@@ -66,7 +69,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
           {groups.length === 0 && <p className="text-soft">{t.noResult}</p>}
           {groups.map(([name, list]) => (
             <section key={name}>
-              <h4 className="mb-2 flex items-baseline gap-2 text-sm font-semibold">{name}<span className="text-xs font-normal text-soft">{t.people.replace("{n}", String(list.length))}</span></h4>
+              <h4 className="mb-2 flex items-baseline gap-2 text-sm font-semibold">{group === "region" ? regionLabel(name) : name}<span className="text-xs font-normal text-soft">{t.people.replace("{n}", String(list.length))}</span></h4>
               <ul className="grid gap-2 sm:grid-cols-2">
                 {list.map((m) => {
                   const on = m.id === picked;
@@ -81,7 +84,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
                         </span>
                         {m.business_name && <span className="mt-0.5 block text-sm">{m.business_name}</span>}
                         <span className="mt-1 block text-xs text-soft">
-                          {group === "industry" ? regionOf(m) : industryOf(m)}
+                          {group === "industry" ? [regionLabel(regionOf(m)), m.district].filter(Boolean).join(" ") : [m.district, industryOf(m)].filter(Boolean).join(" · ")}{m.chapter ? ` · ${m.chapter}` : ""}
                           {ways && ` · ${ways}`}
                         </span>
                         <span className="mt-1 block text-xs text-soft">
