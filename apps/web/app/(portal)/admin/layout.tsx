@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
   return (
     <div className="connect min-h-svh text-[15px]">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" precedence="default" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" precedence="default" />
       <header className="sticky top-3 z-40 px-3 pt-3 md:top-4 md:px-6">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 rounded-[2rem] bg-white/85 py-2.5 pl-5 pr-3 shadow-[0_14px_30px_-18px_rgba(14,70,58,0.45),0_0_0_1px_rgba(22,24,29,0.06)] backdrop-blur-xl">
           <span className="flex items-center gap-2.5">

@@ -215,12 +215,12 @@ img, svg, video { max-width: 100%; }
 /* ───── 화면별 배경 장면: 은은하게, 사진이 말을 걸되 글을 방해하지 않게 ───── */
 /* WMTO Connect 글꼴: 제목·숫자는 명조(Noto Serif KR), 본문은 IBM Plex Sans KR */
 .connect {
-  --font-display: "Noto Serif KR", "Nanum Myeongjo", Batang, serif;
   --font-sans: "IBM Plex Sans KR", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-display: var(--font-sans);
   font-family: var(--font-sans);
 }
-.connect .display { font-weight: 500; letter-spacing: -0.015em; }
-.serif { font-family: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif; }
+.connect .display { font-weight: 600; letter-spacing: -0.02em; }
+.serif { font-family: var(--font-sans); }
 .scene-room { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-size: cover; background-position: center 30%; filter: saturate(0.7); }
 .scene-room::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(248,244,236,0.55) 0%, rgba(248,244,236,0.86) 45%, rgba(248,244,236,0.94) 100%); }
 .tent-theme .cbezel { background: rgba(255, 252, 246, 0.4); box-shadow: 0 0 0 1px rgba(120, 90, 40, 0.1); }
@@ -233,7 +233,7 @@ img, svg, video { max-width: 100%; }
   transition: transform 0.8s var(--ease), box-shadow 0.8s var(--ease);
 }
 .stationery:hover { transform: translateY(-3px); }
-.letter-body { font-family: "Noto Serif KR", "Nanum Myeongjo", serif; font-weight: 300; font-size: 1.02rem; line-height: 2.1; color: #2b2823; }
+.letter-body { font-family: var(--font-sans); font-weight: 400; font-size: 1.02rem; line-height: 2.1; color: #2b2823; }
 .pen { font-family: "Nanum Pen Script", cursive; font-size: 1.7rem; line-height: 1.2; color: #3a342a; }
 .gilt { color: #9a7b3c; }
 .hair-t { border-top: 1px solid rgba(22, 24, 29, 0.08); }
