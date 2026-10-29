@@ -5,12 +5,13 @@ import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate, fmtDateTime } from "@/lib/format";
+import { Avatar } from "@/components/connect/Avatar";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
 
 type Tent = { id: string; name: string; region: string | null; via: "own" | "mentor" };
 type Person = {
   id: string; name: string; role: "mentor" | "partner" | "sponsor"; country: string | null; joined_at: string;
-  industry: string | null; business_name: string | null; contribution_types: string[] | null;
+  photo_url: string | null; industry: string | null; business_name: string | null; contribution_types: string[] | null;
   mission_field: string | null; business_idea: string | null; stage: string | null; via: "own" | "mentor"; mentee_count: number;
 };
 type Ev = { id: string; type: string; title: string; start_at: string; location: string | null; meeting_url: string | null; attended: number; me_attended: boolean };
@@ -91,7 +92,9 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   const personCard = (p: Person) => {
     const ways = (p.contribution_types ?? []).map((k) => m.contribution[k as keyof typeof m.contribution]).filter(Boolean).join(" · ");
     return (
-      <li key={p.id} className="rounded-2xl bg-white p-4 ring-1 ring-black/[0.06]">
+      <li key={p.id} className="flex gap-3 rounded-2xl bg-white/90 p-4 ring-1 ring-black/[0.06]">
+        <Avatar name={p.name} url={p.photo_url} size={46} />
+        <div className="min-w-0 flex-1">
         <span className="flex items-center justify-between gap-2">
           <b className="font-display">{p.name}</b>
           {stage(p.stage) && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{stage(p.stage)}</span>}
@@ -110,6 +113,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
           </>
         )}
         {p.role === "sponsor" && p.country && <span className="mt-0.5 block text-sm text-soft">{p.country}</span>}
+        </div>
       </li>
     );
   };

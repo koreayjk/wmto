@@ -5,7 +5,9 @@ import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { cookies } from "next/headers";
 import { isLocale, LOCALE_COOKIE } from "@/lib/i18n";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase/server";
+import { Avatar } from "@/components/connect/Avatar";
+import { AvatarUploader } from "@/components/connect/AvatarUploader";
 import { contributionTypes, krRegions, sponsorTypes } from "@/lib/codes";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
 
@@ -29,6 +31,21 @@ async function saveProfile(fd: FormData) {
   }
   revalidatePath("/connect/profile");
   redirect("/connect/profile?saved=1");
+}
+
+/** 증명사진: 서버가 Storage(wmto-avatars)에 올리고 주소만 저장합니다. 보기 전용(관리자·체험)에서는 저장하지 않습니다. */
+async function uploadAvatar(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  const file = fd.get("photo");
+  if (!(file instanceof File) || file.size === 0 || file.size > 3 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) return;
+  const db = createSupabaseAdminClient();
+  const path = `${r.me.id}/${Date.now()}.jpg`;
+  const { error } = await db.storage.from("wmto-avatars").upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type, upsert: true });
+  if (error) { console.error("avatar upload failed", error.message); return; }
+  await db.from("members").update({ photo_url: db.storage.from("wmto-avatars").getPublicUrl(path).data.publicUrl }).eq("id", r.me.id);
+  revalidatePath("/connect", "layout");
 }
 
 async function logout() {
@@ -61,6 +78,10 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
     <div className="space-y-4">
       <PageTitle>{t.title}</PageTitle>
       {saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
+      <Card>
+        <AvatarUploader action={uploadAvatar} hasPhoto={!!me.photo_url} name={t.photo.title} labels={t.photo}
+          preview={me.photo_url ? <Avatar name={me.name} url={me.photo_url} size={88} /> : <Avatar name={me.name} size={88} />} />
+      </Card>
       <Card>
         <p className="text-sm text-soft">{t.role}: {roleLabel}{me.stage ? ` · ${t.stage}: ${c.stageNames[me.stage as keyof typeof c.stageNames]}` : ""}</p>
         <p className="mt-1 text-sm text-soft">{me.email}</p>

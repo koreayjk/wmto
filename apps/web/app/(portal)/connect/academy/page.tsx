@@ -20,17 +20,20 @@ export default async function Academy() {
       <PageTitle>{t.title}</PageTitle>
       {groups.size === 0 && <p className="text-soft">{t.empty}</p>}
       {[...groups].map(([cat, vids]) => (
-        <section key={cat} className="space-y-3">
-          <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-clay">{cat}</h2>
-          {vids.map((v) => (
-            <Card key={v.id}>
-              <p className="font-display text-lg font-semibold">{v.title}</p>
-              <p className="text-xs text-soft">{fmtDate(v.published_at, locale)}</p>
-              {v.description && <p className="mt-2 text-soft">{v.description}</p>}
-              <a href={v.video_url} target="_blank" rel="noopener noreferrer" className="cbtn mt-5">{t.watch}</a>
-            </Card>
-          ))}
-        </section>
+        <Card key={cat} title={cat}>
+          <ul className="divide-y divide-black/[0.06]">
+            {vids.map((v) => (
+              <li key={v.id} className="flex items-center justify-between gap-5 py-4 first:pt-0 last:pb-0">
+                <span className="min-w-0">
+                  <span className="block font-display text-base font-semibold">{v.title}</span>
+                  {v.description && <span className="mt-0.5 block text-sm text-soft">{v.description}</span>}
+                  <span className="mt-1 block text-xs text-soft">{fmtDate(v.published_at, locale)}</span>
+                </span>
+                <a href={v.video_url} target="_blank" rel="noopener noreferrer" className="cbtn cbtn-sm shrink-0">{t.watch}</a>
+              </li>
+            ))}
+          </ul>
+        </Card>
       ))}
     </div>
   );

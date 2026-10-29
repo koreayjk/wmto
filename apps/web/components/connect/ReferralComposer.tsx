@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Avatar } from "@/components/connect/Avatar";
 
 export type DirMentor = {
   id: string; name: string; industry: string | null; business_name: string | null;
   country: string | null; region: string | null; district: string | null; chapter: string | null;
-  contribution_types: string[]; stage: string | null; mentee_count: number; joined_at: string;
+  contribution_types: string[]; stage: string | null; mentee_count: number; joined_at: string; photo_url: string | null;
 };
 
 export type ComposerText = {
@@ -78,11 +79,16 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
                     <li key={m.id}>
                       <button type="button" aria-pressed={on} onClick={() => setPicked(m.id)}
                         className={`w-full rounded-2xl p-4 text-left transition-colors ${on ? "bg-accent/10 ring-2 ring-accent" : "bg-white ring-1 ring-black/[0.06] hover:ring-black/20"}`}>
+                        <span className="flex items-center gap-3">
+                          <Avatar name={m.name} url={m.photo_url} size={44} />
+                          <span className="min-w-0 flex-1">
                         <span className="flex items-center justify-between gap-2">
                           <b className="font-display">{m.name}</b>
                           {m.stage && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{t.stages[m.stage] ?? m.stage}</span>}
                         </span>
                         {m.business_name && <span className="mt-0.5 block text-sm">{m.business_name}</span>}
+                          </span>
+                        </span>
                         <span className="mt-1 block text-xs text-soft">
                           {group === "industry" ? [regionLabel(regionOf(m)), m.district].filter(Boolean).join(" ") : [m.district, industryOf(m)].filter(Boolean).join(" · ")}{m.chapter ? ` · ${m.chapter}` : ""}
                           {ways && ` · ${ways}`}
@@ -105,7 +111,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
         <div>
           <span className="mb-1.5 block text-sm font-medium">{t.receiver}</span>
           <p className={`rounded-2xl px-4 py-3 text-sm ${chosen ? "bg-accent/10" : "bg-tint text-soft"}`} aria-live="polite">
-            {chosen ? <><b>{chosen.name}</b>{chosen.industry ? ` · ${chosen.industry}` : ""}</> : t.none}
+            {chosen ? <span className="flex items-center gap-3"><Avatar name={chosen.name} url={chosen.photo_url} size={40} /><span><b>{chosen.name}</b>{chosen.industry ? ` · ${chosen.industry}` : ""}</span></span> : t.none}
           </p>
         </div>
         <label className="block"><span className="mb-1.5 block text-sm font-medium">{t.client}</span><input name="client_name" required maxLength={200} className="field" /></label>

@@ -211,3 +211,29 @@ img, svg, video { max-width: 100%; }
   .connect-wide > .space-y-4 > h2,
   .connect-wide > .space-y-4 > p { grid-column: 1 / -1; }
 }
+
+/* ───── 화면별 배경 장면 ───── */
+.scene-hero {
+  position: absolute; inset: 0 0 auto 0; height: 26rem; z-index: 0; pointer-events: none;
+  background-size: cover; background-position: center 40%; opacity: 0.55;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.5) 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.5) 55%, transparent 100%);
+}
+.scene-room { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-size: cover; background-position: center 30%; }
+.scene-room::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(251,246,236,0.35) 0%, rgba(251,246,236,0.78) 55%, rgba(251,246,236,0.9) 100%); }
+.tent-theme .cbezel { background: rgba(255, 250, 240, 0.35); box-shadow: 0 0 0 1px rgba(120, 90, 40, 0.12); }
+.tent-theme .cbezel-in { background: rgba(255, 252, 246, 0.9); }
+
+/* ───── 편지지 ───── */
+.paper {
+  position: relative; background-color: #fbf5e6; border-radius: 4px;
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 2.1rem, rgba(131, 98, 48, 0.16) 2.1rem, rgba(131, 98, 48, 0.16) calc(2.1rem + 1px));
+  background-position: 0 1.2rem;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 0 0 1px rgba(120, 90, 40, 0.1), 0 22px 36px -22px rgba(72, 52, 20, 0.45);
+  transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
+}
+.paper::before { content: ""; position: absolute; left: 3.2rem; top: 0; bottom: 0; width: 1px; background: rgba(190, 80, 70, 0.28); }
+.paper:hover { transform: rotate(0deg) translateY(-3px) !important; }
+.hand { font-family: "Nanum Pen Script", "Gaegu", cursive; font-size: 1.55rem; line-height: 2.1rem; letter-spacing: 0.01em; color: #2e2a22; }
+.seal { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 999px; color: #fff; font-size: 11px; font-weight: 700;
+  background: radial-gradient(circle at 35% 30%, #d5584b, #9c2f27 70%); box-shadow: 0 6px 12px -6px rgba(110, 30, 24, 0.7), inset 0 1px 1px rgba(255,255,255,0.35); }

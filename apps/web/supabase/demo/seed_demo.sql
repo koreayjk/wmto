@@ -237,10 +237,10 @@ begin
   for r in select id, mentor_id from matchings where mentor_id = any (mentor_ids) and partner_id = any (partner_ids) loop
     n := 6 + floor(random() * 7)::int;
     for k in 1..n loop
-      insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics, created_at)
+      insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics, created_at, shared)
       values (r.id, now() - (case when k = 1 then random() * 3 when k <= 3 then random() * 14 else random() * 150 end) * interval '1 day',
               (array[30,45,60,60,90])[1 + floor(random() * 5)::int], pg_temp.pick(log_content), r.mentor_id,
-              case when random() < 0.65 then pg_temp.pick(log_next) end, case when random() < 0.5 then pg_temp.pick(log_pray) end, now());
+              case when random() < 0.65 then pg_temp.pick(log_next) end, case when random() < 0.5 then pg_temp.pick(log_pray) end, now(), random() > 0.18);
     end loop;
     -- 감사 편지 1~2통
     for k in 1..(2 + floor(random() * 3)::int) loop
@@ -334,9 +334,9 @@ begin
   -- 멘토링 기록: 6개월에 걸쳐 8건씩
   for r in select id, mentor_id from matchings where mentor_id = sc_mentor or partner_id = sc_partner loop
     for k in 1..8 loop
-      insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics)
+      insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics, shared)
       values (r.id, now() - ((k - 1) * 21 + 3 + random() * 6) * interval '1 day', (array[45,60,60,90,60])[1 + (k % 5)],
-              log_content[1 + ((k + 2) % 10)], r.mentor_id, log_next[1 + (k % 8)], case when k % 3 <> 0 then log_pray[1 + (k % 7)] end);
+              log_content[1 + ((k + 2) % 10)], r.mentor_id, log_next[1 + (k % 8)], case when k % 3 <> 0 then log_pray[1 + (k % 7)] end, k % 4 <> 0);
     end loop;
   end loop;
 
@@ -417,6 +417,21 @@ begin
     where e.chapter_id = r.id and e.start_at < now() and random() < 0.72
     on conflict do nothing;
   end loop;
+
+  -- ───────── 증명사진 (일부 회원만. 나머지는 이름 첫 글자 아바타) ─────────
+  update members set photo_url = '/people/p01.jpg' where id = sc_mentor;
+  update members set photo_url = '/people/p02.jpg' where id = sc_partner;
+  update members set photo_url = '/people/p03.jpg' where id = sc_sponsor;
+  with fem as (
+    select id, row_number() over (order by role, email) rn from members
+    where email like 'demo.%@demo.wmto.invalid' and email not like 'demo.showcase%' and email not like 'demo.apply%' and status = 'active'
+      and right(name, 2) = any (array['서연','하은','수빈','지우','채원','소영','은지','유진','미래','나연','혜진','다은','가영','보람','지은','민서','세린','은서','하린','소희'])
+  ) update members m set photo_url = '/people/' || (array['p05','p07','p09','p11'])[fem.rn] || '.jpg' from fem where m.id = fem.id and fem.rn <= 4;
+  with mal as (
+    select id, row_number() over (order by role, email) rn from members
+    where email like 'demo.%@demo.wmto.invalid' and email not like 'demo.showcase%' and email not like 'demo.apply%' and status = 'active'
+      and right(name, 2) <> all (array['서연','하은','수빈','지우','채원','소영','은지','유진','미래','나연','혜진','다은','가영','보람','지은','민서','세린','은서','하린','소희'])
+  ) update members m set photo_url = '/people/' || (array['p04','p06','p08','p10','p12'])[mal.rn] || '.jpg' from mal where m.id = mal.id and mal.rn <= 5;
 
   -- ───────── 실제로 로그인할 수 있는 회원의 화면도 채우기 ─────────
   for r in select m.id, m.role from members m

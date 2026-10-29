@@ -696,6 +696,7 @@ export const en: Messages = {
       checkedIn: "Checked in",
       checkInHint: "Check-in opens 30 minutes before the start.",
       past: "Past meetings",
+      tl: { until: "Until the next gathering", d: "d", h: "h", m: "m", now: "Happening now", today: "Today", tomorrow: "Tomorrow", thisWeek: "This week", thisMonth: "This month", later: "Later", dday: "D-{n}", ago: "{n}d ago", sub: "The times we gather, in the flow of the month.", at: "", dayBar: "Time of day" },
     },
     mentoring: {
       title: "Mentoring log",
@@ -711,6 +712,10 @@ export const en: Messages = {
       withMentor: "Mentor",
       minutes: "min",
       noMatching: "You need an assigned missionary before you can write a record.",
+      sub: "Everything you shared with your missionaries, in order of time.",
+      all: "All", me: "Me", sharedBadge: "Shared with other mentors", privateBadge: "Only me and the missionary",
+      shareLabel: "Share with other mentors who help the same missionary", shareHint: "Sharing is the default. Turn it off for personal matters, and only you and this missionary can see it.",
+      fromOther: "Shared by mentor {n}", forPartner: "Missionary", mentorLabel: "Mentor",
     },
     report: {
       title: "Self-reliance report",
@@ -730,6 +735,7 @@ export const en: Messages = {
       reliance: "Self-reliance",
     },
     profile: {
+      photo: { title: "Photo", choose: "Upload a photo", change: "Change photo", busy: "Uploading…", hint: "A clear headshot is best. Others see it in referrals and tents." },
       locationNote: "You are placed in the tent for your area automatically. If you change your area, you move to the tent of the new area.",
       title: "Profile",
       save: "Save",
@@ -832,7 +838,7 @@ export const en: Messages = {
       received: "Letters received",
       empty: "No letters yet.",
       noMentor: "You can write a thank-you letter once a mentor is assigned.",
-      newBadge: "New",
+      newBadge: "New", from: "", toShort: "Dear", seal: "Send",
     },
     academy: {
       title: "Academy",

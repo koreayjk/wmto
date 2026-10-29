@@ -12,6 +12,7 @@ import { demoModes, pickDemoMember, type DemoMode } from "@/lib/demo";
 import { Sidebar, type SideGroup } from "@/components/connect/Sidebar";
 import { ContentFrame } from "@/components/connect/ContentFrame";
 import { DemoHint } from "@/components/connect/DemoHint";
+import { Avatar } from "@/components/connect/Avatar";
 import { DemoGuard } from "@/components/connect/DemoGuard";
 
 export const metadata: Metadata = {
@@ -123,7 +124,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
         </div>
       )}
       {active && (
-        <aside className="hidden w-72 shrink-0 lg:block">
+        <aside className="relative z-10 hidden w-72 shrink-0 lg:block">
           <div className={`sticky flex flex-col overflow-y-auto px-5 py-8 ${r?.demo ? "top-[3.25rem] h-[calc(100svh-3.25rem)]" : r?.viewAs ? "top-9 h-[calc(100svh-2.25rem)]" : "top-0 h-svh"}`}>
             <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -135,8 +136,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
           </div>
         </aside>
       )}
-      <div className="min-w-0 flex-1">
-        <header className="pt-[env(safe-area-inset-top)]">
+      <div className="relative min-w-0 flex-1">
+        <header className="relative z-10 pt-[env(safe-area-inset-top)]">
           <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-20 lg:max-w-none lg:px-10 xl:px-14">
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -145,7 +146,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
             </span>
             {active && (
-              <span className="ml-auto flex items-center gap-1 rounded-full bg-white/80 py-1.5 pl-4 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
+              <span className="ml-auto flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
+                <Avatar name={active.name} url={active.photo_url} size={30} />
                 <span className="hidden text-ink/70 sm:inline">{active.name}</span>
                 {stageName && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
               </span>

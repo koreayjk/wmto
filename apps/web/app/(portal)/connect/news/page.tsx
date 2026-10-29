@@ -19,56 +19,40 @@ export default async function News() {
     <div className="space-y-4">
       <PageTitle sub={n.sub}>{n.title}</PageTitle>
       {rows.length === 0 && <p className="text-soft">{n.empty}</p>}
-      {rows.map((r) => {
-        const level = r.self_reliance ?? 0;
-        const recentUp = r.stage_changed_at && Date.now() - new Date(r.stage_changed_at).getTime() < 90 * 86400_000;
-        return (
-          <Card key={r.partner_name + (r.mission_field ?? "")}>
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-display text-xl font-semibold">{r.partner_name}</p>
-                <p className="text-sm text-soft">{r.mission_field ?? "-"}</p>
-              </div>
-              {r.stage && (
-                <span className="shrink-0 rounded-full bg-tint px-3 py-1 text-xs font-semibold text-accent">
-                  {c.stageNames[r.stage as keyof typeof c.stageNames] ?? r.stage}
-                </span>
-              )}
-            </div>
-            {recentUp && r.stage_changed_at && (
-              <p className="mt-3 text-sm font-medium text-accent">{n.stageUp.replace("{d}", fmtDate(r.stage_changed_at, locale))}</p>
-            )}
-            {r.report_month ? (
-              <div className="mt-5 space-y-4">
-                <p className="text-xs text-soft">{n.report.replace("{m}", fmtMonth(r.report_month, locale))}</p>
-                <div>
-                  <p className="mb-2 text-[13px] text-soft">{n.reliance}</p>
-                  <div className="flex items-center gap-3">
-                    <span className="flex gap-1.5" aria-hidden>
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <span key={i} className={`h-2 w-7 rounded-full ${i <= level ? "bg-accent" : "bg-black/10"}`} />
-                      ))}
-                    </span>
-                    <span className="text-sm">{n.relianceLabels[level] ?? ""}</span>
-                  </div>
-                </div>
-                {r.prayer_topics && (
+      {rows.length > 0 && (
+        <Card className="lg:col-span-full">
+          <ul className="divide-y divide-black/[0.06]">
+            {rows.map((r) => {
+              const level = r.self_reliance ?? 0;
+              const recentUp = r.stage_changed_at && Date.now() - new Date(r.stage_changed_at).getTime() < 90 * 86400_000;
+              return (
+                <li key={r.partner_name + (r.mission_field ?? "")} className="grid gap-x-8 gap-y-3 py-6 first:pt-0 last:pb-0 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)_auto]">
                   <div>
-                    <p className="mb-1 text-[13px] text-soft">{n.prayer}</p>
-                    <p className="leading-relaxed">&ldquo;{r.prayer_topics}&rdquo;</p>
+                    <p className="font-display text-lg font-semibold">{r.partner_name}</p>
+                    <p className="text-sm text-soft">{r.mission_field ?? "-"}</p>
+                    {r.stage && <span className="mt-2 inline-block rounded-full bg-tint px-3 py-0.5 text-xs font-semibold text-accent">{c.stageNames[r.stage as keyof typeof c.stageNames] ?? r.stage}</span>}
+                    {recentUp && r.stage_changed_at && <p className="mt-2 text-xs font-medium text-accent">{n.stageUp.replace("{d}", fmtDate(r.stage_changed_at, locale))}</p>}
                   </div>
-                )}
-              </div>
-            ) : (
-              <p className="mt-5 text-soft">{n.noReport}</p>
-            )}
-            <p className="mt-5 border-t border-black/[0.06] pt-4 text-sm text-soft">
-              {n.given} <b className="font-semibold text-ink">{fmtMoney(Number(r.given), locale)}</b>
-              {r.last_gift ? ` · ${fmtDate(r.last_gift, locale)}` : ""}
-            </p>
-          </Card>
-        );
-      })}
+                  {r.report_month ? (
+                    <div className="space-y-2">
+                      <p className="flex flex-wrap items-center gap-3 text-sm">
+                        <span className="text-xs text-soft">{n.report.replace("{m}", fmtMonth(r.report_month, locale))}</span>
+                        <span className="flex gap-1" aria-hidden>{[1, 2, 3, 4, 5].map((i) => <span key={i} className={`h-1.5 w-5 rounded-full ${i <= level ? "bg-accent" : "bg-black/10"}`} />)}</span>
+                        <span>{n.relianceLabels[level] ?? ""}</span>
+                      </p>
+                      {r.prayer_topics && <p className="leading-relaxed text-ink/85">&ldquo;{r.prayer_topics}&rdquo;</p>}
+                    </div>
+                  ) : <p className="text-soft">{n.noReport}</p>}
+                  <p className="text-sm text-soft lg:text-right">
+                    {n.given}<b className="block font-display text-lg font-semibold text-ink tabular-nums">{fmtMoney(Number(r.given), locale)}</b>
+                    {r.last_gift ? fmtDate(r.last_gift, locale) : ""}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }

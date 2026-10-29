@@ -11,7 +11,7 @@ export async function getViewAsId(): Promise<string | null> {
 }
 
 // 보기 모드에서 허용하는 요청: 조회(GET/HEAD)와 조회용 RPC 만. 나머지는 모두 막아 "보기 전용"을 지킵니다.
-const READ_RPC = /\/rest\/v1\/rpc\/(open_matching_requests|mentor_directory|my_tents|tent_overview|sponsor_overview|sponsor_gifts|sponsor_partner_feed|fund_overview)(\?|$)/;
+const READ_RPC = /\/rest\/v1\/rpc\/(open_matching_requests|mentor_directory|mentoring_feed|my_tents|tent_overview|sponsor_overview|sponsor_gifts|sponsor_partner_feed|fund_overview)(\?|$)/;
 
 export const viewOnlyFetch: typeof fetch = async (input, init) => {
   const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;

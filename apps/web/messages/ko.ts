@@ -707,6 +707,7 @@ export const ko = {
       checkedIn: "출석 완료",
       checkInHint: "시작 30분 전부터 출석 체크가 가능합니다.",
       past: "지난 모임",
+      tl: { until: "다음 모임까지", d: "일", h: "시간", m: "분", now: "지금 진행 중", today: "오늘", tomorrow: "내일", thisWeek: "이번 주", thisMonth: "이번 달", later: "그 이후", dday: "D-{n}", ago: "{n}일 전", sub: "한 달의 흐름 속에서 우리가 함께 모이는 시간입니다.", at: "시", dayBar: "하루 중 시간" },
     },
     mentoring: {
       title: "멘토링 기록",
@@ -722,6 +723,10 @@ export const ko = {
       withMentor: "멘토",
       minutes: "분",
       noMatching: "배정된 멘티가 있어야 기록을 작성할 수 있습니다.",
+      sub: "선교사와 나눈 이야기를 시간 순서대로 모아 봅니다.",
+      all: "전체", me: "나", sharedBadge: "다른 멘토와 공유", privateBadge: "나와 선교사만",
+      shareLabel: "같은 선교사를 돕는 다른 멘토에게도 공유", shareHint: "기본은 공유입니다. 개인적인 내용이면 끄세요. 그러면 나와 이 선교사만 볼 수 있어요.",
+      fromOther: "{n} 멘토가 공유한 기록", forPartner: "선교사", mentorLabel: "멘토",
     },
     report: {
       title: "자립 리포트",
@@ -741,6 +746,7 @@ export const ko = {
       reliance: "자립도",
     },
     profile: {
+      photo: { title: "증명사진", choose: "증명사진 올리기", change: "사진 바꾸기", busy: "올리는 중…", hint: "얼굴이 잘 보이는 사진이 좋아요. 리퍼럴·텐트에서 다른 분들이 봅니다." },
       locationNote: "계신 지역(시·도, 시·군·구)에 맞는 텐트에 자동으로 들어갑니다. 지역을 바꾸면 새 지역의 텐트로 옮겨집니다.",
       title: "내 정보",
       save: "저장",
@@ -843,7 +849,7 @@ export const ko = {
       received: "받은 편지",
       empty: "아직 편지가 없습니다.",
       noMentor: "담당 멘토가 배정되면 감사 편지를 쓸 수 있습니다.",
-      newBadge: "새 편지",
+      newBadge: "새 편지", from: "드림", toShort: "받는 분", seal: "보내기",
     },
     academy: {
       title: "아카데미",

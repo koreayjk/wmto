@@ -67,33 +67,40 @@ export default async function Referrals() {
         )}
       </Card>
 
-      <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-soft">{t.received}</h2>
-      {received.length === 0 && <p className="text-soft">{t.empty}</p>}
-      {received.map((r) => (
-        <Card key={r.id}>
-          <p className="text-xs text-clay">{t.from} {who(r.giver_id)} · {fmtDate(r.created_at, locale)}</p>
-          <p className="mt-1 font-display text-lg font-semibold">{r.client_name}</p>
-          {r.client_contact && <p className="text-sm text-soft">{r.client_contact}</p>}
-          {r.note && <p className="mt-2 whitespace-pre-line text-soft">{r.note}</p>}
-          <form action={setStatus} className="mt-3 flex items-center gap-2">
-            <input type="hidden" name="id" value={r.id} />
-            <select name="status" defaultValue={r.status} className="field !w-auto !py-1.5 !text-sm" aria-label={t.update}>
-              {STATUSES.map((s) => <option key={s} value={s}>{t.status[s]}</option>)}
-            </select>
-            <button className="cbtn cbtn-sm">{t.update}</button>
-          </form>
-        </Card>
-      ))}
+      <Card title={`${t.received} · ${received.length}`} className="lg:col-span-1">
+        {received.length === 0 ? <p className="text-soft">{t.empty}</p> : (
+          <ul className="divide-y divide-black/[0.06]">
+            {received.map((r) => (
+              <li key={r.id} className="py-4 first:pt-0 last:pb-0">
+                <p className="flex items-center justify-between gap-3 text-xs text-clay"><span>{t.from} {who(r.giver_id)} · {fmtDate(r.created_at, locale)}</span></p>
+                <p className="mt-0.5 font-display text-base font-semibold">{r.client_name}{r.client_contact && <span className="ml-2 text-sm font-normal text-soft">{r.client_contact}</span>}</p>
+                {r.note && <p className="mt-1 whitespace-pre-line text-sm text-soft">{r.note}</p>}
+                <form action={setStatus} className="mt-2.5 flex items-center gap-2">
+                  <input type="hidden" name="id" value={r.id} />
+                  <select name="status" defaultValue={r.status} className="field !w-auto !py-1.5 !text-sm" aria-label={t.update}>
+                    {STATUSES.map((s) => <option key={s} value={s}>{t.status[s]}</option>)}
+                  </select>
+                  <button className="cbtn cbtn-sm">{t.update}</button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
-      <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-soft">{t.sent}</h2>
-      {sent.length === 0 && <p className="text-soft">{t.empty}</p>}
-      {sent.map((r) => (
-        <Card key={r.id}>
-          <p className="flex justify-between text-xs text-clay"><span>{t.to} {who(r.receiver_id)} · {fmtDate(r.created_at, locale)}</span><span>{t.status[r.status]}</span></p>
-          <p className="mt-1 font-display text-lg font-semibold">{r.client_name}</p>
-          {r.note && <p className="mt-2 whitespace-pre-line text-soft">{r.note}</p>}
-        </Card>
-      ))}
+      <Card title={`${t.sent} · ${sent.length}`} className="lg:col-span-1">
+        {sent.length === 0 ? <p className="text-soft">{t.empty}</p> : (
+          <ul className="divide-y divide-black/[0.06]">
+            {sent.map((r) => (
+              <li key={r.id} className="py-4 first:pt-0 last:pb-0">
+                <p className="flex justify-between gap-3 text-xs text-clay"><span>{t.to} {who(r.receiver_id)} · {fmtDate(r.created_at, locale)}</span><span className="rounded-full bg-tint px-2.5 py-0.5 font-semibold text-accent">{t.status[r.status]}</span></p>
+                <p className="mt-0.5 font-display text-base font-semibold">{r.client_name}</p>
+                {r.note && <p className="mt-1 whitespace-pre-line text-sm text-soft">{r.note}</p>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }

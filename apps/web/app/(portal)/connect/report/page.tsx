@@ -6,6 +6,7 @@ import { getMessages, type Locale } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { currentMonthKst, fmtMonth } from "@/lib/format";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
+import { Avatar } from "@/components/connect/Avatar";
 
 async function saveReport(fd: FormData) {
   "use server";
@@ -41,14 +42,43 @@ type Report = {
 
 const money = (r: Report, locale: Locale) => (r.revenue_amount == null ? "-" : `${Number(r.revenue_amount).toLocaleString(locale === "en" ? "en-US" : "ko-KR")} ${r.currency}`);
 
-function Details({ r, locale }: { r: Report; locale: Locale }) {
+function Dots({ n }: { n: number | null }) {
+  return (
+    <span className="inline-flex gap-1" aria-label={`${n ?? 0}/5`}>
+      {[1, 2, 3, 4, 5].map((i) => <span key={i} className={`h-1.5 w-4 rounded-full ${i <= (n ?? 0) ? "bg-accent" : "bg-black/10"}`} />)}
+    </span>
+  );
+}
+
+/** 한 줄씩 내려가는 리포트 목록: 왼쪽에 사람과 달, 오른쪽에 매출과 자립도, 아래에 어려움·기도제목 */
+function ReportRows({ rows, locale, nameOf, photoOf }: { rows: Report[]; locale: Locale; nameOf?: Map<string, string>; photoOf?: Map<string, string | null> }) {
   const t = getMessages(locale).connect.report;
   return (
-    <>
-      <p className="text-sm text-soft">{t.revenueLabel} {money(r, locale)} · {t.reliance} {r.self_reliance ?? "-"}/5</p>
-      {r.difficulties && <p className="mt-2 whitespace-pre-line text-sm"><b>{t.difficulties}</b> {r.difficulties}</p>}
-      {r.prayer_topics && <p className="mt-2 whitespace-pre-line text-sm"><b>{t.prayer}</b> {r.prayer_topics}</p>}
-    </>
+    <ul className="divide-y divide-black/[0.06]">
+      {rows.map((r) => (
+        <li key={r.id} className="py-5 first:pt-0 last:pb-0">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+            <span className="flex items-center gap-3">
+              {nameOf && <Avatar name={nameOf.get(r.partner_id) ?? "-"} url={photoOf?.get(r.partner_id)} size={38} />}
+              <span>
+                {nameOf && <b className="block font-display text-base">{nameOf.get(r.partner_id) ?? "-"}</b>}
+                <span className={nameOf ? "text-xs text-clay" : "font-display text-base font-semibold"}>{fmtMonth(r.month, locale)}</span>
+              </span>
+            </span>
+            <span className="flex items-center gap-5 text-sm">
+              <span className="text-right"><span className="block text-[11px] text-soft">{t.revenueLabel}</span><b className="tabular-nums">{money(r, locale)}</b></span>
+              <span><span className="mb-1.5 block text-[11px] text-soft">{t.reliance} {r.self_reliance ?? "-"}/5</span><Dots n={r.self_reliance} /></span>
+            </span>
+          </div>
+          {(r.difficulties || r.prayer_topics) && (
+            <dl className="mt-3 space-y-1 text-sm text-ink/80 sm:pl-[3.4rem]">
+              {r.difficulties && <div><dt className="inline font-semibold">{t.difficulties} </dt><dd className="inline">{r.difficulties}</dd></div>}
+              {r.prayer_topics && <div><dt className="inline font-semibold">{t.prayer} </dt><dd className="inline">{r.prayer_topics}</dd></div>}
+            </dl>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -68,18 +98,14 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
 
   if (me.role === "mentor") {
     const ids = [...new Set(reports.map((r) => r.partner_id))];
-    const { data: people } = ids.length ? await supabase.from("members").select("id,name").in("id", ids) : { data: [] };
-    const nameOf = new Map((people ?? []).map((p) => [p.id, p.name]));
+    const { data: people } = ids.length ? await supabase.from("members").select("id,name,photo_url").in("id", ids) : { data: [] };
+    const nameOf = new Map((people ?? []).map((p) => [p.id, p.name as string]));
+    const photoOf = new Map((people ?? []).map((p) => [p.id, p.photo_url as string | null]));
     return (
       <div className="space-y-4">
         <PageTitle>{t.menteeReports}</PageTitle>
         {reports.length === 0 && <p className="text-soft">{t.empty}</p>}
-        {reports.map((r) => (
-          <Card key={r.id}>
-            <p className="font-display text-lg font-semibold">{nameOf.get(r.partner_id) ?? "-"} <span className="text-sm font-normal text-clay">{fmtMonth(r.month, locale)}</span></p>
-            <Details r={r} locale={locale} />
-          </Card>
-        ))}
+        {reports.length > 0 && <Card className="lg:col-span-full"><ReportRows rows={reports} locale={locale} nameOf={nameOf} photoOf={photoOf} /></Card>}
       </div>
     );
   }
@@ -134,14 +160,9 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
         </form>
       </Card>
 
-      <h2 className="pt-4 text-xs font-medium uppercase tracking-[0.2em] text-soft">{t.history}</h2>
-      {reports.length === 0 && <p className="text-soft">{t.empty}</p>}
-      {reports.map((r) => (
-        <Card key={r.id}>
-          <p className="font-display text-lg font-semibold">{fmtMonth(r.month, locale)}</p>
-          <Details r={r} locale={locale} />
-        </Card>
-      ))}
+      <Card title={t.history} className="lg:col-span-2">
+        {reports.length === 0 ? <p className="text-soft">{t.empty}</p> : <ReportRows rows={reports} locale={locale} />}
+      </Card>
     </div>
   );
 }

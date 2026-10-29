@@ -48,18 +48,27 @@ export default async function Matching() {
       <div className="space-y-4">
         <PageTitle>{t.incomingTitle}</PageTitle>
         {rows.length === 0 && <p className="text-soft">{t.incomingEmpty}</p>}
-        {rows.map((r) => (
-          <Card key={r.id}>
-            <p className="text-xs text-clay">{m.contribution[r.contribution_type]} · {fmtDate(r.created_at, locale)}</p>
-            <p className="mt-1 font-display text-lg font-semibold">{r.partner_name}{r.mission_field ? <span className="ml-2 text-sm font-normal text-soft">{r.mission_field}</span> : null}</p>
-            {r.message && <p className="mt-2 whitespace-pre-line text-soft">{r.message}</p>}
-            <form action={accept} className="mt-4">
-              <input type="hidden" name="id" value={r.id} />
-              <button className="cbtn">{t.accept}</button>
-              <p className="mt-2 text-xs text-soft">{t.acceptHint}</p>
-            </form>
+        {rows.length > 0 && (
+          <Card className="lg:col-span-full">
+            <ul className="divide-y divide-black/[0.06]">
+              {rows.map((r) => (
+                <li key={r.id} className="grid gap-x-8 gap-y-3 py-5 first:pt-0 last:pb-0 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] md:items-center">
+                  <div>
+                    <p className="font-display text-lg font-semibold">{r.partner_name}</p>
+                    <p className="text-sm text-soft">{r.mission_field ?? "-"}</p>
+                    <p className="mt-1 text-xs text-clay">{m.contribution[r.contribution_type]} · {fmtDate(r.created_at, locale)}</p>
+                  </div>
+                  <p className="whitespace-pre-line leading-relaxed text-ink/80">{r.message}</p>
+                  <form action={accept} className="md:text-right">
+                    <input type="hidden" name="id" value={r.id} />
+                    <button className="cbtn cbtn-sm">{t.accept}</button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-xs text-soft">{t.acceptHint}</p>
           </Card>
-        ))}
+        )}
       </div>
     );
   }
@@ -77,17 +86,21 @@ export default async function Matching() {
           <button className="cbtn w-full">{t.send}</button>
         </form>
       </Card>
-      <h2 className="pt-2 text-xs font-medium uppercase tracking-[0.2em] text-soft">{t.mine}</h2>
-      {(data ?? []).length === 0 && <p className="text-soft">{t.empty}</p>}
-      {(data ?? []).map((r) => (
-        <Card key={r.id}>
-          <p className="flex justify-between text-xs text-clay"><span>{m.contribution[r.contribution_type as keyof typeof m.contribution]} · {fmtDate(r.created_at, locale)}</span><span>{t.status[r.status as keyof typeof t.status]}</span></p>
-          {r.message && <p className="mt-2 whitespace-pre-line text-soft">{r.message}</p>}
-          {r.status === "pending" && (
-            <form action={cancelRequest} className="mt-3"><input type="hidden" name="id" value={r.id} /><button className="text-sm text-soft underline">{t.cancel}</button></form>
-          )}
-        </Card>
-      ))}
+      <Card title={t.mine} className="lg:col-span-1">
+        {(data ?? []).length === 0 ? <p className="text-soft">{t.empty}</p> : (
+          <ul className="divide-y divide-black/[0.06]">
+            {(data ?? []).map((r) => (
+              <li key={r.id} className="py-4 first:pt-0 last:pb-0">
+                <p className="flex justify-between gap-3 text-xs text-clay"><span>{m.contribution[r.contribution_type as keyof typeof m.contribution]} · {fmtDate(r.created_at, locale)}</span><span className="rounded-full bg-tint px-2.5 py-0.5 font-semibold text-accent">{t.status[r.status as keyof typeof t.status]}</span></p>
+                {r.message && <p className="mt-1.5 whitespace-pre-line text-ink/80">{r.message}</p>}
+                {r.status === "pending" && (
+                  <form action={cancelRequest} className="mt-2"><input type="hidden" name="id" value={r.id} /><button className="text-sm text-soft underline">{t.cancel}</button></form>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }
