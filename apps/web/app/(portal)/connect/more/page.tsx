@@ -25,7 +25,7 @@ export default async function More() {
   links.push({ href: "/connect/profile", ...it.profile });
   return (
     <div className="space-y-4">
-      <PageTitle>{m.title}</PageTitle>
+      <PageTitle eyebrow="More">{m.title}</PageTitle>
       <ul className="divide-y divide-black/[0.06]">
         {links.map((l) => (
           <li key={l.href}>

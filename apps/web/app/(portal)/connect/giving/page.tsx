@@ -30,13 +30,13 @@ export default async function Giving() {
 
   return (
     <div className="space-y-4">
-      <PageTitle sub={o.first_gift ? g.since.replace("{d}", fmtDate(o.first_gift, locale)) : g.sub}>{g.title}</PageTitle>
+      <PageTitle eyebrow="Giving" sub={o.first_gift ? g.since.replace("{d}", fmtDate(o.first_gift, locale)) : g.sub}>{g.title}</PageTitle>
       <div className="grid grid-cols-2 gap-4 lg:col-span-full lg:grid-cols-4">
         {stats.map(([label, value]) => (
           <div key={label} className="cbezel c-rise">
             <div className="cbezel-in flex min-h-32 flex-col justify-between p-5">
               <p className="text-[13px] text-soft">{label}</p>
-              <p className="font-display text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
+              <p className="serif text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
             </div>
           </div>
         ))}

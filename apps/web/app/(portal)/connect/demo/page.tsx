@@ -31,7 +31,7 @@ export default async function DemoPage({ searchParams }: { searchParams: Promise
   const { error } = await searchParams;
   return (
     <div className="mx-auto max-w-3xl space-y-4 pt-4 md:pt-12">
-      <PageTitle sub={d.sub}>{d.title}</PageTitle>
+      <PageTitle eyebrow="Experience" sub={d.sub}>{d.title}</PageTitle>
       <Card title={d.what.title}>
         <p className="leading-relaxed">{d.what.body}</p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-3">

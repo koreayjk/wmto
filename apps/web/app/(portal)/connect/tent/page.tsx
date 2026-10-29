@@ -142,13 +142,13 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
           ))}
         </nav>
       )}
-      {me.role === "partner" && <p className="col-span-full max-w-3xl rounded-2xl bg-tint px-5 py-4 text-sm leading-relaxed text-ink/80">{t.partnerNote}</p>}
+      {me.role === "partner" && <p className="col-span-full max-w-3xl border-l-2 border-[#b8975a]/60 py-1 pl-5 text-sm leading-relaxed text-ink/75">{t.partnerNote}</p>}
 
       <div className="col-span-full grid grid-cols-2 gap-3 sm:grid-cols-5">
         {stats.map(([k, v]) => (
           <div key={k} className="cbezel c-rise"><div className="cbezel-in p-5">
             <p className="text-[13px] text-soft">{k}</p>
-            <p className="font-display text-[2.2rem] font-light leading-none tabular-nums">{v}</p>
+            <p className="serif text-[2.2rem] font-light leading-none tabular-nums">{v}</p>
           </div></div>
         ))}
       </div>

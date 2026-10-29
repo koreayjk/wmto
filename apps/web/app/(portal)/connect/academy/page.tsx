@@ -17,7 +17,7 @@ export default async function Academy() {
   });
   return (
     <div className="space-y-4">
-      <PageTitle>{t.title}</PageTitle>
+      <PageTitle eyebrow="Academy">{t.title}</PageTitle>
       {groups.size === 0 && <p className="text-soft">{t.empty}</p>}
       {[...groups].map(([cat, vids]) => (
         <Card key={cat} title={cat}>

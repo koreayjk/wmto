@@ -46,7 +46,7 @@ export default async function Matching() {
     const rows = (data ?? []) as { id: string; partner_name: string; mission_field: string | null; contribution_type: keyof typeof m.contribution; message: string | null; created_at: string }[];
     return (
       <div className="space-y-4">
-        <PageTitle>{t.incomingTitle}</PageTitle>
+        <PageTitle eyebrow="Matching">{t.incomingTitle}</PageTitle>
         {rows.length === 0 && <p className="text-soft">{t.incomingEmpty}</p>}
         {rows.length > 0 && (
           <Card className="lg:col-span-full">
@@ -76,7 +76,7 @@ export default async function Matching() {
   const { data } = await supabase.from("matching_requests").select("id,contribution_type,message,status,created_at").order("created_at", { ascending: false }).limit(50);
   return (
     <div className="space-y-4">
-      <PageTitle>{t.title}</PageTitle>
+      <PageTitle eyebrow="Matching">{t.title}</PageTitle>
       <Card title={t.new}>
         <form action={createRequest} className="space-y-4">
           <select name="contribution_type" className="field" aria-label={t.new}>

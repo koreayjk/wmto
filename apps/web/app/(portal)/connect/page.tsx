@@ -266,15 +266,15 @@ export default async function ConnectHome() {
 
   return (
     <div className="space-y-4">
-      <PageTitle>{me.name}{m.greeting}</PageTitle>
+      <PageTitle eyebrow="Home">{me.name}{m.greeting}</PageTitle>
       {demo && <DemoPersona me={me} db={supabase} locale={locale} />}
       {demo && me.role && (
         <Card title={m.demo.tourTitle}>
-          <ol className="grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+          <ol className="grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
             {m.demo.tour[me.role].map((s, i) => (
               <li key={s.href}>
-                <Link href={s.href} className="alist flex gap-3 rounded-2xl p-3">
-                  <span className="font-display text-lg text-accent tabular-nums">{i + 1}</span>
+                <Link href={s.href} className="flex gap-4 border-t border-black/[0.07] py-4 transition-colors duration-500 hover:bg-black/[0.02]">
+                  <span className="serif gilt text-xl font-light tabular-nums">{i + 1}</span>
                   <span><b className="block font-display">{s.name}</b><span className="text-sm text-soft">{s.text}</span></span>
                 </Link>
               </li>
@@ -303,7 +303,7 @@ export default async function ConnectHome() {
               <Link key={c} href={statHref[c]} className="cbezel c-rise block">
                 <div className="cbezel-in flex h-full min-h-32 flex-col justify-between p-5">
                   <p className="text-[13px] text-soft">{g.labels[c]}</p>
-                  <p className="font-display text-[2.6rem] font-light leading-none tabular-nums">{thisMonth.counts[c]}</p>
+                  <p className="serif text-[2.6rem] font-light leading-none tabular-nums">{thisMonth.counts[c]}</p>
                 </div>
               </Link>
             ))}
@@ -317,7 +317,7 @@ export default async function ConnectHome() {
             <div key={label} className="cbezel c-rise">
               <div className="cbezel-in flex min-h-32 flex-col justify-between p-5">
                 <p className="text-[13px] text-soft">{label}</p>
-                <p className="font-display text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
+                <p className="serif text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
               </div>
             </div>
           ))}

@@ -76,7 +76,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
 
   return (
     <div className="space-y-4">
-      <PageTitle>{t.title}</PageTitle>
+      <PageTitle eyebrow="Profile">{t.title}</PageTitle>
       {saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
       <Card>
         <AvatarUploader action={uploadAvatar} hasPhoto={!!me.photo_url} name={t.photo.title} labels={t.photo}

@@ -6,16 +6,17 @@ export function Card({ title, children, className = "", tone }: { title?: string
   return (
     <section className={`cbezel c-rise ${className}`}>
       <div className={`cbezel-in p-6 md:p-7 ${dark ? "dark" : ""}`}>
-        {title && <h2 className={`mb-4 text-[12px] font-medium tracking-[0.14em] ${dark ? "text-white/60" : "text-soft"}`}>{title}</h2>}
+        {title && <h2 className={`mb-5 text-[11px] font-medium uppercase tracking-[0.24em] ${dark ? "text-white/60" : "gilt"}`}>{title}</h2>}
         {children}
       </div>
     </section>
   );
 }
 
-export function PageTitle({ children, sub }: { children: ReactNode; sub?: string }) {
+export function PageTitle({ children, sub, eyebrow }: { children: ReactNode; sub?: string; eyebrow?: string }) {
   return (
-    <header className="mb-8 mt-2">
+    <header className="mb-10 mt-2">
+      {eyebrow && <p className="gilt mb-3 text-[11px] font-medium uppercase tracking-[0.3em]">{eyebrow}</p>}
       <h1 className="display text-[2rem] leading-[1.15] md:text-[2.4rem]">{children}</h1>
       {sub && <p className="mt-3 text-soft">{sub}</p>}
     </header>
@@ -51,4 +52,4 @@ export function StageBar({
   );
 }
 
-export const labelCls = "mb-1.5 block text-sm font-medium";
+export const labelCls = "mb-2 block text-[12px] font-medium tracking-[0.06em] text-ink/60";

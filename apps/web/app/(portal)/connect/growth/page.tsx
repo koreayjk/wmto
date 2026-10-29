@@ -37,7 +37,7 @@ export default async function Growth() {
 
   return (
     <div className="space-y-4">
-      <PageTitle>{g.title}</PageTitle>
+      <PageTitle eyebrow="Growth">{g.title}</PageTitle>
       <Card title={m.stageTitle}>
         <StageBar stages={stages} current={me.stage} names={names} desc={m.stageDesc} />
         {sugg.data && (

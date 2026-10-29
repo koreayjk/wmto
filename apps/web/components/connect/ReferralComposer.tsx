@@ -45,7 +45,7 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
       <div>
-        <h3 className="mb-3 text-sm font-medium">{t.find}</h3>
+        <h3 className="gilt mb-4 text-[11px] font-medium uppercase tracking-[0.24em]">{t.find}</h3>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex gap-1 rounded-full bg-tint p-1 text-sm" role="group">
             {(["industry", "region"] as const).map((g) => (

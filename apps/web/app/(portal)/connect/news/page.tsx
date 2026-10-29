@@ -17,7 +17,7 @@ export default async function News() {
 
   return (
     <div className="space-y-4">
-      <PageTitle sub={n.sub}>{n.title}</PageTitle>
+      <PageTitle eyebrow="News" sub={n.sub}>{n.title}</PageTitle>
       {rows.length === 0 && <p className="text-soft">{n.empty}</p>}
       {rows.length > 0 && (
         <Card className="lg:col-span-full">

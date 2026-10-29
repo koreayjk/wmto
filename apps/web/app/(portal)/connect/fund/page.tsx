@@ -27,13 +27,13 @@ export default async function Fund() {
 
   return (
     <div className="space-y-4">
-      <PageTitle sub={f.sub}>{f.title}</PageTitle>
+      <PageTitle eyebrow="Fund" sub={f.sub}>{f.title}</PageTitle>
       {lent === 0 ? (
         <p className="text-soft">{f.empty}</p>
       ) : (
         <>
           <Card title={f.ratio} tone="dark" className="lg:col-span-full">
-            <p className="font-display text-[3.2rem] font-light leading-none tabular-nums">{ratio}<span className="text-2xl">%</span></p>
+            <p className="serif text-[3.2rem] font-light leading-none tabular-nums">{ratio}<span className="text-2xl">%</span></p>
             <div className="mt-6 h-2 rounded-full bg-white/15" role="img" aria-label={`${f.ratio} ${ratio}%`}>
               <div className="h-full rounded-full bg-white" style={{ width: `${ratio}%` }} />
             </div>
@@ -44,7 +44,7 @@ export default async function Fund() {
               <div key={label} className="cbezel c-rise">
                 <div className="cbezel-in flex min-h-28 flex-col justify-between p-5">
                   <p className="text-[13px] text-soft">{label}</p>
-                  <p className="font-display text-[1.4rem] font-light leading-tight tabular-nums">{value}</p>
+                  <p className="serif text-[1.4rem] font-light leading-tight tabular-nums">{value}</p>
                 </div>
               </div>
             ))}

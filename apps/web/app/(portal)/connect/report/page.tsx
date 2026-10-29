@@ -103,7 +103,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
     const photoOf = new Map((people ?? []).map((p) => [p.id, p.photo_url as string | null]));
     return (
       <div className="space-y-4">
-        <PageTitle>{t.menteeReports}</PageTitle>
+        <PageTitle eyebrow="Report">{t.menteeReports}</PageTitle>
         {reports.length === 0 && <p className="text-soft">{t.empty}</p>}
         {reports.length > 0 && <Card className="lg:col-span-full"><ReportRows rows={reports} locale={locale} nameOf={nameOf} photoOf={photoOf} /></Card>}
       </div>
@@ -117,7 +117,7 @@ export default async function ReportPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="space-y-4">
-      <PageTitle>{t.title}</PageTitle>
+      <PageTitle eyebrow="Report">{t.title}</PageTitle>
       {sp.saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
       <nav aria-label={t.month} className="flex gap-2 text-sm">
         {[cur, prev].map((v) => (

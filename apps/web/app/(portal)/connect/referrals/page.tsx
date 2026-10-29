@@ -58,7 +58,7 @@ export default async function Referrals() {
 
   return (
     <div className="space-y-4">
-      <PageTitle>{t.title}</PageTitle>
+      <PageTitle eyebrow="Referrals">{t.title}</PageTitle>
       <Card title={t.new} className="lg:col-span-full">
         {mentors.length === 0 ? (
           <p className="text-soft">{t.noMentors}</p>
