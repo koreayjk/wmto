@@ -110,7 +110,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         </form>
       </Card>
       <Card>
-        <form action={setLanguage} className="flex items-center justify-between gap-4">
+        <form action={setLanguage} data-demo-allow className="flex items-center justify-between gap-4">
           <span className="text-sm font-medium">{t.language}</span>
           <span className="flex gap-2">
             {([["ko", "한국어"], ["en", "English"]] as const).map(([v, label]) => (
@@ -123,7 +123,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         </form>
       </Card>
       <p className="px-1 text-sm text-soft">{t.install}</p>
-      <form action={logout}><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
+      <form action={logout} data-demo-allow><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
     </div>
   );
 }

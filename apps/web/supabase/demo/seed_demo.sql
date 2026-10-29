@@ -47,6 +47,7 @@ declare
   mt contribution_type;
   ev_id uuid;
   mid uuid;
+  sc_mentor uuid; sc_partner uuid; sc_sponsor uuid;
 begin
   if exists (select 1 from members where email like '%@demo.wmto.invalid') then
     raise exception '데모 데이터가 이미 있습니다. 먼저 clear_demo.sql 을 실행하세요.';
@@ -207,6 +208,11 @@ begin
     values ('offline', '[데모] 오프라인 모임 (' || (array['서울','부산','대전'])[k] || ')', (current_date - k * 30 - 5)::timestamptz + interval '10 hours', (current_date - k * 30 - 5)::timestamptz + interval '13 hours',
             (array['서울 강남 모임 장소','부산 해운대 모임 장소','대전 유성 모임 장소'])[k]);
   end loop;
+  for k in 1..3 loop
+    insert into events (type, title, start_at, end_at, location)
+    values ('offline', '[데모] 오프라인 모임 (' || (array['인천','광주','대구'])[k] || ')', (current_date - (110 + k * 22))::timestamptz + interval '10 hours', (current_date - (110 + k * 22))::timestamptz + interval '13 hours',
+            (array['인천 모임 장소','광주 모임 장소','대구 모임 장소'])[k]);
+  end loop;
   for k in 0..4 loop
     insert into events (type, title, start_at, end_at, location, meeting_provider, meeting_url)
     values ('online', '[데모] 격주 온라인 모임 #' || (9 + k), (current_date + (k * 14 + 3))::timestamptz + interval '11 hours', (current_date + (k * 14 + 3))::timestamptz + interval '12 hours',
@@ -279,6 +285,96 @@ begin
     ('[데모] 좋은 멘토가 되는 법', '질문하고 듣고 끝까지 동행하는 멘토링 안내', 'https://example.com/demo-video-6', 'other', '멘토 교육', '{mentor}', now() - interval '18 days'),
     ('[데모] 선교지 사례 나눔: 제빵 교실', '현장 선교사가 직접 들려주는 1년의 이야기', 'https://example.com/demo-video-7', 'other', '선교 사례', '{mentor,partner,sponsor}', now() - interval '9 days'),
     ('[데모] 후원은 어떻게 열매가 되는가', '순환 기금이 다음 사람에게 흘러가는 과정', 'https://example.com/demo-video-8', 'other', '선교 사례', '{sponsor,mentor}', now() - interval '3 days');
+
+
+  -- ───────── 체험 모드의 주인공 3명 (모든 기능이 가득 채워진 대표 회원) ─────────
+  insert into members (role, name, email, phone, country, chapter, chapter_id, status, created_at)
+  values ('mentor', '김은혜', 'demo.showcase.mentor@demo.wmto.invalid', '010-1000-0001', '대한민국', (select name from chapters where id = ch[1]), ch[1], 'active', now() - interval '240 days')
+  returning id into sc_mentor;
+  insert into mentor_profiles (member_id, business_name, industry, contribution_types, stage)
+  values (sc_mentor, '온유 카페', '카페', '{skill,coach}', 'harvester');
+  insert into members (role, name, email, phone, country, chapter, chapter_id, status, created_at)
+  values ('partner', '이소망', 'demo.showcase.partner@demo.wmto.invalid', '+855-10-000-001', '캄보디아', (select name from chapters where id = ch[3]), ch[3], 'active', now() - interval '200 days')
+  returning id into sc_partner;
+  insert into partner_profiles (member_id, mission_field, sending_org, business_idea, stage)
+  values (sc_partner, '캄보디아 프놈펜', 'IM선교회', '작은 커피 로스팅 카페와 현지 청년 바리스타 교육', 'growing');
+  insert into members (role, name, email, country, status, created_at)
+  values ('sponsor', '최은성', 'demo.showcase.sponsor@demo.wmto.invalid', '미국', 'active', now() - interval '180 days')
+  returning id into sc_sponsor;
+  insert into sponsor_profiles (member_id, sponsor_type) values (sc_sponsor, 'individual');
+
+  insert into stage_history (member_id, role, from_stage, to_stage, note, created_at) values
+    (sc_mentor, 'mentor', 'seed', 'sower', '운영위원회 승인', now() - interval '200 days'),
+    (sc_mentor, 'mentor', 'sower', 'harvester', '운영위원회 승인', now() - interval '45 days'),
+    (sc_partner, 'partner', 'ready', 'launch', '운영위원회 승인', now() - interval '150 days'),
+    (sc_partner, 'partner', 'launch', 'growing', '운영위원회 승인', now() - interval '25 days');
+
+  -- 매칭: 대표 사업가는 선교사 4명과, 대표 선교사는 멘토 2명과 동행
+  insert into matchings (mentor_id, partner_id, contribution_type, started_at) values
+    (sc_mentor, sc_partner, 'skill', current_date - 150),
+    (sc_mentor, partner_ids[8], 'coach', current_date - 120),
+    (sc_mentor, partner_ids[10], 'skill', current_date - 95),
+    (sc_mentor, partner_ids[15], 'coach', current_date - 70),
+    (mentor_ids[40], sc_partner, (select contribution_types[1] from mentor_profiles where member_id = mentor_ids[40]), current_date - 100);
+  insert into matching_requests (partner_id, mentor_id, contribution_type, message, status, created_at, responded_at)
+  values (sc_partner, sc_mentor, 'skill', '로스팅 기술을 가르쳐 주실 분을 찾고 있습니다.', 'accepted', now() - interval '153 days', now() - interval '150 days');
+  insert into matching_requests (partner_id, contribution_type, message, status, created_at)
+  values (sc_partner, 'channel', '[데모] 로스팅한 원두를 한국에서 판매할 거래처를 찾고 있습니다.', 'pending', now() - interval '2 days');
+
+  -- 멘토링 기록: 6개월에 걸쳐 8건씩
+  for r in select id, mentor_id from matchings where mentor_id = sc_mentor or partner_id = sc_partner loop
+    for k in 1..8 loop
+      insert into mentoring_logs (matching_id, held_at, duration_min, content, created_by, next_steps, prayer_topics)
+      values (r.id, now() - ((k - 1) * 21 + 3 + random() * 6) * interval '1 day', (array[45,60,60,90,60])[1 + (k % 5)],
+              log_content[1 + ((k + 2) % 10)], r.mentor_id, log_next[1 + (k % 8)], case when k % 3 <> 0 then log_pray[1 + (k % 7)] end);
+    end loop;
+  end loop;
+
+  -- 대표 선교사의 자립 리포트 6개월 (매출과 자립도가 오르는 모습)
+  for k in 0..5 loop
+    insert into self_reports (partner_id, month, revenue_amount, currency, self_reliance, difficulties, prayer_topics)
+    values (sc_partner, date_trunc('month', now() - k * interval '1 month')::date, round((2400000 - k * 330000)::numeric, -3), 'KRW',
+            (array[4,4,3,3,2,2])[k + 1], difficulties[1 + (k % 6)], log_pray[1 + (k % 7)]);
+  end loop;
+
+  -- 감사 편지: 대표 선교사 → 대표 사업가 5통, 다른 선교사들 → 대표 사업가 3통 (일부는 안 읽음)
+  for k in 1..5 loop
+    insert into thanks_letters (sender_id, recipient_id, body, read_at, created_at)
+    values (sc_partner, sc_mentor, thanks_body[1 + (k % 6)], case when k <= 2 then null else now() - k * interval '3 days' end, now() - (array[3, 12, 40, 75, 120])[k] * interval '1 day');
+  end loop;
+  for k in 1..3 loop
+    insert into thanks_letters (sender_id, recipient_id, body, read_at, created_at)
+    values (partner_ids[(array[8, 10, 15])[k]], sc_mentor, thanks_body[1 + ((k + 2) % 6)], case when k = 1 then null else now() - interval '5 days' end, now() - (k * 9) * interval '1 day');
+  end loop;
+
+  -- 리퍼럴: 대표 사업가가 6건 받고 5건 보냄
+  for k in 1..6 loop
+    insert into referrals (giver_id, receiver_id, client_name, client_contact, note, status, created_at)
+    values (mentor_ids[(array[3, 9, 14, 20, 26, 33])[k]], sc_mentor, clients[1 + (k % 10)], '010-' || lpad((4100 + k * 13)::text, 4, '0') || '-' || lpad((6100 + k * 31)::text, 4, '0'),
+            '꼭 한번 만나 보시길 권합니다.', (array['sent','sent','contacted','contacted','closed','closed'])[k]::referral_status, now() - (k * 26) * interval '1 day');
+  end loop;
+  for k in 1..5 loop
+    insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
+    values (sc_mentor, mentor_ids[(array[5, 11, 17, 23, 30])[k]], clients[1 + ((k + 4) % 10)], '도움이 필요하다고 하셔서 소개합니다.', (array['sent','contacted','closed','closed','sent'])[k]::referral_status, now() - (k * 31) * interval '1 day');
+  end loop;
+
+  -- 출석: 대표 3명은 지난 모임의 대부분에 참석
+  insert into attendance (event_id, member_id, attended_at)
+  select e.id, m.id, e.start_at + interval '2 minutes'
+  from events e join members m on m.email in ('demo.showcase.mentor@demo.wmto.invalid','demo.showcase.partner@demo.wmto.invalid','demo.showcase.sponsor@demo.wmto.invalid')
+  where e.title like '[데모]%' and e.start_at < now() and random() < 0.85
+  on conflict do nothing;
+
+  -- 대표 후원자: 정기 후원 6개월, 선교사 1:1 후원 3명, 캠프 장학금, 순환 기금
+  for k in 0..5 loop
+    insert into donations (sponsor_id, kind, amount, donated_at) values (sc_sponsor, 'monthly', 50000, current_date - (k * 30 + 2));
+  end loop;
+  insert into donations (sponsor_id, kind, partner_id, amount, donated_at) values
+    (sc_sponsor, 'one_to_one', sc_partner, 2000000, current_date - 60),
+    (sc_sponsor, 'one_to_one', partner_ids[12], 1800000, current_date - 40),
+    (sc_sponsor, 'one_to_one', partner_ids[15], 1500000, current_date - 25);
+  insert into donations (sponsor_id, kind, amount, donated_at) values
+    (sc_sponsor, 'camp', 500000, current_date - 30), (sc_sponsor, 'fund', 1000000, current_date - 80);
 
   -- ───────── 실제로 로그인할 수 있는 회원의 화면도 채우기 ─────────
   for r in select m.id, m.role from members m

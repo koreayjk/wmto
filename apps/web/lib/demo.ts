@@ -11,6 +11,9 @@ type Admin = ReturnType<typeof createSupabaseAdminClient>;
 /** 모드마다 활동이 가장 풍부한 데모 회원을 고릅니다(매칭 수, 후원 수 기준). */
 export async function pickDemoMember(mode: DemoMode): Promise<string | null> {
   const db = createSupabaseAdminClient();
+  // 시연용으로 일부러 채워 둔 대표 회원이 있으면 그 사람을 먼저 보여 줍니다.
+  const { data: showcase } = await db.from("members").select("id").eq("email", `demo.showcase.${mode}${DEMO_DOMAIN}`).eq("status", "active").maybeSingle();
+  if (showcase?.id) return showcase.id as string;
   const { data: people } = await db.from("members").select("id").eq("role", mode).eq("status", "active").like("email", `%${DEMO_DOMAIN}`).limit(300);
   const ids = (people ?? []).map((p) => p.id as string);
   if (!ids.length) return null;

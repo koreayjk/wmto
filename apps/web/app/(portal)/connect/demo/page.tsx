@@ -30,8 +30,29 @@ export default async function DemoPage({ searchParams }: { searchParams: Promise
   const d = getMessages(locale).connect.demo;
   const { error } = await searchParams;
   return (
-    <div className="mx-auto max-w-xl pt-4 md:pt-12">
+    <div className="mx-auto max-w-3xl space-y-4 pt-4 md:pt-12">
       <PageTitle sub={d.sub}>{d.title}</PageTitle>
+      <Card title={d.what.title}>
+        <p className="leading-relaxed">{d.what.body}</p>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+          {d.roles.map((r) => (
+            <li key={r.name} className="rounded-2xl bg-tint p-4">
+              <b className="block font-display">{r.name}</b>
+              <span className="mt-1 block text-sm leading-relaxed text-soft">{r.text}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+      <Card title={d.tourTitle}>
+        <ol className="space-y-4">
+          {d.flow.map((f, i) => (
+            <li key={f.name} className="flex gap-4">
+              <span className="font-display text-xl text-accent tabular-nums">{i + 1}</span>
+              <span><b className="block font-display">{f.name}</b><span className="text-sm leading-relaxed text-soft">{f.text}</span></span>
+            </li>
+          ))}
+        </ol>
+      </Card>
       <Card className="lg:!col-span-1">
         <ul className="space-y-3 leading-relaxed">
           {d.points.map((p) => (

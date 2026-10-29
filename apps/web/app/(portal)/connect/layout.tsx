@@ -11,6 +11,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { demoModes, pickDemoMember, type DemoMode } from "@/lib/demo";
 import { Sidebar, type SideGroup } from "@/components/connect/Sidebar";
 import { ContentFrame } from "@/components/connect/ContentFrame";
+import { DemoHint } from "@/components/connect/DemoHint";
+import { DemoGuard } from "@/components/connect/DemoGuard";
 
 export const metadata: Metadata = {
   title: "WMTO Connect",
@@ -151,7 +153,9 @@ export default async function ConnectLayout({ children }: { children: React.Reac
           </div>
         </header>
         <main className={`px-5 pt-2 lg:px-10 xl:px-14 lg:pt-4 ${active ? "pb-32 lg:pb-20" : "pb-12"}`}>
+          {r?.demo && active?.role && <DemoHint hints={m.demo.hints[active.role]} />}
           <ContentFrame>{children}</ContentFrame>
+          {r?.demo && <DemoGuard message={m.demo.saveToast} />}
         </main>
       </div>
       {active && <BottomNav items={items} />}

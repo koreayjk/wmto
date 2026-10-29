@@ -15,7 +15,7 @@ type Ev = { id: string; title: string; start_at: string; meeting_url: string | n
 
 export default async function ConnectHome() {
   const locale = await getPortalLocale();
-  const { me, supabase } = await requireMe();
+  const { me, supabase, demo } = await requireMe();
   const m = getMessages(locale).connect;
 
   const { data: ev } = await supabase
@@ -266,6 +266,20 @@ export default async function ConnectHome() {
   return (
     <div className="space-y-4">
       <PageTitle>{me.name}{m.greeting}</PageTitle>
+      {demo && me.role && (
+        <Card title={m.demo.tourTitle}>
+          <ol className="grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+            {m.demo.tour[me.role].map((s, i) => (
+              <li key={s.href}>
+                <Link href={s.href} className="alist flex gap-3 rounded-2xl p-3">
+                  <span className="font-display text-lg text-accent tabular-nums">{i + 1}</span>
+                  <span><b className="block font-display">{s.name}</b><span className="text-sm text-soft">{s.text}</span></span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      )}
       <Card title={t.title} tone="dark">
         <p className="display max-w-xl text-[1.5rem] leading-snug md:text-[1.9rem]">{today.text}</p>
         {today.href && (
