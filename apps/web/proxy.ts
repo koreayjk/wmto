@@ -34,7 +34,8 @@ export async function proxy(request: NextRequest) {
         },
       },
     });
-    await supabase.auth.getUser();
+    // 만료된 세션은 갱신하고, 유효한 세션은 서명만 확인합니다(인증 서버 왕복 없음).
+    await supabase.auth.getClaims();
     return response;
   }
 

@@ -23,13 +23,15 @@ export type Me = {
 export const getMe = cache(async () => {
   if (!isSupabaseConfigured()) return null;
   const supabase = await createSupabaseServerClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return null;
+  // 로그인 확인은 서명(JWT)을 서버에서 바로 검증합니다(getClaims). 매번 인증 서버를 부르던 왕복을 줄입니다.
+  const { data: cl } = await supabase.auth.getClaims();
+  const uid = cl?.claims?.sub;
+  if (!uid) return null;
 
   // 관리자의 "회원 화면 보기": 그 회원 시점으로, 읽기 전용으로 보여 줍니다(관리자에게만 효력).
   const viewId = await getViewAsId();
   if (viewId) {
-    const { data: adm } = await supabase.from("admins").select("user_id").eq("user_id", auth.user.id).maybeSingle();
+    const { data: adm } = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
     if (adm) {
       const { data: vm } = await supabase.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("id", viewId).maybeSingle();
       if (vm) {
@@ -45,8 +47,8 @@ export const getMe = cache(async () => {
   }
 
   const [{ data: m }, { data: dv }] = await Promise.all([
-    supabase.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("auth_user_id", auth.user.id).maybeSingle(),
-    supabase.from("demo_viewers").select("user_id").eq("user_id", auth.user.id).maybeSingle(),
+    supabase.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("auth_user_id", uid).maybeSingle(),
+    supabase.from("demo_viewers").select("user_id").eq("user_id", uid).maybeSingle(),
   ]);
   if (!m) {
     // 공개 데모 계정: 가상 회원의 시점으로 읽기 전용 화면을 보여 줍니다(데이터베이스가 데모 회원만 허용).
