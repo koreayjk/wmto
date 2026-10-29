@@ -44,7 +44,7 @@ export default async function Fund() {
               <div key={label} className="cbezel c-rise">
                 <div className="cbezel-in flex min-h-28 flex-col justify-between p-5">
                   <p className="text-[13px] text-soft">{label}</p>
-                  <p className="serif text-[1.4rem] font-light leading-tight tabular-nums">{value}</p>
+                  <p style={{ whiteSpace: "nowrap" }} className="serif text-[1.15rem] font-light leading-tight tabular-nums sm:text-[1.4rem]">{value}</p>
                 </div>
               </div>
             ))}

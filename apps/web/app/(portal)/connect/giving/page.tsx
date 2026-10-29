@@ -36,7 +36,7 @@ export default async function Giving() {
           <div key={label} className="cbezel c-rise">
             <div className="cbezel-in flex min-h-32 flex-col justify-between p-5">
               <p className="text-[13px] text-soft">{label}</p>
-              <p className="serif text-[1.7rem] font-light leading-tight tabular-nums">{value}</p>
+              <p style={{ whiteSpace: "nowrap" }} className="serif text-[1.2rem] font-light leading-tight tabular-nums sm:text-[1.7rem]">{value}</p>
             </div>
           </div>
         ))}
