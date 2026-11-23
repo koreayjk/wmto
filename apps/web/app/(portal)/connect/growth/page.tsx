@@ -6,6 +6,7 @@ import { currentMonthKst, fmtDate } from "@/lib/format";
 import { activityScore, WEIGHTS, type ActivityCounts } from "@/lib/score";
 import { mentorStages, partnerStages } from "@/lib/stages";
 import { Card, PageTitle, StageBar } from "@/components/connect/ui";
+import { GrowthIndex, type GrowthData } from "@/components/connect/GrowthIndex";
 
 export default async function Growth() {
   const locale = await getPortalLocale();
@@ -17,7 +18,7 @@ export default async function Growth() {
   const count = (q: PromiseLike<{ count: number | null }>) => q.then((r) => r.count ?? 0);
   const head = { count: "exact", head: true } as const;
 
-  const [attendance, mentoring, reports, referrals, letters, matchings, hist, sugg] = await Promise.all([
+  const [attendance, mentoring, reports, referrals, letters, matchings, hist, sugg, growth] = await Promise.all([
     count(supabase.from("attendance").select("id", head).eq("member_id", me.id).gte("attended_at", monthStart)),
     me.role === "mentor"
       ? count(supabase.from("mentoring_logs").select("id", head).eq("created_by", me.id).gte("held_at", monthStart))
@@ -28,6 +29,7 @@ export default async function Growth() {
     count(supabase.from("matchings").select("id", head).eq("status", "active")),
     supabase.from("stage_history").select("id,from_stage,to_stage,created_at").eq("member_id", me.id).order("created_at", { ascending: false }).limit(20),
     supabase.from("promotion_suggestions").select("to_stage,reason").eq("member_id", me.id).maybeSingle(),
+    me.role === "mentor" ? supabase.rpc("my_growth") : Promise.resolve({ data: null }),
   ]);
 
   const counts: ActivityCounts = { attendance, mentoring, reports, referrals, letters, matchings };
@@ -38,6 +40,7 @@ export default async function Growth() {
   return (
     <div className="space-y-4">
       <PageTitle eyebrow="Growth">{g.title}</PageTitle>
+      {growth.data && <GrowthIndex data={growth.data as GrowthData} t={g.index} />}
       <Card title={m.stageTitle}>
         <StageBar stages={stages} current={me.stage} names={names} desc={m.stageDesc} />
         {sugg.data && (
@@ -47,6 +50,7 @@ export default async function Growth() {
           </p>
         )}
       </Card>
+      {!growth.data && (
       <Card title={g.thisMonth}>
         <ul className="divide-y divide-line">
           {keys.map((k) => (
@@ -62,6 +66,7 @@ export default async function Growth() {
         </p>
         <p className="mt-2 text-xs text-soft">{g.note}</p>
       </Card>
+      )}
       <Card title={g.history}>
         {(hist.data ?? []).length === 0 ? (
           <p className="text-soft">{g.noHistory}</p>

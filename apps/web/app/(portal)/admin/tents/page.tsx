@@ -28,12 +28,34 @@ async function assign(fd: FormData) {
   revalidatePath("/admin/tents");
 }
 
+async function addLeader(fd: FormData) {
+  "use server";
+  await requireAdmin();
+  const db = createSupabaseAdminClient();
+  const member = String(fd.get("member") ?? "");
+  const tent = String(fd.get("tent") ?? "");
+  const role = fd.get("role") === "deputy" ? "deputy" : "leader";
+  if (!member || !tent) return;
+  await db.from("chapter_leaders").upsert({ chapter_id: tent, member_id: member, role_key: role }, { onConflict: "chapter_id,member_id" });
+  revalidatePath("/admin/tents");
+}
+
+async function removeLeader(fd: FormData) {
+  "use server";
+  await requireAdmin();
+  const db = createSupabaseAdminClient();
+  await db.from("chapter_leaders").delete().eq("chapter_id", String(fd.get("tent"))).eq("member_id", String(fd.get("member")));
+  revalidatePath("/admin/tents");
+}
+
 export default async function AdminTents() {
   const { supabase } = await requireAdmin();
-  const [{ data: tents }, { data: people }] = await Promise.all([
+  const [{ data: tents }, { data: people }, { data: leaders }] = await Promise.all([
     supabase.from("chapters").select("id,name,region").order("name"),
     supabase.from("members").select("id,name,role,chapter_id").eq("status", "active").in("role", ["mentor", "sponsor", "partner"]).order("name").limit(500),
+    supabase.from("chapter_leaders").select("chapter_id,member_id,role_key"),
   ]);
+  const leaderRows = (leaders ?? []) as { chapter_id: string; member_id: string; role_key: string }[];
   const list = tents ?? [];
   const all = people ?? [];
   const roleName = { mentor: "사업가", partner: "선교사", sponsor: "후원자" } as const;
@@ -57,6 +79,14 @@ export default async function AdminTents() {
             <li key={t.id} className="py-4">
               <p className="font-display text-lg font-semibold">{t.name} <span className="text-sm font-normal text-soft">{t.region ?? ""} · 구성원 {own.length}명</span></p>
               <p className="mt-1 text-sm text-soft">{own.map((p) => p.name).join(", ") || "아직 없음"}</p>
+              {leaderRows.filter((l) => l.chapter_id === t.id).map((l) => (
+                <form key={l.member_id} action={removeLeader} className="mt-1 flex items-center gap-2 text-sm">
+                  <input type="hidden" name="tent" value={t.id} /><input type="hidden" name="member" value={l.member_id} />
+                  <span className="gilt text-[11px] font-semibold">{l.role_key === "deputy" ? "부텐트장" : "텐트장"}</span>
+                  <span>{all.find((p) => p.id === l.member_id)?.name ?? "-"}</span>
+                  <button className="text-soft underline">해제</button>
+                </form>
+              ))}
             </li>
           );
         })}
@@ -73,6 +103,20 @@ export default async function AdminTents() {
           {list.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
         </select>
         <button className="cbtn">배정</button>
+      </form>
+
+      <h2 className="mt-10 text-sm font-medium">텐트장·부텐트장 지정 (방문자 확인 권한)</h2>
+      <form action={addLeader} className="mt-3 flex flex-wrap gap-3">
+        <select name="tent" required className="field !w-64" defaultValue="">
+          <option value="" disabled>텐트 선택</option>
+          {list.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+        </select>
+        <select name="member" required className="field !w-64" defaultValue="">
+          <option value="" disabled>사업가 선택</option>
+          {all.filter((p) => p.role === "mentor").map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+        <select name="role" className="field !w-40" defaultValue="leader"><option value="leader">텐트장</option><option value="deputy">부텐트장</option></select>
+        <button className="cbtn">지정</button>
       </form>
     </>
   );
