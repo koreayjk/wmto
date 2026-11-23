@@ -3,6 +3,8 @@ import { createSupabaseAdminClient } from "@/lib/supabase/server";
 /** 공개 데모 계정 (supabase/migrations/0007_demo_viewer.sql). 비밀번호 없이 서버가 세션을 만들어 줍니다. */
 export const DEMO_EMAIL = process.env.DEMO_ACCOUNT_EMAIL || "wmto-demo@example.com";
 export const DEMO_DOMAIN = "@demo.wmto.invalid";
+/** 체험 모드 스위치. 환경변수 DEMO_ENABLED=false 로 끄면 체험 진입·세션이 모두 막힙니다(기본은 켜짐). */
+export const demoEnabled = () => process.env.DEMO_ENABLED !== "false";
 export const demoModes = ["mentor", "partner", "sponsor"] as const;
 export type DemoMode = (typeof demoModes)[number];
 

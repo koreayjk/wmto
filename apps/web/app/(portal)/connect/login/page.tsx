@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getMessages, localizeHref } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
+import { demoEnabled } from "@/lib/demo";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 async function sendLink(fd: FormData) {
@@ -41,7 +42,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         </form>
       )}
       </div></div>
-      <p className="mt-8 px-2 text-center text-sm"><Link href="/connect/demo" className="font-medium text-accent underline">{getMessages(locale).connect.demo.title}</Link></p>
+      {demoEnabled() && <p className="mt-8 px-2 text-center text-sm"><Link href="/connect/demo" className="font-medium text-accent underline">{getMessages(locale).connect.demo.title}</Link></p>}
       <p className="mt-8 px-2 text-center text-sm text-soft">
         {m.notMember}{" "}
         <Link href={localizeHref(locale, "/apply?type=observe")} className="underline">{m.apply}</Link>

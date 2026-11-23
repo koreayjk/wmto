@@ -681,7 +681,7 @@ export const ko = {
   },
 
   connect: {
-    appName: "WMTO Connect",
+    appName: "CBC Connect",
     nav: { home: "홈", events: "일정", mentoring: "멘토링", report: "리포트", more: "더보기", profile: "내 정보" },
     login: {
       title: "로그인",

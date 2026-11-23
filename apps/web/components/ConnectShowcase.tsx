@@ -6,7 +6,8 @@ type Screen = { key: string; label: string; title: string; text: string };
 type Role = { name: string; text: string };
 
 /** 홈페이지의 WMTO Connect 소개: 화면을 탭으로 바꿔 보여 주고, 체험·로그인으로 이어 줍니다. */
-export function ConnectShowcase({ eyebrow, title, body, screens, roles, demo, login, note, frameAlt }: {
+export function ConnectShowcase({ eyebrow, title, body, screens, roles, demo, login, note, frameAlt, showDemo = true }: {
+  showDemo?: boolean;
   eyebrow: string; title: string; body: string; screens: readonly Screen[]; roles: readonly Role[];
   demo: string; login: string; note: string; frameAlt: string;
 }) {
@@ -42,7 +43,7 @@ export function ConnectShowcase({ eyebrow, title, body, screens, roles, demo, lo
               ))}
             </ul>
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <a href="/connect/demo" className="inline-flex items-center rounded-full bg-accent px-6 py-3 text-[15px] font-semibold text-white transition duration-500 hover:bg-[var(--accent-hover)] active:scale-[0.98]">{demo}</a>
+              {showDemo && <a href="/connect/demo" className="inline-flex items-center rounded-full bg-accent px-6 py-3 text-[15px] font-semibold text-white transition duration-500 hover:bg-[var(--accent-hover)] active:scale-[0.98]">{demo}</a>}
               <a href="/connect/login" className="inline-flex items-center rounded-full px-6 py-3 text-[15px] font-semibold text-ink ring-1 ring-inset ring-ink/15 transition duration-500 hover:bg-black/[0.04] active:scale-[0.98]">{login}</a>
             </div>
             <p className="mt-4 text-xs text-soft">{note}</p>

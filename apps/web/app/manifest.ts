@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { BRAND } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "WMTO Connect",
-    short_name: "WMTO",
-    description: "WMTO 자립선교 비즈니스 네트워크 회원 앱",
+    name: `${BRAND} Connect`,
+    short_name: BRAND,
+    description: "크리스천 사업가 네트워크 회원 앱 (선교 사역 WMTO 포함)",
     lang: "ko",
     start_url: "/connect",
     scope: "/",

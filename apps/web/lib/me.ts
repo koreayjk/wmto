@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { Role } from "@/lib/codes";
 import { getViewAsId } from "@/lib/viewas";
-import { pickDemoMember } from "@/lib/demo";
+import { demoEnabled, pickDemoMember } from "@/lib/demo";
 
 export type Me = {
   id: string;
@@ -53,7 +53,7 @@ export const getMe = cache(async () => {
   ]);
   if (!m) {
     // 공개 데모 계정: 가상 회원의 시점으로 읽기 전용 화면을 보여 줍니다(데이터베이스가 데모 회원만 허용).
-    if (!dv) return null;
+    if (!dv || !demoEnabled()) return null;
     const candidates = [viewId, await pickDemoMember("mentor")].filter(Boolean) as string[];
     for (const id of candidates) {
       const vc = await createSupabaseServerClient({ viewAs: id });

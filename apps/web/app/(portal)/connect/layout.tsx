@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { VIEW_AS_COOKIE } from "@/lib/viewas";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { demoModes, pickDemoMember, type DemoMode } from "@/lib/demo";
+import { BRAND } from "@/lib/brand";
 import { Sidebar, type SideGroup } from "@/components/connect/Sidebar";
 import { ContentFrame } from "@/components/connect/ContentFrame";
 import { DemoHint } from "@/components/connect/DemoHint";
@@ -16,10 +17,10 @@ import { Avatar } from "@/components/connect/Avatar";
 import { DemoGuard } from "@/components/connect/DemoGuard";
 
 export const metadata: Metadata = {
-  title: "WMTO Connect",
+  title: `${BRAND} Connect`,
   manifest: "/manifest.webmanifest",
   robots: { index: false, follow: false },
-  appleWebApp: { capable: true, title: "WMTO", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: BRAND, statusBarStyle: "black-translucent" },
   icons: { apple: "/icons/apple-touch-icon.png" },
 };
 export const viewport: Viewport = { themeColor: "#16130f", viewportFit: "cover" };

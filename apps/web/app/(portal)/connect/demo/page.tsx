@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase/server";
-import { DEMO_EMAIL, ensureDemoUser, pickDemoMember } from "@/lib/demo";
+import { DEMO_EMAIL, demoEnabled, ensureDemoUser, pickDemoMember } from "@/lib/demo";
 import { VIEW_AS_COOKIE } from "@/lib/viewas";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
@@ -10,6 +10,7 @@ import { PendingButton } from "@/components/connect/PendingButton";
 
 async function enterDemo() {
   "use server";
+  if (!demoEnabled()) redirect("/connect/login");
   const db = createSupabaseAdminClient();
   // 처음 보여 줄 사업가 모드의 회원을 고르고(데모 데이터가 없으면 안내), 계정을 준비합니다. 둘을 동시에 처리합니다.
   const [first] = await Promise.all([pickDemoMember("mentor"), ensureDemoUser(db)]);
@@ -26,6 +27,7 @@ async function enterDemo() {
 }
 
 export default async function DemoPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  if (!demoEnabled()) redirect("/connect/login");
   const locale = await getPortalLocale();
   const d = getMessages(locale).connect.demo;
   const { error } = await searchParams;

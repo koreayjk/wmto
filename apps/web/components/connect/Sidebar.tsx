@@ -10,7 +10,7 @@ export type SideGroup = { title?: string; items: { href: string; label: string }
 export function Sidebar({ groups }: { groups: SideGroup[] }) {
   const path = usePathname();
   return (
-    <nav aria-label="WMTO Connect" className="space-y-7">
+    <nav aria-label="Connect" className="space-y-7">
       {groups.map((g, gi) => (
         <div key={gi}>
           {g.title && <p className="mb-2 px-4 gilt text-[11px] font-semibold uppercase tracking-[0.24em]">{g.title}</p>}
