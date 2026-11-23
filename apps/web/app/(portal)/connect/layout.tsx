@@ -73,7 +73,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/records", "/connect/privacy", "/connect/review", "/connect/dashboard", "/connect/renewal", "/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/testimonials", "/connect/records", "/connect/privacy", "/connect/review", "/connect/dashboard", "/connect/renewal", "/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
@@ -81,7 +81,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   const network: { href: string; label: string }[] = [{ href: "/connect/tent", label: m.tent.title }];
   if (role === "partner") network.push({ href: "/connect/matching", label: it.matching.name }, { href: "/connect/thanks", label: it.thanks.name });
   const missionOk = !!active && hasMission(active);
-  if (role === "mentor") network.push({ href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, ...(missionOk ? [{ href: "/connect/matching", label: it.requests.name }] : [{ href: "/connect/mission", label: m.mission.nav }]), { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
+  if (role === "mentor") network.push({ href: "/connect/testimonials", label: m.testimonials.nav }, { href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, ...(missionOk ? [{ href: "/connect/matching", label: it.requests.name }] : [{ href: "/connect/mission", label: m.mission.nav }]), { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
   const activity = [{ href: "/connect/events", label: m.nav.events }];
   const reports: { href: string; label: string }[] = [];
   if (role === "mentor" || role === "partner") {
