@@ -33,7 +33,8 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     .map((r) => ("chapters" in r ? (Array.isArray(r.chapters) ? r.chapters[0] : r.chapters) : r)).filter(Boolean) as { id: string; name: string }[];
   if (!chapters.length) return <div className="space-y-6"><PageTitle eyebrow="Overview">{t.title}</PageTitle><p className="text-soft">{t.empty}</p></div>;
   const current = chapters.find((c) => c.id === want) ?? chapters[0];
-  const { data } = await supabase.rpc("chapter_dashboard", { p_chapter: current.id });
+  const [{ data }, { data: wl }] = await Promise.all([supabase.rpc("chapter_dashboard", { p_chapter: current.id }), supabase.rpc("chapter_watchlist", { p_chapter: current.id })]);
+  const watch = (wl ?? { absence: [], stalled_referrals: 0, early: [] }) as { absence: { id: string; name: string; missed: number }[]; stalled_referrals: number; early: { id: string; name: string; term_end: string; level: string; total: number }[] };
   if (!data) redirect("/connect");
   const d = data as Dash;
   const lm = getMessages(locale).connect.growth.index.levels as Record<string, string>;
@@ -88,6 +89,15 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <ol className="space-y-2 text-sm leading-relaxed">{t.coach.steps.map((s, i) => <li key={s} className="flex gap-3"><span className="gilt font-medium tabular-nums">{i + 1}</span>{s}</li>)}</ol>
         </Card>
       </div>
+
+      <Card title={t.watch.title}>
+        <p className="mb-4 text-sm text-soft">{t.watch.sub}</p>
+        <div className="space-y-4 text-sm">
+          <p><b className="font-medium">{t.watch.absence}</b><br /><span className="text-soft">{watch.absence.length ? watch.absence.map((a) => `${a.name} (${t.watch.missed.replace("{n}", String(a.missed))})`).join(", ") : t.watch.none}</span></p>
+          <p><b className="font-medium">{t.watch.stalled}</b><br /><span className="text-soft">{watch.stalled_referrals > 0 ? watch.stalled_referrals : t.watch.none}</span></p>
+          <p><b className="font-medium">{t.watch.early}</b><br /><span className="text-soft">{watch.early.length ? watch.early.map((a) => `${a.name} (${lm[a.level] ?? a.level} · ${fmtDate(a.term_end, locale)})`).join(", ") : t.watch.none}</span></p>
+        </div>
+      </Card>
 
       <Card title={t.members.title}>
         <p className="mb-4 text-sm text-soft">{t.members.sub}</p>
