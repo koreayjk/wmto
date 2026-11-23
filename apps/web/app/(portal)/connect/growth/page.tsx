@@ -72,7 +72,7 @@ export default async function Growth() {
               <button className="cbtn cbtn-quiet cbtn-sm">{rw.mine.appealBtn}</button>
             </form>
           )}
-          {isLeader && <a href="/connect/renewal" className="mt-4 inline-block text-sm underline">{rw.nav}</a>}
+          {isLeader && <span className="mt-4 flex gap-5 text-sm"><a href="/connect/renewal" className="underline">{rw.nav}</a><a href="/connect/dashboard" className="underline">{getMessages(locale).connect.dashboard.nav}</a></span>}
         </Card>
       )}
       <Card title={m.stageTitle}>

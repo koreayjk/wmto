@@ -870,6 +870,18 @@ export const ko = {
         renewal_not_renewed: "갱신 심사 결과가 나왔어요. 확인해 주세요.",
       },
     },
+    dashboard: {
+      nav: "텐트 현황", title: "텐트 현황", sub: "텐트가 건강하게 자라고 있는지 한눈에 봅니다. 최근 90일 기준이며, 점수는 줄 세우기가 아니라 곁에서 돕기 위한 자료입니다.",
+      pickChapter: "텐트 선택", size: "회원 수", sizeOf: "최대 {cap}명", newMembers: "최근 6개월 새로 온 분", renewalDue: "60일 안에 기간이 끝나는 분",
+      attendance: "모임 출석률", referrals: "1인당 주간 소개", oneToOne: "1인당 주간 1:1 만남", visitors: "초대한 손님", attended: "참석", joined: "입회", conversion: "손님 → 입회", none: "자료 없음",
+      health: { title: "텐트 건강 지표", good: "든든해요", watch: "살펴봐요", care: "돌봄이 필요해요", note: "기준은 임시이며 운영하며 조정합니다." },
+      levels: { title: "회원 성장 단계", peg: "말뚝", pole: "기둥", canvas: "천막", lantern: "등불" },
+      members: { title: "회원 현황", sub: "리더에게만 보입니다. 낮은 순서로 정렬했어요. 순위를 매기려는 것이 아니라 먼저 안부를 묻기 위한 순서입니다.", total: "점수", level: "단계", next: "다음 걸음", term: "기간 종료" },
+      weakest: { attendance: "다음 모임에 함께 나오도록 안부 전하기", referrals: "소개할 만한 분을 함께 떠올려 보기", one_to_one: "만나면 좋은 사업가를 이어 주기", visitors: "초대할 만한 분을 함께 기도하며 떠올리기", learning: "아카데미 강의 하나 같이 보기", service: "작은 섬김(새 회원 동행 등)을 부탁해 보기" },
+      open: { title: "비어 있는 업종", sub: "우리 텐트에 아직 없는 업종입니다. 손님을 초대할 때 참고하세요.", count: "{n}개 업종이 비어 있어요", show: "업종 보기" },
+      coach: { title: "이렇게 살펴 주세요", steps: ["살핌 — 지표를 보고 어려워 보이는 분을 먼저 떠올려요.", "격려 — 좋아진 분과 꾸준한 분에게 먼저 고마움을 전해요.", "동행 — 낮은 단계의 분께 안부를 묻고 1:1 만남을 함께 잡아요.", "이어 가기 — 한 달 뒤 변화를 다시 보고 이어 갑니다."] },
+      empty: "리더로 지정된 텐트가 없습니다.",
+    },
     visitors: {
       nav: "손님 초대", title: "손님 초대", sub: "함께하면 좋을 분을 챕터 모임에 초대하세요. 손님이 실제로 참석하면 챕터 리더가 확인해 성장 지표에 반영됩니다.",
       invite: "새 손님 초대", name: "손님 이름", contact: "연락처 (선택)", category: "하시는 일", planned: "참석 예정일 (선택)", note: "메모 (선택)", send: "초대 기록하기", saved: "손님 초대를 기록했습니다.",

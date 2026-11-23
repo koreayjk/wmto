@@ -859,6 +859,18 @@ export const en: Messages = {
         renewal_not_renewed: "Your renewal review result is in. Please take a look.",
       },
     },
+    dashboard: {
+      nav: "Tent overview", title: "Tent overview", sub: "See at a glance how your tent is growing. Based on the last 90 days. Scores are for supporting people, not for ranking them.",
+      pickChapter: "Choose a tent", size: "Members", sizeOf: "up to {cap}", newMembers: "New in the last 6 months", renewalDue: "Terms ending within 60 days",
+      attendance: "Gathering attendance", referrals: "Referrals per member per week", oneToOne: "1:1s per member per week", visitors: "Guests invited", attended: "attended", joined: "joined", conversion: "Guest to member", none: "No data",
+      health: { title: "Tent health", good: "Strong", watch: "Keep an eye", care: "Needs care", note: "Thresholds are provisional and will be tuned." },
+      levels: { title: "Member growth levels", peg: "Peg", pole: "Pole", canvas: "Canvas", lantern: "Lantern" },
+      members: { title: "Members", sub: "Visible only to leaders. Sorted from lowest, not to rank people but to decide who to check in on first.", total: "Score", level: "Level", next: "Next step", term: "Term ends" },
+      weakest: { attendance: "Check in and invite them to the next gathering", referrals: "Think together about who they could refer", one_to_one: "Connect them with a member worth meeting", visitors: "Pray and think together about who to invite", learning: "Watch an academy lesson together", service: "Ask them to take a small serving role" },
+      open: { title: "Open industries", sub: "Industries not yet in your tent. Use them as a guide when inviting guests.", count: "{n} industries are open", show: "Show industries" },
+      coach: { title: "How to look after the tent", steps: ["Notice — look at the numbers and think of who may be struggling.", "Encourage — thank those who are steady or improving first.", "Walk with — check in with those at lower levels and set up 1:1s together.", "Follow through — look again in a month and continue."] },
+      empty: "You are not a leader of any tent.",
+    },
     visitors: {
       nav: "Invite guests", title: "Invite guests", sub: "Invite people who would be a good fit to your chapter gathering. When a guest actually attends, your chapter leader confirms it and it counts toward your growth index.",
       invite: "Invite a new guest", name: "Guest name", contact: "Contact (optional)", category: "What they do", planned: "Planned date (optional)", note: "Note (optional)", send: "Record invitation", saved: "Invitation recorded.",

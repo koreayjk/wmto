@@ -72,7 +72,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/dashboard", "/connect/renewal", "/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
@@ -89,6 +89,11 @@ export default async function ConnectLayout({ children }: { children: React.Reac
     reports.push({ href: "/connect/growth", label: it.growth.name });
   }
   let unread = 0;
+  let isLeader = false;
+  if (active?.role === "mentor" && r && !r.demo && !r.viewAs) {
+    const { data: ld } = await r.supabase.from("chapter_leaders").select("chapter_id").eq("member_id", active.id).limit(1);
+    isLeader = (ld ?? []).length > 0;
+  }
   if (active && r && !r.demo && !r.viewAs) {
     const { count } = await r.supabase.from("notifications").select("id", { count: "exact", head: true }).eq("member_id", active.id).is("read_at", null);
     unread = count ?? 0;
@@ -100,6 +105,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   if (role === "mentor" && missionOk) network.push({ href: "/connect/fund", label: m.sponsor.navFund });
   if (network.length) groups.push({ title: m.side.network, items: network });
   groups.push({ title: m.side.activity, items: activity });
+  if (isLeader) reports.push({ href: "/connect/dashboard", label: m.dashboard.nav }, { href: "/connect/renewal", label: m.renewal.nav });
   if (reports.length) groups.push({ title: m.side.report, items: reports });
   groups.push({ title: m.side.learn, items: [{ href: "/connect/academy", label: it.academy.name }] }, { items: [{ href: "/connect/profile", label: it.profile.name }] });
   const stageName = active?.stage ? m.stageNames[active.stage as keyof typeof m.stageNames] : null;
