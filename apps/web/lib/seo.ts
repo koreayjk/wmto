@@ -10,7 +10,7 @@ export function pageMetadata(locale: Locale, key: Key, path: string): Metadata {
     title: m.meta[key],
     alternates: {
       canonical: localizeHref(locale, path),
-      languages: { ko: path, en: localizeHref("en", path), "x-default": path },
+      languages: { ko: localizeHref("ko", path), en: localizeHref("en", path), "x-default": localizeHref("ko", path) },
     },
   };
 }

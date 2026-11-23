@@ -40,19 +40,34 @@ export async function proxy(request: NextRequest) {
   }
 
   // ───── 공개 사이트 ─────
+  // 루트(/, /en)는 CBC 첫 화면, 선교 사역 소개(WMTO)는 /wmto(영어 /wmto/en) 아래에 있습니다.
   const first = pathname.split("/")[1];
+  const SITE_PAGES = ["about", "mentor", "partner", "sponsor", "camp", "fund", "stories", "events", "apply", "privacy"];
+  // 예전 주소(/about, /en/about …)는 새 주소로 안내합니다.
+  if (SITE_PAGES.includes(first) || (first === "en" && SITE_PAGES.includes(pathname.split("/")[2] ?? ""))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/wmto" + pathname;
+    return NextResponse.redirect(url, 308);
+  }
   if (first === "ko") {
-    // /ko/... 는 접두사 없는 주소로 정리
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/ko/, "") || "/";
     return NextResponse.redirect(url, 308);
   }
-  const isEn = first === "en";
+  let isEn = first === "en";
+  let internal: string; // 내부(앱 라우트) 경로
+  if (first === "wmto") {
+    const inner = pathname.slice("/wmto".length) || "/";
+    isEn = inner === "/en" || inner.startsWith("/en/");
+    internal = isEn ? inner : `/ko${inner === "/" ? "" : inner}`;
+  } else if (pathname === "/" || pathname === "/en") {
+    internal = `/cbc/${isEn ? "en" : "ko"}`;
+  } else {
+    internal = isEn ? pathname : `/ko${pathname}`;
+  }
   const headers = new Headers(request.headers);
   headers.set("x-locale", isEn ? "en" : "ko");
-  const response = isEn
-    ? NextResponse.next({ request: { headers } })
-    : NextResponse.rewrite(new URL(`/ko${pathname === "/" ? "" : pathname}${request.nextUrl.search}`, request.url), { request: { headers } });
+  const response = NextResponse.rewrite(new URL(internal + request.nextUrl.search, request.url), { request: { headers } });
   // 마지막으로 본 언어를 기억해 회원 앱 로그인 화면 등에서 이어 씁니다.
   const want: Locale = isEn ? "en" : "ko";
   if (request.cookies.get(LOCALE_COOKIE)?.value !== want) {

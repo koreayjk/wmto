@@ -8,13 +8,13 @@
 
 ## 1. 앱 컨셉
 
-- BNI Connect가 "리퍼럴(돈 되는 소개)"을 기록한다면, WMTO Connect는 **"나눔과 자립의 과정"**을 기록
+- 일반적인 비즈니스 네트워크 앱이 "리퍼럴(돈 되는 소개)"을 기록한다면, WMTO Connect는 **"나눔과 자립의 과정"**을 기록
 - 경쟁이 아니라 격려: 활동 점수는 색깔 순위가 아니라 성장 단계 이름으로 표시
 - 홈페이지 신청자(`members.status = applicant`)가 승인되면 `active`로 바뀌고, 앱 로그인 계정(`auth_user_id`)이 연결됨
 
-## 2. BNI Connect → WMTO Connect 대응
+## 2. 일반 네트워크 앱 → WMTO Connect 대응
 
-| BNI Connect | WMTO Connect |
+| 일반 네트워크 앱 | WMTO Connect |
 |---|---|
 | 회원 프로필 | 역할별 프로필 (사업가·선교사·후원자) |
 | 1:1 미팅 기록 | 멘토링 기록 |

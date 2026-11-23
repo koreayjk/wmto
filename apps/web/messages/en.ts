@@ -90,7 +90,7 @@ export const en: Messages = {
         { key: "tent", label: "Tent", title: "Our local gathering", text: "You join the tent for your area automatically and share regular gatherings, notices, and recaps. A tent holds up to 50 members and only one business owner per industry; when it is full or the industry is taken, a new tent opens in the same region. Tents share regular gatherings, notices, and recaps." },
         { key: "mentoring", label: "Mentoring log", title: "Every meeting, in order", text: "Record what you shared, the next steps, and prayer topics. Notes are shared by default with other mentors helping the same missionary, or kept between the two of you if personal." },
         { key: "letters", label: "Thank-you letters", title: "Words on real stationery", text: "Missionaries write to the mentors who helped them, and business owners read each letter as it arrives." },
-        { key: "referrals", label: "Referrals", title: "Find by industry and region", text: "See photos and business details to find a business owner and refer a client. Helping one another, BNI style." },
+        { key: "referrals", label: "Referrals", title: "Find by industry and region", text: "See photos and business details to find a business owner and refer a client. Helping one another." },
       ],
       roles: [
         { name: "Business owners", text: "welcome missionaries into the tent and walk with them as mentors." },

@@ -5,8 +5,9 @@ const paths = ["/", "/about", "/mentor", "/partner", "/sponsor", "/camp", "/fund
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-  return paths.map((p) => ({
-    url: base + (p === "/" ? "" : p),
-    alternates: { languages: { ko: base + (p === "/" ? "" : p), en: base + localizeHref("en", p) } },
-  }));
+  const cbc = { url: base, alternates: { languages: { ko: base, en: base + "/en" } } };
+  return [cbc, ...paths.map((p) => ({
+    url: base + localizeHref("ko", p),
+    alternates: { languages: { ko: base + localizeHref("ko", p), en: base + localizeHref("en", p) } },
+  }))];
 }
