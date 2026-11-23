@@ -72,7 +72,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
@@ -88,7 +88,12 @@ export default async function ConnectLayout({ children }: { children: React.Reac
     if (role === "partner" || missionOk) reports.push({ href: "/connect/report", label: m.report.title });
     reports.push({ href: "/connect/growth", label: it.growth.name });
   }
-  const groups: SideGroup[] = [{ items: [{ href: "/connect", label: m.nav.home }] }];
+  let unread = 0;
+  if (active && r && !r.demo && !r.viewAs) {
+    const { count } = await r.supabase.from("notifications").select("id", { count: "exact", head: true }).eq("member_id", active.id).is("read_at", null);
+    unread = count ?? 0;
+  }
+  const groups: SideGroup[] = [{ items: [{ href: "/connect", label: m.nav.home }, ...(active ? [{ href: "/connect/notifications", label: unread > 0 ? `${m.notifications.nav} (${unread})` : m.notifications.nav }] : [])] }];
   if (role === "sponsor") {
     groups.push({ title: m.sponsor.group, items: [{ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews }, { href: "/connect/fund", label: m.sponsor.navFund }] });
   }
