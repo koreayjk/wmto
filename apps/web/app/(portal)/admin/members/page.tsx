@@ -19,9 +19,18 @@ async function findAuthUserId(db: ReturnType<typeof createSupabaseAdminClient>, 
   return null;
 }
 
+async function waitlist(fd: FormData) {
+  "use server";
+  const { supabase } = await requireAdmin();
+  await supabase.rpc("waitlist_set", { p_member: String(fd.get("id")), p_wait: fd.get("wait") === "1", p_note: String(fd.get("note") ?? "") });
+  revalidatePath("/admin/members");
+}
+
+type Adm = { member_id: string; category_name: string; region_key: string | null; region_label: string | null; chapters: number | null; open_chapters: number | null; waiting: boolean; waiting_since: string | null };
+
 async function approve(fd: FormData) {
   "use server";
-  await requireAdmin(); // 관리자 확인 후, 계정 생성은 서비스 키로 수행
+  const { supabase: adminAuthed } = await requireAdmin(); // 관리자 확인 후, 계정 생성은 서비스 키로 수행
   const db = createSupabaseAdminClient();
   const id = String(fd.get("id"));
   const { data: m } = await db.from("members").select("id,email,role,auth_user_id").eq("id", id).single();
@@ -40,6 +49,7 @@ async function approve(fd: FormData) {
   await db.from("members").update({ status: "active", role, auth_user_id: userId }).eq("id", id);
   // 역할 프로필 행 보장 (이미 있으면 그대로 두어 신청 시 입력값과 단계를 보존)
   await db.from(`${role}_profiles`).upsert({ member_id: id }, { onConflict: "member_id", ignoreDuplicates: true });
+  await adminAuthed.rpc("waitlist_mark_placed", { p_member: id });
   revalidatePath("/admin/members");
 }
 
@@ -56,7 +66,11 @@ async function setStatus(fd: FormData) {
 export default async function AdminMembers() {
   const { supabase } = await requireAdmin();
   const roleLabel = getMessages().apply.options.role;
-  const { data } = await supabase.from("members").select("*").order("created_at", { ascending: false }).limit(300);
+  const [{ data }, { data: adm }] = await Promise.all([
+    supabase.from("members").select("*").order("created_at", { ascending: false }).limit(300),
+    supabase.rpc("admission_overview"),
+  ]);
+  const admBy = new Map(((adm ?? []) as Adm[]).map((a) => [a.member_id, a]));
   const members = (data ?? []) as Member[];
   const applicants = members.filter((x) => x.status === "applicant");
   const others = members.filter((x) => x.status !== "applicant");
@@ -74,6 +88,17 @@ export default async function AdminMembers() {
             <span>
               <b>{x.name}</b> <span className="text-soft">{x.email}{x.country ? ` · ${x.country}` : ""}</span>
               <span className="ml-2 text-xs text-clay">{x.role ? roleLabel[x.role] : "역할 미정"}</span>
+              {admBy.get(x.id) && (() => {
+                const a = admBy.get(x.id)!;
+                const open = a.open_chapters ?? 0;
+                return (
+                  <span className="mt-1 block text-sm text-soft">
+                    업종 <b className="text-ink">{a.category_name}</b> · 지역 {a.region_label ?? "미정"} ·{" "}
+                    {a.region_key == null ? "지역 정보가 없어 자동 배정이 안 됩니다" : open > 0 ? `이 업종이 비어 있는 텐트 ${open}곳 (바로 입회 가능)` : "이 지역 텐트에 같은 업종이 이미 있어 새 텐트가 열립니다"}
+                    {a.waiting && <b className="ml-2 text-accent">대기 중{open > 0 ? " · 자리 났음" : ""}</b>}
+                  </span>
+                );
+              })()}
             </span>
             <form action={approve} className="flex flex-wrap items-center gap-2">
               <input type="hidden" name="id" value={x.id} />
@@ -85,6 +110,13 @@ export default async function AdminMembers() {
               )}
               <button className="cbtn cbtn-sm">승인·초대</button>
             </form>
+            {admBy.get(x.id) && (
+              <form action={waitlist}>
+                <input type="hidden" name="id" value={x.id} />
+                <input type="hidden" name="wait" value={admBy.get(x.id)!.waiting ? "0" : "1"} />
+                <button className="text-sm text-soft underline">{admBy.get(x.id)!.waiting ? "대기 해제" : "업종 대기 명단에 올리기"}</button>
+              </form>
+            )}
           </li>
         ))}
       </ul>
