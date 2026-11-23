@@ -717,6 +717,7 @@ export const en: Messages = {
       checkIn: "Check in",
       checkedIn: "Checked in",
       checkInHint: "Check-in opens 30 minutes before the start.",
+      cond: { units: "Attend for +{n} learning units", deadline: "Sign up by {d}", people: "{a} signed up", min: "min {n}", cap: "capacity {n}", signup: "Sign up", signedUp: "Signed up", cancel: "Cancel", closed: "Sign-up closed", full: "Full", lowHint: "It may be cancelled if the minimum is not reached." },
       past: "Past meetings",
       tl: { until: "Until the next gathering", d: "d", h: "h", m: "m", now: "Happening now", today: "Today", tomorrow: "Tomorrow", thisWeek: "This week", thisMonth: "This month", later: "Later", dday: "D-{n}", ago: "{n}d ago", sub: "The times we gather, in the flow of the month.", at: "", dayBar: "Time of day" },
     },

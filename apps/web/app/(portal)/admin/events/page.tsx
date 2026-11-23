@@ -21,6 +21,10 @@ async function addEvent(fd: FormData) {
     meeting_provider: String(fd.get("meeting_url") ?? "") ? (fd.get("meeting_provider") === "bbb" ? "bbb" : "zoom") : null,
     meeting_url: String(fd.get("meeting_url") ?? "") || null,
     chapter_id: String(fd.get("chapter_id") ?? "") || null,
+    learning_units: Math.min(20, Math.max(0, Number(fd.get("learning_units")) || 0)),
+    signup_deadline: String(fd.get("signup_deadline") ?? "") ? new Date(`${String(fd.get("signup_deadline"))}:00+09:00`).toISOString() : null,
+    min_people: Number(fd.get("min_people")) > 0 ? Math.min(1000, Number(fd.get("min_people"))) : null,
+    capacity: Number(fd.get("capacity")) > 0 ? Math.min(1000, Number(fd.get("capacity"))) : null,
   });
   revalidatePath("/admin/events");
   revalidatePath("/events");
@@ -53,6 +57,11 @@ export default async function AdminEvents() {
         <select name="chapter_id" className="field" defaultValue=""><option value="">전체 모임 (텐트 없음)</option>{(tents ?? []).map((t) => <option key={t.id} value={t.id}>{t.name} 모임</option>)}</select>
         <select name="meeting_provider" className="field"><option value="zoom">Zoom</option><option value="bbb">BigBlueButton</option></select>
         <input name="meeting_url" type="url" placeholder="회의 링크 (회원에게만 공개)" className="field md:col-span-2" />
+        <p className="text-xs text-soft md:col-span-2">참가 조건(선택): 교육·행사에 참석하면 회원의 배움 점수에 자동으로 더해지고, 신청 마감과 인원 조건을 보여 줍니다. 최소 인원 미달 취소는 직접 판단해 주세요.</p>
+        <label className="text-sm text-soft">참석 시 배움 단위<input name="learning_units" type="number" min={0} max={20} step="0.5" defaultValue={0} className="field mt-1" /></label>
+        <label className="text-sm text-soft">신청 마감 (KST)<input name="signup_deadline" type="datetime-local" className="field mt-1" /></label>
+        <label className="text-sm text-soft">최소 인원<input name="min_people" type="number" min={1} className="field mt-1" /></label>
+        <label className="text-sm text-soft">정원<input name="capacity" type="number" min={1} className="field mt-1" /></label>
         <button className="cbtn w-full md:col-span-2">일정 등록</button>
       </form>
       <ul className="mt-10 alist divide-y divide-black/[0.06]">

@@ -728,6 +728,7 @@ export const ko = {
       checkIn: "출석 체크",
       checkedIn: "출석 완료",
       checkInHint: "시작 30분 전부터 출석 체크가 가능합니다.",
+      cond: { units: "참석하면 배움 +{n}단위", deadline: "신청 마감 {d}", people: "{a}명 신청", min: "최소 {n}명", cap: "정원 {n}명", signup: "참가 신청", signedUp: "신청했어요", cancel: "신청 취소", closed: "신청이 마감됐어요", full: "정원이 찼어요", lowHint: "최소 인원이 모이지 않으면 취소될 수 있어요." },
       past: "지난 모임",
       tl: { until: "다음 모임까지", d: "일", h: "시간", m: "분", now: "지금 진행 중", today: "오늘", tomorrow: "내일", thisWeek: "이번 주", thisMonth: "이번 달", later: "그 이후", dday: "D-{n}", ago: "{n}일 전", sub: "한 달의 흐름 속에서 우리가 함께 모이는 시간입니다.", at: "시", dayBar: "하루 중 시간" },
     },

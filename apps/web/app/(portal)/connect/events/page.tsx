@@ -14,7 +14,7 @@ async function checkIn(fd: FormData) {
   revalidatePath("/connect/events");
 }
 
-type Ev = { chapter_id: string | null; id: string; type: string; title: string; start_at: string; end_at: string | null; location: string | null; meeting_url: string | null };
+type Ev = { learning_units: number; signup_deadline: string | null; min_people: number | null; capacity: number | null; chapter_id: string | null; id: string; type: string; title: string; start_at: string; end_at: string | null; location: string | null; meeting_url: string | null };
 
 /** 한국 시간 기준 날짜(YYYY-MM-DD)와 하루 중 분(0~1439) */
 const kstDate = (d: Date) => d.toLocaleDateString("en-CA", { timeZone: KST });
@@ -31,6 +31,16 @@ async function absence(fd: FormData) {
   revalidatePath("/connect/events");
 }
 
+async function signup(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  const id = String(fd.get("event_id"));
+  if (fd.get("cancel")) await r.supabase.rpc("cancel_signup", { p_event: id });
+  else await r.supabase.rpc("signup_event", { p_event: id });
+  revalidatePath("/connect/events");
+}
+
 export default async function Events() {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
@@ -38,12 +48,15 @@ export default async function Events() {
   const c = m.connect.events;
   const tl = c.tl;
   const since = new Date(Date.now() - 30 * 86400_000).toISOString();
-  const [{ data: events }, { data: att }, { data: mine }, { data: notices }] = await Promise.all([
-    supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url").gte("start_at", since).order("start_at"),
+  const [{ data: events }, { data: att }, { data: mine }, { data: notices }, { data: sums }] = await Promise.all([
+    supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url,learning_units,signup_deadline,min_people,capacity").gte("start_at", since).order("start_at"),
     supabase.from("attendance").select("event_id").eq("member_id", me.id),
     supabase.rpc("my_tents"),
     me.role === "mentor" ? supabase.from("absence_notices").select("event_id").eq("member_id", me.id) : Promise.resolve({ data: [] }),
+    supabase.rpc("event_signup_summary"),
   ]);
+  const sumBy = new Map(((sums ?? []) as { event_id: string; signups: number; mine: boolean }[]).map((s) => [s.event_id, s]));
+  const cd = c.cond;
   const noticed = new Set(((notices ?? []) as { event_id: string }[]).map((n) => n.event_id));
   const am = m.connect.absence;
   // 전체 모임과 내 텐트의 모임만 보여 줍니다(다른 텐트의 정기 모임은 제외).
@@ -107,6 +120,24 @@ export default async function Events() {
             </span>
             <span className="text-[10px] tracking-[0.2em] text-soft/80">0 · 6 · 12 · 18 · 24</span>
           </div>
+          {!isPast && (e.learning_units > 0 || e.signup_deadline || e.min_people || e.capacity) && (() => {
+            const sm = sumBy.get(e.id);
+            const closed = !!e.signup_deadline && new Date(e.signup_deadline).getTime() < nowMs;
+            const full = !!e.capacity && (sm?.signups ?? 0) >= e.capacity && !sm?.mine;
+            const bits = [e.learning_units > 0 ? cd.units.replace("{n}", String(e.learning_units)) : null, e.signup_deadline ? cd.deadline.replace("{d}", new Date(e.signup_deadline).toLocaleString(loc, { timeZone: KST, month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit" })) : null,
+              cd.people.replace("{a}", String(sm?.signups ?? 0)), e.min_people ? cd.min.replace("{n}", String(e.min_people)) : null, e.capacity ? cd.cap.replace("{n}", String(e.capacity)) : null].filter(Boolean);
+            const low = !!e.min_people && (sm?.signups ?? 0) < e.min_people;
+            return (
+              <div className="mt-3 text-sm">
+                <p className="text-soft">{bits.join(" · ")}</p>
+                {low && <p className="mt-0.5 text-xs text-soft">{cd.lowHint}</p>}
+                <form action={signup} className="mt-2 flex items-center gap-3"><input type="hidden" name="event_id" value={e.id} />
+                  {sm?.mine ? <><span className="text-accent">✓ {cd.signedUp}</span><button name="cancel" value="1" className="text-xs text-soft underline">{cd.cancel}</button></>
+                    : closed ? <span className="text-xs text-soft">{cd.closed}</span> : full ? <span className="text-xs text-soft">{cd.full}</span> : <button className="cbtn cbtn-quiet cbtn-sm">{cd.signup}</button>}
+                </form>
+              </div>
+            );
+          })()}
           {!isPast && (
             <div className="mt-4 flex flex-wrap items-center gap-3">
               {e.meeting_url && <a href={e.meeting_url} target="_blank" rel="noopener noreferrer" className="cbtn cbtn-sm">{m.connect.join}</a>}
