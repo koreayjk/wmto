@@ -20,7 +20,7 @@ async function invite(fd: FormData) {
     p_for: /^[0-9a-f-]{36}$/i.test(String(fd.get("for_member") ?? "")) ? String(fd.get("for_member")) : null,
   });
   revalidatePath("/connect/visitors");
-  redirect(error ? "/connect/visitors?error=form" : "/connect/visitors?saved=1");
+  redirect(error ? `/connect/visitors?error=${/duplicate_visitor/.test(error.message) ? "dup" : "form"}` : "/connect/visitors?saved=1");
 }
 
 async function setStatus(fd: FormData) {
@@ -57,7 +57,7 @@ export default async function Visitors({ searchParams }: { searchParams: Promise
     <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start">
       <div className="lg:col-span-full"><PageTitle eyebrow="Guests" sub={t.sub}>{t.title}</PageTitle></div>
       {saved && <p role="status" className="rounded-2xl bg-tint px-4 py-3 text-sm text-accent lg:col-span-full">{t.saved}</p>}
-      {err && <p role="alert" className="rounded-2xl bg-[#fdf1ee] px-4 py-3 text-sm text-[#8a2f1a] lg:col-span-full">{t.errors.form}</p>}
+      {err && <p role="alert" className="rounded-2xl bg-[#fdf1ee] px-4 py-3 text-sm text-[#8a2f1a] lg:col-span-full">{err === "dup" ? t.errors.dup : t.errors.form}</p>}
 
       <Card title={t.invite}>
         <form action={invite} className="space-y-4">

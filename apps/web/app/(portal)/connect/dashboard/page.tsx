@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
@@ -18,6 +19,14 @@ type Dash = {
 const BANDS = { attendance: [0.8, 0.6], referrals: [0.5, 0.25], oneToOne: [0.5, 0.25], conversion: [0.4, 0.2] } as const;
 const tone = (v: number | null, [good, watch]: readonly [number, number]) => (v === null ? "none" : v >= good ? "good" : v >= watch ? "watch" : "care");
 
+async function decideCategory(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  await r.supabase.rpc("decide_category_change", { p_id: String(fd.get("id")), p_approve: fd.get("approve") === "1" });
+  revalidatePath("/connect/dashboard");
+}
+
 export default async function Dashboard({ searchParams }: { searchParams: Promise<{ chapter?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
@@ -33,7 +42,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     .map((r) => ("chapters" in r ? (Array.isArray(r.chapters) ? r.chapters[0] : r.chapters) : r)).filter(Boolean) as { id: string; name: string }[];
   if (!chapters.length) return <div className="space-y-6"><PageTitle eyebrow="Overview">{t.title}</PageTitle><p className="text-soft">{t.empty}</p></div>;
   const current = chapters.find((c) => c.id === want) ?? chapters[0];
-  const [{ data }, { data: wl }] = await Promise.all([supabase.rpc("chapter_dashboard", { p_chapter: current.id }), supabase.rpc("chapter_watchlist", { p_chapter: current.id })]);
+  const [{ data }, { data: wl }, { data: cc }] = await Promise.all([supabase.rpc("chapter_dashboard", { p_chapter: current.id }), supabase.rpc("chapter_watchlist", { p_chapter: current.id }), supabase.rpc("pending_category_changes")]);
+  const catReq = (cc ?? []) as { id: string; name: string; chapter_name: string | null; from_name: string | null; to_name: string; note: string | null }[];
+  const cm = getMessages(locale).connect.catChange;
   const watch = (wl ?? { absence: [], stalled_referrals: 0, early: [] }) as { absence: { id: string; name: string; missed: number }[]; stalled_referrals: number; early: { id: string; name: string; term_end: string; level: string; total: number }[] };
   if (!data) redirect("/connect");
   const d = data as Dash;
@@ -89,6 +100,21 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <ol className="space-y-2 text-sm leading-relaxed">{t.coach.steps.map((s, i) => <li key={s} className="flex gap-3"><span className="gilt font-medium tabular-nums">{i + 1}</span>{s}</li>)}</ol>
         </Card>
       </div>
+
+      {catReq.length > 0 && (
+        <Card title={`${cm.review} · ${catReq.length}`}>
+          <ul className="divide-y divide-black/[0.06]">
+            {catReq.map((q) => (
+              <li key={q.id} className="py-3.5 first:pt-0 last:pb-0">
+                <p className="text-sm"><b className="font-medium">{q.name}</b> <span className="text-soft">{q.from_name ?? "-"} → {q.to_name}</span></p>
+                {q.note && <p className="mt-0.5 text-xs text-soft">{q.note}</p>}
+                <form action={decideCategory} className="mt-2 flex gap-2"><input type="hidden" name="id" value={q.id} />
+                  <button name="approve" value="1" className="cbtn cbtn-sm">{cm.approve}</button><button name="approve" value="0" className="cbtn cbtn-quiet cbtn-sm">{cm.decline}</button></form>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       <Card title={t.watch.title}>
         <p className="mb-4 text-sm text-soft">{t.watch.sub}</p>

@@ -21,6 +21,16 @@ const kstDate = (d: Date) => d.toLocaleDateString("en-CA", { timeZone: KST });
 const kstMinutes = (d: Date) => { const [h, m] = d.toLocaleTimeString("en-GB", { timeZone: KST, hour: "2-digit", minute: "2-digit", hour12: false }).split(":").map(Number); return h * 60 + m; };
 const dayDiff = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 86400_000);
 
+async function absence(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  const id = String(fd.get("event_id"));
+  if (fd.get("cancel")) await r.supabase.rpc("cancel_absence", { p_event: id });
+  else await r.supabase.rpc("notify_absence", { p_event: id, p_reason: String(fd.get("reason") ?? "other"), p_note: String(fd.get("note") ?? "") });
+  revalidatePath("/connect/events");
+}
+
 export default async function Events() {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
@@ -28,11 +38,14 @@ export default async function Events() {
   const c = m.connect.events;
   const tl = c.tl;
   const since = new Date(Date.now() - 30 * 86400_000).toISOString();
-  const [{ data: events }, { data: att }, { data: mine }] = await Promise.all([
+  const [{ data: events }, { data: att }, { data: mine }, { data: notices }] = await Promise.all([
     supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url").gte("start_at", since).order("start_at"),
     supabase.from("attendance").select("event_id").eq("member_id", me.id),
     supabase.rpc("my_tents"),
+    me.role === "mentor" ? supabase.from("absence_notices").select("event_id").eq("member_id", me.id) : Promise.resolve({ data: [] }),
   ]);
+  const noticed = new Set(((notices ?? []) as { event_id: string }[]).map((n) => n.event_id));
+  const am = m.connect.absence;
   // 전체 모임과 내 텐트의 모임만 보여 줍니다(다른 텐트의 정기 모임은 제외).
   const myTents = new Set(((mine ?? []) as { id: string }[]).map((x) => x.id));
   const attended = new Set((att ?? []).map((a) => a.event_id));
@@ -105,6 +118,22 @@ export default async function Events() {
                 <span className="text-xs text-soft">{c.checkInHint}</span>
               )}
             </div>
+          )}
+          {!isPast && !live && !attended.has(e.id) && me.role === "mentor" && e.chapter_id && (
+            noticed.has(e.id) ? (
+              <form action={absence} className="mt-3 flex items-center gap-3 text-sm text-soft"><input type="hidden" name="event_id" value={e.id} /><span>✓ {am.done}</span><button name="cancel" value="1" className="underline">{am.cancel}</button></form>
+            ) : (
+              <details className="mt-3 text-sm">
+                <summary className="cursor-pointer text-soft underline">{am.title}</summary>
+                <form action={absence} className="mt-2 flex flex-wrap items-center gap-2">
+                  <input type="hidden" name="event_id" value={e.id} />
+                  <select name="reason" className="field !w-auto !py-1.5 !text-sm">{(Object.keys(am.reason) as (keyof typeof am.reason)[]).map((k) => <option key={k} value={k}>{am.reason[k]}</option>)}</select>
+                  <input name="note" maxLength={300} placeholder={am.note} className="field !w-56 !py-1.5 !text-sm" />
+                  <button className="cbtn cbtn-quiet cbtn-sm">{am.send}</button>
+                </form>
+                <p className="mt-1 text-xs text-soft">{am.hint}</p>
+              </details>
+            )
           )}
           {isPast && attended.has(e.id) && <p className="mt-2 text-sm text-soft">✓ {c.checkedIn}</p>}
         </article>

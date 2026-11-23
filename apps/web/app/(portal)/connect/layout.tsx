@@ -72,7 +72,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/review", "/connect/dashboard", "/connect/renewal", "/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/records", "/connect/privacy", "/connect/review", "/connect/dashboard", "/connect/renewal", "/connect/notifications", "/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
@@ -105,6 +105,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   if (role === "mentor" && missionOk) network.push({ href: "/connect/fund", label: m.sponsor.navFund });
   if (network.length) groups.push({ title: m.side.network, items: network });
   groups.push({ title: m.side.activity, items: activity });
+  if (role === "mentor") reports.push({ href: "/connect/records", label: m.records.nav });
   if (isLeader) reports.push({ href: "/connect/dashboard", label: m.dashboard.nav }, { href: "/connect/review", label: m.review.nav }, { href: "/connect/renewal", label: m.renewal.nav });
   if (reports.length) groups.push({ title: m.side.report, items: reports });
   groups.push({ title: m.side.learn, items: [{ href: "/connect/academy", label: it.academy.name }] }, { items: [{ href: "/connect/profile", label: it.profile.name }] });

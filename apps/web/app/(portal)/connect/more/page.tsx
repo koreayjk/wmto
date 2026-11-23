@@ -23,7 +23,8 @@ export default async function More() {
   }
   links.push({ href: "/connect/academy", ...it.academy });
   if (me.role === "mentor" || me.role === "partner") links.push({ href: "/connect/growth", ...it.growth });
-  links.push({ href: "/connect/profile", ...it.profile });
+  if (me.role === "mentor") links.push({ href: "/connect/records", name: getMessages(locale).connect.records.nav, text: getMessages(locale).connect.records.title });
+  links.push({ href: "/connect/profile", ...it.profile }, { href: "/connect/privacy", name: getMessages(locale).connect.privacy.nav, text: getMessages(locale).connect.privacy.title });
   return (
     <div className="space-y-4">
       <PageTitle eyebrow="More">{m.title}</PageTitle>

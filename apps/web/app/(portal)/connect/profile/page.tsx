@@ -24,11 +24,15 @@ async function saveProfile(fd: FormData) {
   if (me.role === "mentor") {
     const types = fd.getAll("contribution_types").map(String).filter((v) => (contributionTypes as readonly string[]).includes(v));
     // 업종은 표준 목록에서 고릅니다. 한 챕터에 같은 업종이 이미 있으면 DB 가 거부합니다.
+    // 업종은 처음 정할 때만 직접 고르고, 바꿀 때는 신청 후 승인(아래 requestCategoryChange).
     const cid = /^\d+$/.test(String(fd.get("category_id") ?? "")) ? Number(fd.get("category_id")) : null;
-    const { data: cat } = cid ? await supabase.from("industry_categories").select("name_ko").eq("id", cid).maybeSingle() : { data: null };
+    const { data: curRow } = await supabase.from("mentor_profiles").select("category_id,industry").eq("member_id", me.id).maybeSingle();
+    if (cid && !curRow?.category_id) {
+      const { error: ce } = await supabase.rpc("set_first_category", { p_category: cid });
+      if (ce?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
+    }
     const { error } = await supabase.from("mentor_profiles").update({
-      business_name: opt(fd, "business_name"), industry: cat?.name_ko ?? opt(fd, "industry"),
-      ...(cid ? { category_id: cid } : {}), contribution_types: types,
+      business_name: opt(fd, "business_name"), ...(!curRow?.category_id && !cid ? { industry: opt(fd, "industry") } : {}), contribution_types: types,
       intro: opt(fd, "intro", 1500), keywords: opt(fd, "keywords", 300), years_in_business: /^\d{1,2}$/.test(String(fd.get("years") ?? "")) ? Number(fd.get("years")) : null,
       website: opt(fd, "website", 200), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), mission_heart: opt(fd, "mission_heart", 1000),
     }).eq("member_id", me.id);
@@ -41,6 +45,15 @@ async function saveProfile(fd: FormData) {
   }
   revalidatePath("/connect/profile");
   redirect("/connect/profile?saved=1");
+}
+
+async function requestCategoryChange(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  const cid = /^\d+$/.test(String(fd.get("category_id") ?? "")) ? Number(fd.get("category_id")) : 0;
+  if (cid) await r.supabase.rpc("request_category_change", { p_category: cid, p_note: String(fd.get("note") ?? "") });
+  revalidatePath("/connect/profile");
 }
 
 /** 증명사진: 서버가 Storage(wmto-avatars)에 올리고 주소만 저장합니다. 보기 전용(관리자·체험)에서는 저장하지 않습니다. */
@@ -84,6 +97,9 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const cats = me.role === "mentor" ? groupCategories(await loadCategories(supabase), locale === "en" ? "en" : "ko") : [];
   const { data: loc } = await supabase.from("members").select("region,district").eq("id", me.id).maybeSingle();
   const roleLabel = me.role ? f.options.role[me.role] : "-";
+  const { data: pendingChange } = me.role === "mentor" ? await supabase.from("category_change_requests").select("id").eq("member_id", me.id).eq("status", "pending").maybeSingle() : { data: null };
+  const hasCategory = !!p.category_id;
+  const currentCatName = hasCategory ? (cats.flatMap((g) => g.items).find((i) => i.id === Number(p.category_id))?.label ?? (p.industry as string) ?? "") : "";
   // 프로필 완성도(사업가): 비어 있는 항목을 알려 줍니다.
   const filled = (v: unknown) => !(v == null || v === "" || (Array.isArray(v) && v.length === 0));
   const checks: [string, boolean][] = me.role === "mentor" ? [
@@ -156,13 +172,15 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
               <label className="block"><span className={labelCls}>{f.fields.businessName}</span><input name="business_name" defaultValue={(p.business_name as string) ?? ""} className="field" /></label>
               <label className="block">
                 <span className={labelCls}>{f.fields.industry}</span>
-                {cats.length > 0 ? (
+                {hasCategory ? (
+                  <span className="field flex items-center !bg-black/[0.03] text-soft">{currentCatName}</span>
+                ) : cats.length > 0 ? (
                   <select name="category_id" defaultValue={String((p.category_id as number | null) ?? "")} className="field">
                     <option value="">{c.select}</option>
                     {cats.map((g) => <optgroup key={g.group} label={g.group}>{g.items.map((i) => <option key={i.id} value={i.id}>{i.label}</option>)}</optgroup>)}
                   </select>
                 ) : <input name="industry" defaultValue={(p.industry as string) ?? ""} className="field" />}
-                {cats.length > 0 && <span className="mt-2 block text-xs text-soft">{t.categoryNote}</span>}
+                {cats.length > 0 && <span className="mt-2 block text-xs text-soft">{hasCategory ? getMessages(locale).connect.catChange.note : t.categoryNote}</span>}
               </label>
               <h3 className="pt-2 text-[13px] font-medium text-soft">{t.more.title}</h3>
               <label className="block"><span className={labelCls}>{t.more.intro}</span><textarea name="intro" rows={3} maxLength={1500} defaultValue={(p.intro as string) ?? ""} placeholder={t.more.introHint} className="field" /></label>
@@ -209,6 +227,18 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           <button className="cbtn w-full">{t.save}</button>
         </form>
       </Card>
+      {me.role === "mentor" && hasCategory && (
+        <Card title={getMessages(locale).connect.catChange.title}>
+          {pendingChange ? <p className="text-sm">{getMessages(locale).connect.catChange.pending}</p> : (
+            <form action={requestCategoryChange} className="space-y-4">
+              <label className="block"><span className={labelCls}>{getMessages(locale).connect.catChange.pick}</span>
+                <select name="category_id" defaultValue="" className="field"><option value="">{c.select}</option>{cats.map((g) => <optgroup key={g.group} label={g.group}>{g.items.map((i) => <option key={i.id} value={i.id}>{i.label}</option>)}</optgroup>)}</select></label>
+              <label className="block"><span className={labelCls}>{getMessages(locale).connect.catChange.why}</span><input name="note" maxLength={500} className="field" /></label>
+              <button className="cbtn cbtn-quiet">{getMessages(locale).connect.catChange.send}</button>
+            </form>
+          )}
+        </Card>
+      )}
     </div>
   );
 }
