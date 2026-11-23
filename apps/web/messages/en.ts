@@ -859,6 +859,7 @@ export const en: Messages = {
         referral_closed: "Your referral with {name} was completed. Consider sending thanks.",
         companion_buddy: "You are now {name}'s companion. Meet 1:1 first and say hello.",
         companion_newcomer: "{name} is your companion. Set up your first 1:1.",
+        featured_assigned: "You are the featured speaker at '{title}'.",
         absence_notice: "{name} let us know they cannot make '{title}'.",
         category_request: "{name} requested an industry change.",
         category_approved: "Your industry change was approved.",
@@ -922,6 +923,14 @@ export const en: Messages = {
       go: { profile: "/connect/profile", buddy: "/connect/one-to-one", one_to_one: "/connect/one-to-one", referral: "/connect/referrals", visitor: "/connect/visitors", learning: "/connect/academy", attendance: "/connect/events" },
       done: "Done", progress: "{a}/{b}",
       leader: { title: "New members, first 90 days", sub: "Progress and companions for members within their first 90 days.", none: "No members within their first 90 days right now.", pick: "Choose a companion", assign: "Assign", change: "Change", steps: "{a}/{b} steps" },
+    },
+    meeting: {
+      nav: "Gathering plan", title: "Gathering plan", sub: "Preview how this gathering will run.", back: "Back to schedule", open: "View plan",
+      none: "No plan yet.", noAccess: "You can only see gatherings of your own tent.", minutes: "min", owner: "Lead", total: "{n} min total",
+      sections: { welcome: "Welcome and prayer", word: "A word from Scripture", newcomers: "Greeting new members and guests", featured: "Featured sharing", sharing: "Referrals and thanks", requests: "This week's requests", prayer: "Prayer requests and closing" },
+      featured: { title: "Featured speaker", topic: "Topic (optional)", none: "Not chosen yet", suggest: "Suggested (longest since last turn)", never: "Has not spoken yet", last: "Last spoke {d}" },
+      edit: { title: "Set the plan and speaker", save: "Save", saved: "Saved.", error: "Could not save.", hint: "Set 0 minutes to skip a part." },
+      recap: { title: "Gathering recap", members: "Tent members", attended: "Attended", notices: "Notices of absence", signups: "Sign-ups", guests: "Guests", post: "Post as recap", posted: "Posted to the tent as a recap.", postTitle: "{t} recap", postBody: "{a} people gathered, with {g} guest(s). {n} notice(s) of absence were given. Featured sharing: {f}. Thank you for being there." },
     },
     visitors: {
       nav: "Invite guests", title: "Invite guests", sub: "Invite people who would be a good fit to your chapter gathering. When a guest actually attends, your chapter leader confirms it and it counts toward your growth index.",

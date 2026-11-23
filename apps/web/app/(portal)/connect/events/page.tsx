@@ -127,6 +127,7 @@ export default async function Events() {
             </span>
             <span className="text-[10px] tracking-[0.2em] text-soft/80">0 · 6 · 12 · 18 · 24</span>
           </div>
+          {e.chapter_id && <a href={`/connect/meeting/${e.id}`} className="mt-3 inline-block text-sm text-accent underline">{m.connect.meeting.open}</a>}
           {!isPast && (e.learning_units > 0 || e.signup_deadline || e.min_people || e.capacity) && (() => {
             const sm = sumBy.get(e.id);
             const closed = !!e.signup_deadline && new Date(e.signup_deadline).getTime() < nowMs;

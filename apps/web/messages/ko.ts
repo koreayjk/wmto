@@ -870,6 +870,7 @@ export const ko = {
         referral_closed: "{name} 님과 소개가 성사로 마무리됐어요. 감사 인사를 전해 보세요.",
         companion_buddy: "{name} 님의 동행 짝이 되셨어요. 먼저 1:1로 만나 안부를 나눠 보세요.",
         companion_newcomer: "{name} 님이 동행 짝이에요. 첫 1:1 만남을 잡아 보세요.",
+        featured_assigned: "'{title}' 모임에서 나눔 발표를 맡으셨어요.",
         absence_notice: "{name} 님이 '{title}'에 못 간다고 미리 알렸어요.",
         category_request: "{name} 님이 업종 변경을 신청했어요.",
         category_approved: "업종 변경이 승인됐어요.",
@@ -933,6 +934,14 @@ export const ko = {
       go: { profile: "/connect/profile", buddy: "/connect/one-to-one", one_to_one: "/connect/one-to-one", referral: "/connect/referrals", visitor: "/connect/visitors", learning: "/connect/academy", attendance: "/connect/events" },
       done: "완료", progress: "{a}/{b}",
       leader: { title: "새 회원 첫 90일", sub: "입회 90일 안의 분들의 걸음과 동행 짝입니다.", none: "지금 입회 90일 안의 분이 없어요.", pick: "동행 짝 고르기", assign: "짝 지정", change: "바꾸기", steps: "{a}/{b}걸음" },
+    },
+    meeting: {
+      nav: "모임 순서", title: "모임 순서", sub: "이번 모임을 어떻게 진행할지 미리 봅니다.", back: "일정으로", open: "모임 순서 보기",
+      none: "아직 정해진 순서가 없어요.", noAccess: "내 텐트의 모임만 볼 수 있어요.", minutes: "분", owner: "담당", total: "총 {n}분",
+      sections: { welcome: "환영과 기도", word: "말씀 한 토막", newcomers: "새 회원·손님 인사", featured: "나눔 발표", sharing: "소개와 감사 나눔", requests: "이번 주 도움 요청", prayer: "기도 제목과 마무리" },
+      featured: { title: "나눔 발표자", topic: "발표 주제(선택)", none: "아직 정하지 않았어요", suggest: "추천(가장 오래 발표하지 않은 분)", never: "아직 발표 안 함", last: "마지막 발표 {d}" },
+      edit: { title: "순서와 발표자 정하기", save: "저장", saved: "저장했습니다.", error: "저장하지 못했습니다.", hint: "0분으로 두면 그 순서는 건너뜁니다." },
+      recap: { title: "모임 요약", members: "텐트 회원", attended: "출석", notices: "미리 알린 결석", signups: "참가 신청", guests: "함께한 손님", post: "후기 글로 올리기", posted: "텐트 후기로 올렸습니다.", postTitle: "{t} 후기", postBody: "{a}명이 함께했고, 손님 {g}명이 함께했습니다. 미리 알려 주신 결석은 {n}건입니다. 나눔 발표: {f}. 함께해 주셔서 감사합니다." },
     },
     visitors: {
       nav: "손님 초대", title: "손님 초대", sub: "함께하면 좋을 분을 챕터 모임에 초대하세요. 손님이 실제로 참석하면 챕터 리더가 확인해 성장 지표에 반영됩니다.",
