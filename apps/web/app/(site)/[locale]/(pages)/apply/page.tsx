@@ -4,6 +4,8 @@ import { getMessages, type Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 import { applicationTypes, isApplicationType } from "@/lib/codes";
 import { ApplyForm } from "./ApplyForm";
+import { createSupabaseAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { groupCategories, loadCategories } from "@/lib/categories";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -15,6 +17,11 @@ export default async function Apply({ params, searchParams }: { params: Promise<
   const { type: raw } = await searchParams;
   const type = isApplicationType(raw) ? raw : "contact";
   const m = getMessages(locale as Locale).apply;
+  // 사업가 가입 폼에서 고를 업종 목록(읽을 수 없으면 비어 있고, 그때는 자유 입력으로 대체)
+  let categories: ReturnType<typeof groupCategories> = [];
+  if (type === "mentor_join" && isSupabaseConfigured()) {
+    try { categories = groupCategories(await loadCategories(createSupabaseAdminClient()), locale === "en" ? "en" : "ko"); } catch { categories = []; }
+  }
   return (
     <section className="bg-paper pb-28 pt-32 md:pt-40">
       <div className="mx-auto max-w-2xl px-6">
@@ -36,7 +43,7 @@ export default async function Apply({ params, searchParams }: { params: Promise<
         </nav>
 
         {/* key: 유형을 바꾸면 폼 상태를 초기화 */}
-        <ApplyForm key={type} type={type} />
+        <ApplyForm key={type} type={type} categories={categories} />
       </div>
     </section>
   );

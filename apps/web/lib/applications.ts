@@ -42,6 +42,7 @@ export const applicationSchema = z.discriminatedUnion("type", [
     type: z.literal("mentor_join"),
     businessName: optional(200),
     industry: optional(200),
+    categoryId: optional(10),
     contributionTypes: list(contributionTypes).pipe(z.array(z.enum(contributionTypes)).min(1)),
   }),
   z.object({

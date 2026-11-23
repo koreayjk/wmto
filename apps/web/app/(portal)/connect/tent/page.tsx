@@ -128,7 +128,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
 
       <p className="col-span-full -mt-4 max-w-3xl text-sm leading-relaxed text-soft">
         {o.tent.region ? `${o.tent.region}` : ""}{o.tent.districts?.length ? ` · ${o.tent.districts.join(" · ")}` : ""}
-        {" · "}{t.capacity.replace("{n}", String(mentors.length)).replace("{max}", "12")}
+        {" · "}{t.capacity.replace("{n}", String(mentors.length)).replace("{max}", "50")}
         <span className="block">{t.splitNote}</span>
       </p>
 

@@ -89,19 +89,24 @@ type Input = ReturnType<typeof applicationSchema.parse>;
 // 프로필 upsert 에서 stage 는 건드리지 않아 기존 단계가 유지됩니다.
 async function saveProfile(db: Db, memberId: string, input: Input) {
   switch (input.type) {
-    case "mentor_join":
+    case "mentor_join": {
+      // 업종은 표준 목록에서 고릅니다(한 챕터에 같은 업종은 한 명). 고른 업종 이름을 industry 에도 함께 저장합니다.
+      const cid = input.categoryId && /^\d+$/.test(input.categoryId) ? Number(input.categoryId) : null;
+      const { data: cat } = cid ? await db.from("industry_categories").select("name_ko").eq("id", cid).maybeSingle() : { data: null };
       await check(
         db.from("mentor_profiles").upsert(
           {
             member_id: memberId,
             business_name: input.businessName ?? null,
-            industry: input.industry ?? null,
+            industry: cat?.name_ko ?? input.industry ?? null,
+            ...(cat ? { category_id: cid } : {}),
             contribution_types: input.contributionTypes,
           },
           { onConflict: "member_id" },
         ),
       );
       break;
+    }
     case "camp_instructor":
       await check(
         db

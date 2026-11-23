@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { isLocale, LOCALE_COOKIE } from "@/lib/i18n";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase/server";
 import { Avatar } from "@/components/connect/Avatar";
+import { groupCategories, loadCategories } from "@/lib/categories";
 import { AvatarUploader } from "@/components/connect/AvatarUploader";
 import { contributionTypes, krRegions, sponsorTypes } from "@/lib/codes";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
@@ -22,7 +23,14 @@ async function saveProfile(fd: FormData) {
   await supabase.from("members").update({ name, phone: opt(fd, "phone", 50), country: opt(fd, "country", 100), region: (krRegions as readonly string[]).includes(String(fd.get("region"))) ? String(fd.get("region")) : null, district: opt(fd, "district", 100) }).eq("id", me.id);
   if (me.role === "mentor") {
     const types = fd.getAll("contribution_types").map(String).filter((v) => (contributionTypes as readonly string[]).includes(v));
-    await supabase.from("mentor_profiles").update({ business_name: opt(fd, "business_name"), industry: opt(fd, "industry"), contribution_types: types }).eq("member_id", me.id);
+    // 업종은 표준 목록에서 고릅니다. 한 챕터에 같은 업종이 이미 있으면 DB 가 거부합니다.
+    const cid = /^\d+$/.test(String(fd.get("category_id") ?? "")) ? Number(fd.get("category_id")) : null;
+    const { data: cat } = cid ? await supabase.from("industry_categories").select("name_ko").eq("id", cid).maybeSingle() : { data: null };
+    const { error } = await supabase.from("mentor_profiles").update({
+      business_name: opt(fd, "business_name"), industry: cat?.name_ko ?? opt(fd, "industry"),
+      ...(cid ? { category_id: cid } : {}), contribution_types: types,
+    }).eq("member_id", me.id);
+    if (error?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
   } else if (me.role === "partner") {
     await supabase.from("partner_profiles").update({ mission_field: opt(fd, "mission_field"), sending_org: opt(fd, "sending_org"), business_idea: opt(fd, "business_idea", 1000) }).eq("member_id", me.id);
   } else if (me.role === "sponsor") {
@@ -63,20 +71,22 @@ async function setLanguage(fd: FormData) {
   redirect("/connect/profile");
 }
 
-export default async function Profile({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
+export default async function Profile({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
   const c = getMessages(locale).connect;
   const t = c.profile;
   const f = getMessages(locale).apply;
   const p = (me.profile ?? {}) as Record<string, string | string[] | null>;
-  const { saved } = await searchParams;
+  const { saved, error: err } = await searchParams;
+  const cats = me.role === "mentor" ? groupCategories(await loadCategories(supabase), locale === "en" ? "en" : "ko") : [];
   const { data: loc } = await supabase.from("members").select("region,district").eq("id", me.id).maybeSingle();
   const roleLabel = me.role ? f.options.role[me.role] : "-";
 
   return (
     <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,23rem)_minmax(0,1fr)] lg:items-start">
       <div className="lg:col-span-full"><PageTitle eyebrow="Profile">{t.title}</PageTitle></div>
+      {err === "category_taken" && <p role="alert" className="lg:col-span-full rounded-2xl bg-[#fdf1ee] px-4 py-3 text-sm text-[#8a2f1a]">{t.categoryTaken}</p>}
       {saved && <p role="status" className="lg:col-span-full rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
       <div className="space-y-5 lg:sticky lg:top-6">
       <Card>
@@ -123,7 +133,16 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           {me.role === "mentor" && (
             <>
               <label className="block"><span className={labelCls}>{f.fields.businessName}</span><input name="business_name" defaultValue={(p.business_name as string) ?? ""} className="field" /></label>
-              <label className="block"><span className={labelCls}>{f.fields.industry}</span><input name="industry" defaultValue={(p.industry as string) ?? ""} className="field" /></label>
+              <label className="block">
+                <span className={labelCls}>{f.fields.industry}</span>
+                {cats.length > 0 ? (
+                  <select name="category_id" defaultValue={String((p.category_id as number | null) ?? "")} className="field">
+                    <option value="">{c.select}</option>
+                    {cats.map((g) => <optgroup key={g.group} label={g.group}>{g.items.map((i) => <option key={i.id} value={i.id}>{i.label}</option>)}</optgroup>)}
+                  </select>
+                ) : <input name="industry" defaultValue={(p.industry as string) ?? ""} className="field" />}
+                {cats.length > 0 && <span className="mt-2 block text-xs text-soft">{t.categoryNote}</span>}
+              </label>
               <fieldset>
                 <legend className={labelCls}>{f.fields.contributionTypes}</legend>
                 <div className="flex flex-wrap gap-x-5 gap-y-2">

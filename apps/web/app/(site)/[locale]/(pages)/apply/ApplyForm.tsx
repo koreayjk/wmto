@@ -47,7 +47,7 @@ const input = (name: string, props: React.InputHTMLAttributes<HTMLInputElement> 
   <input name={name} className="field" {...props} />
 );
 
-export function ApplyForm({ type }: { type: ApplicationType }) {
+export function ApplyForm({ type, categories = [] }: { type: ApplicationType; categories?: { group: string; items: { id: number; label: string }[] }[] }) {
   const m = getMessages(localeFromPathname(usePathname())).apply;
   const [state, action, pending] = useActionState(submitApplication, initial);
   const errRef = useRef<HTMLDivElement>(null);
@@ -97,7 +97,19 @@ export function ApplyForm({ type }: { type: ApplicationType }) {
         <>
           <div className="grid gap-6 sm:grid-cols-2">
             <Field label={f.businessName}>{input("businessName")}</Field>
-            <Field label={f.industry}>{input("industry")}</Field>
+            <Field label={f.industry} required={categories.length > 0}>
+              {categories.length > 0 ? (
+                <select name="categoryId" required defaultValue="" className="field">
+                  <option value="" disabled>{m.select}</option>
+                  {categories.map((g) => (
+                    <optgroup key={g.group} label={g.group}>
+                      {g.items.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    </optgroup>
+                  ))}
+                </select>
+              ) : input("industry")}
+              {categories.length > 0 && <p className="mt-2 text-sm text-soft">{m.categoryNote}</p>}
+            </Field>
           </div>
           <Field label={f.contributionTypes} required>
             <Checks name="contributionTypes" values={contributionTypes} labels={m.options.contribution} />

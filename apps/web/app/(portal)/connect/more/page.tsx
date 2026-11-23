@@ -11,7 +11,7 @@ export default async function More() {
   const it = m.items;
   const links: { href: string; name: string; text: string }[] = [{ href: "/connect/tent", name: getMessages(locale).connect.tent.title, text: getMessages(locale).connect.tent.sub }];
   if (me.role === "partner") links.push({ href: "/connect/matching", ...it.matching }, { href: "/connect/thanks", ...it.thanks });
-  if (me.role === "mentor") links.push({ href: "/connect/matching", ...it.requests }, { href: "/connect/referrals", ...it.referrals }, { href: "/connect/thanks", ...it.thanks });
+  if (me.role === "mentor") links.push({ href: "/connect/one-to-one", name: getMessages(locale).connect.oneToOne.nav, text: getMessages(locale).connect.oneToOne.title }, { href: "/connect/matching", ...it.requests }, { href: "/connect/referrals", ...it.referrals }, { href: "/connect/thanks", ...it.thanks });
   if (me.role === "sponsor") {
     const sp = getMessages(locale).connect.sponsor;
     links.push({ href: "/connect/giving", name: sp.navGiving, text: sp.giving.sub }, { href: "/connect/news", name: sp.navNews, text: sp.news.sub }, { href: "/connect/fund", name: sp.navFund, text: sp.fund.sub });

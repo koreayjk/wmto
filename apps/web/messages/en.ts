@@ -87,7 +87,7 @@ export const en: Messages = {
       title: "One place for the road we walk together: WMTO Connect",
       body: "The app for WMTO members. Meet in a regional tent, walk with the missionaries you mentor, and exchange mentoring notes, thank-you letters, and giving news. Try it with sample data before you join.",
       screens: [
-        { key: "tent", label: "Tent", title: "Our local gathering", text: "You join the tent for your area automatically and share regular gatherings, notices, and recaps. When a tent passes 12 business owners it splits in two by district." },
+        { key: "tent", label: "Tent", title: "Our local gathering", text: "You join the tent for your area automatically and share regular gatherings, notices, and recaps. A tent holds up to 50 members and only one business owner per industry; when it is full or the industry is taken, a new tent opens in the same region. Tents share regular gatherings, notices, and recaps." },
         { key: "mentoring", label: "Mentoring log", title: "Every meeting, in order", text: "Record what you shared, the next steps, and prayer topics. Notes are shared by default with other mentors helping the same missionary, or kept between the two of you if personal." },
         { key: "letters", label: "Thank-you letters", title: "Words on real stationery", text: "Missionaries write to the mentors who helped them, and business owners read each letter as it arrives." },
         { key: "referrals", label: "Referrals", title: "Find by industry and region", text: "See photos and business details to find a business owner and refer a client. Helping one another, BNI style." },
@@ -649,6 +649,7 @@ export const en: Messages = {
     consentHelp:
       "Data collected: name, email, phone, country of residence, and what you enter / Purpose: receiving your application and replying / Retention: until the purpose is fulfilled",
     select: "Select",
+    categoryNote: "Each chapter (tent) has only one business owner per industry. If the chapter in your area already has your industry, we will guide you to a new one.",
     errorTitle: "We could not send it",
     submit: "Send",
     submitting: "Sending…",
@@ -757,6 +758,8 @@ export const en: Messages = {
     },
     profile: {
       photo: { title: "Photo", choose: "Upload a photo", change: "Change photo", busy: "Uploading…", hint: "A clear headshot is best. Others see it in referrals and tents." },
+      categoryTaken: "Someone in your chapter already holds this industry, so it cannot be changed. Pick another industry or contact the team.",
+      categoryNote: "Each chapter has only one business owner per industry.",
       locationNote: "You are placed in the tent for your area automatically. If you change your area, you move to the tent of the new area.",
       title: "Profile",
       save: "Save",
@@ -781,7 +784,7 @@ export const en: Messages = {
     },
     tent: {
       title: "Tent", sub: "Our gathering that meets regularly, by region or online.",
-      capacity: "{n} of {max} business owners", splitNote: "Tents form automatically by region (province or country). When a tent grows past 12 business owners, it splits in two by district.",
+      capacity: "{n} of {max} business owners", splitNote: "Tents form by region (province or country). Each tent has only one business owner per industry and holds up to 50 members; when it is full, a new tent opens in the same region.",
       mine: "My tents", viaOwn: "My tent", viaMentor: "Mentor's tent", online: "Online",
       partnerNote: "Missionaries do not need to apply. When a business owner welcomes you into their tent, you become part of it, and whoever wants to mentor you steps forward with \"Mentor this missionary\".",
       noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join a tent when a business owner there welcomes them.",
@@ -797,6 +800,22 @@ export const en: Messages = {
       pickupSub: "Missionaries without a tent yet. When one business owner welcomes a missionary, they become part of this tent. No mentor is chosen yet.",
       pickupBtn: "Welcome into our tent", pickupEmpty: "No missionary is waiting right now.", pickupHint: "They only join the tent. Tent members choose a mentor next.",
       roles: { mentor: "Business owner", partner: "Missionary", sponsor: "Sponsor" },
+    },
+    oneToOne: {
+      nav: "1:1 meetings", title: "1:1 meeting log", sub: "Meet a chapter member one-on-one to get to know each other, and log it here. Once they confirm, it counts for both of you.",
+      new: "New 1:1 meeting", peer: "Who you met", pick: "Choose a chapter member", notMetGroup: "Not met in the last 90 days", metGroup: "Recently met",
+      heldAt: "When (Korea time)", duration: "Minutes", place: "Place", learned: "What we learned about each other", canHelp: "How I can help", nextStep: "What we will follow up on",
+      introTo: "Someone to introduce (optional)", prayer: "Prayer topic (optional)", photo: "Proof photo", optional: "optional", photoChoose: "Add a photo", photoChange: "Change photo",
+      photoHint: "A photo of the two of you is best. Only you two and the chapter leader can see it.",
+      consent: "If the other person agrees, you may show this photo to the two of us and the chapter leader.", save: "Save and ask them to confirm",
+      confirmNote: "It counts as a 1:1 once the other person confirms within 7 days. The same person counts once per 30 days.",
+      saved: "Saved. It counts as a 1:1 once they confirm.",
+      noPeers: "No other business owner is in your chapter yet. People you can meet will appear once you are placed in a chapter.",
+      count90: "1:1s in 90 days", metPeople: "Members met", notMetCount: "Not yet met",
+      waiting: "Waiting for your confirmation", confirm: "Confirm", decline: "Not right", confirmConsent: "You may show the photo to us and the chapter leader", photoAfterConfirm: "The photo is shown only if you consent when confirming.",
+      mine: "My 1:1 records", empty: "No records yet.", byMe: "Logged by me", byOther: "Logged by them", suggest: "People worth meeting next",
+      status: { pending: "Awaiting", confirmed: "Confirmed", declined: "Declined", expired: "Expired" },
+      errors: { form: "Could not save. Please check what you entered.", photo: "A proof photo is required or could not be uploaded. Please choose it again.", chapter: "You can only log a 1:1 with someone in your chapter.", dup: "The same person counts once within 30 days.", expired: "The 7-day confirmation window has passed." },
     },
     growth: {
       title: "Activity and growth",
@@ -941,7 +960,7 @@ export const en: Messages = {
       failed: "We could not open the demo. Please try again in a moment.",
       what: { title: "How WMTO works", body: "Christian business owners teach, missionaries stand on their own, and sponsors open the way. What we receive, we pass on to the next person. (More Blessed to Give)" },
       flow: [
-        { name: "Meet in your regional tent", text: "Business owners and sponsors join the tent of their region (province or country) automatically. When a tent passes 12 business owners it splits in two by district. Tents share regular gatherings, notices, and recaps." },
+        { name: "Meet in your regional tent", text: "Business owners and sponsors join the tent of their region (province or country) automatically. A tent holds up to 50 members and only one business owner per industry; when it is full or the industry is taken, a new tent opens in the same region. Tents share regular gatherings, notices, and recaps." },
         { name: "A missionary asks for help", text: "Missionaries do not pick a tent. They post a request for the help they need: skills, business coaching, market access, or expert advice." },
         { name: "A tent welcomes the missionary", text: "When one business owner chooses \"Welcome into our tent\", the missionary becomes part of that tent. No mentor is chosen yet." },
         { name: "Whoever wants to mentor steps forward", text: "A business owner in the tent who wants to mentor the missionary presses \"Mentor this missionary\", and one-to-one mentoring begins. Several mentors can help the same missionary." },

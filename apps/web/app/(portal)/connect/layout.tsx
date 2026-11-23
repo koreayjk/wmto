@@ -72,14 +72,14 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/one-to-one", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
   const role = active?.role;
   const network: { href: string; label: string }[] = [{ href: "/connect/tent", label: m.tent.title }];
   if (role === "partner") network.push({ href: "/connect/matching", label: it.matching.name }, { href: "/connect/thanks", label: it.thanks.name });
-  if (role === "mentor") network.push({ href: "/connect/matching", label: it.requests.name }, { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
+  if (role === "mentor") network.push({ href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/matching", label: it.requests.name }, { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
   const activity = [{ href: "/connect/events", label: m.nav.events }];
   const reports: { href: string; label: string }[] = [];
   if (role === "mentor" || role === "partner") {
