@@ -48,8 +48,15 @@ export default async function Events() {
   const c = m.connect.events;
   const tl = c.tl;
   const since = new Date(Date.now() - 30 * 86400_000).toISOString();
+  // 새 컬럼(참가 조건)이 아직 없는 데이터베이스에서도 일정이 보이도록, 실패하면 기본 컬럼만 다시 읽습니다.
+  const loadEvents = async () => {
+    const full = await supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url,learning_units,signup_deadline,min_people,capacity").gte("start_at", since).order("start_at");
+    if (!full.error) return full;
+    const basic = await supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url").gte("start_at", since).order("start_at");
+    return { ...basic, data: (basic.data ?? []).map((e) => ({ ...e, learning_units: 0, signup_deadline: null, min_people: null, capacity: null })) };
+  };
   const [{ data: events }, { data: att }, { data: mine }, { data: notices }, { data: sums }] = await Promise.all([
-    supabase.from("events").select("id,chapter_id,type,title,start_at,end_at,location,meeting_url,learning_units,signup_deadline,min_people,capacity").gte("start_at", since).order("start_at"),
+    loadEvents(),
     supabase.from("attendance").select("event_id").eq("member_id", me.id),
     supabase.rpc("my_tents"),
     me.role === "mentor" ? supabase.from("absence_notices").select("event_id").eq("member_id", me.id) : Promise.resolve({ data: [] }),

@@ -21,10 +21,10 @@ async function addEvent(fd: FormData) {
     meeting_provider: String(fd.get("meeting_url") ?? "") ? (fd.get("meeting_provider") === "bbb" ? "bbb" : "zoom") : null,
     meeting_url: String(fd.get("meeting_url") ?? "") || null,
     chapter_id: String(fd.get("chapter_id") ?? "") || null,
-    learning_units: Math.min(20, Math.max(0, Number(fd.get("learning_units")) || 0)),
-    signup_deadline: String(fd.get("signup_deadline") ?? "") ? new Date(`${String(fd.get("signup_deadline"))}:00+09:00`).toISOString() : null,
-    min_people: Number(fd.get("min_people")) > 0 ? Math.min(1000, Number(fd.get("min_people"))) : null,
-    capacity: Number(fd.get("capacity")) > 0 ? Math.min(1000, Number(fd.get("capacity"))) : null,
+    ...(Number(fd.get("learning_units")) > 0 ? { learning_units: Math.min(20, Number(fd.get("learning_units"))) } : {}),
+    ...(String(fd.get("signup_deadline") ?? "") ? { signup_deadline: new Date(`${String(fd.get("signup_deadline"))}:00+09:00`).toISOString() } : {}),
+    ...(Number(fd.get("min_people")) > 0 ? { min_people: Math.min(1000, Number(fd.get("min_people"))) } : {}),
+    ...(Number(fd.get("capacity")) > 0 ? { capacity: Math.min(1000, Number(fd.get("capacity"))) } : {}),
   });
   revalidatePath("/admin/events");
   revalidatePath("/events");
