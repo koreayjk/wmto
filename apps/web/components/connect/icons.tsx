@@ -1,6 +1,6 @@
 "use client";
 
-import { House, HandHeart, ShareNetwork, Envelope, CalendarBlank, ChatsCircle, Notebook, Plant, PlayCircle, UserCircle, DotsThree, HandCoins, Newspaper, ArrowsClockwise, Campfire, Handshake, UserPlus, Globe, Bell, ChartBar, ClipboardText, ListChecks, ShieldCheck, Quotes } from "@phosphor-icons/react";
+import { House, HandHeart, ShareNetwork, Envelope, CalendarBlank, ChatsCircle, Notebook, Plant, PlayCircle, UserCircle, DotsThree, HandCoins, Newspaper, ArrowsClockwise, Campfire, Handshake, UserPlus, Globe, Bell, ChartBar, ClipboardText, ListChecks, ShieldCheck, Quotes, UsersThree } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 
 type Icon = ComponentType<{ size?: number; weight?: "light" | "regular"; "aria-hidden"?: boolean }>;
@@ -29,6 +29,7 @@ const map: Record<string, Icon> = {
   "/connect/records": ListChecks,
   "/connect/privacy": ShieldCheck,
   "/connect/testimonials": Quotes,
+  "/connect/circles": UsersThree,
   "/connect/renewal": ArrowsClockwise,
 };
 

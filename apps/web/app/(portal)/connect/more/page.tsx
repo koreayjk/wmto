@@ -23,6 +23,7 @@ export default async function More() {
   }
   links.push({ href: "/connect/academy", ...it.academy });
   if (me.role === "mentor" || me.role === "partner") links.push({ href: "/connect/growth", ...it.growth });
+  if (me.role === "mentor") links.push({ href: "/connect/circles", name: getMessages(locale).connect.circles.nav, text: getMessages(locale).connect.circles.title });
   if (me.role === "mentor") links.push({ href: "/connect/testimonials", name: getMessages(locale).connect.testimonials.nav, text: getMessages(locale).connect.testimonials.title });
   if (me.role === "mentor") links.push({ href: "/connect/records", name: getMessages(locale).connect.records.nav, text: getMessages(locale).connect.records.title });
   links.push({ href: "/connect/profile", ...it.profile }, { href: "/connect/privacy", name: getMessages(locale).connect.privacy.nav, text: getMessages(locale).connect.privacy.title });

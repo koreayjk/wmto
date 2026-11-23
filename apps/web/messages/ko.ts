@@ -873,6 +873,8 @@ export const ko = {
         testimonial_written: "{name} 님이 추천사를 써 주셨어요. 공개 여부를 정해 주세요.",
         testimonial_request: "{name} 님이 추천사를 부탁했어요.",
         testimonial_published: "{name} 님이 추천사를 공개했어요.",
+        circle_added: "'{name}' 동역 소그룹에 함께하게 됐어요.",
+        circle_post: "{name} 님이 소그룹에 소개 기회를 나눴어요.",
         featured_assigned: "'{title}' 모임에서 나눔 발표를 맡으셨어요.",
         absence_notice: "{name} 님이 '{title}'에 못 간다고 미리 알렸어요.",
         category_request: "{name} 님이 업종 변경을 신청했어요.",
@@ -953,6 +955,12 @@ export const ko = {
       write: "추천사 쓰기", pick: "함께 일해 본 사업가", body: "추천하는 이야기", bodyHint: "어떤 일을 함께했고, 어떤 점이 좋았는지 구체적으로 적어 주세요(10자 이상).", send: "보내기",
       noCandidates: "추천사는 1:1 만남이 확인되었거나 소개를 주고받은 분께만 쓸 수 있어요.", alreadyWrote: "이미 씀",
       ask: "추천사 부탁하기", askPick: "부탁할 분", askSend: "부탁 보내기", asked: "부탁을 보냈어요.", saved: "보냈어요. 받는 분이 공개를 정하면 알려 드려요.", error: "보내지 못했어요. 이미 썼거나 함께한 기록이 없을 수 있어요.",
+    },
+    circles: {
+      nav: "동역 소그룹", title: "동역 소그룹", sub: "서로의 고객층을 이어 줄 수 있는 3~6명의 작은 모임입니다. 이번 주 소개할 기회를 나눕니다.",
+      mine: "내 소그룹", none: "아직 소그룹에 속하지 않았어요. 텐트장이 함께할 분들과 묶어 드려요.", members: "함께하는 분", leave: "나가기",
+      board: "이번 주 소개 기회", boardHint: "소개해 드릴 수 있는 고객 이야기나, 필요한 도움을 짧게 나눠 주세요. (고객 연락처는 적지 마세요)", post: "나누기", noPosts: "아직 글이 없어요.",
+      leader: { title: "텐트 소그룹 관리", create: "소그룹 만들기", name: "이름", purpose: "목적(선택)", add: "구성원 추가", pick: "소그룹 없는 분", close: "소그룹 닫기", remove: "빼기", free: "아직 소그룹이 없는 분", empty: "만든 소그룹이 없어요.", max: "한 소그룹은 최대 6명", error: "처리하지 못했어요. 이미 다른 소그룹이거나 정원이 찼을 수 있어요." },
     },
     visitors: {
       nav: "손님 초대", title: "손님 초대", sub: "함께하면 좋을 분을 챕터 모임에 초대하세요. 손님이 실제로 참석하면 챕터 리더가 확인해 성장 지표에 반영됩니다.",

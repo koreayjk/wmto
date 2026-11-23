@@ -862,6 +862,8 @@ export const en: Messages = {
         testimonial_written: "{name} wrote you a testimonial. Choose whether to publish it.",
         testimonial_request: "{name} asked you for a testimonial.",
         testimonial_published: "{name} published your testimonial.",
+        circle_added: "You joined the '{name}' partner circle.",
+        circle_post: "{name} shared a referral chance in your circle.",
         featured_assigned: "You are the featured speaker at '{title}'.",
         absence_notice: "{name} let us know they cannot make '{title}'.",
         category_request: "{name} requested an industry change.",
@@ -942,6 +944,12 @@ export const en: Messages = {
       write: "Write a testimonial", pick: "Someone you worked with", body: "Your recommendation", bodyHint: "Describe what you did together and what was good (at least 10 characters).", send: "Send",
       noCandidates: "You can write for members with a confirmed 1:1 or a referral exchanged.", alreadyWrote: "Written",
       ask: "Ask for a testimonial", askPick: "Who to ask", askSend: "Send request", asked: "Request sent.", saved: "Sent. We will let you know when they decide.", error: "Could not send. You may have already written one, or have no shared work.",
+    },
+    circles: {
+      nav: "Partner circles", title: "Partner circles", sub: "Small groups of 3–6 who can connect each other's client bases. Share referral opportunities each week.",
+      mine: "My circle", none: "You are not in a circle yet. Your tent leader will group you with others.", members: "Members", leave: "Leave",
+      board: "This week's referral chances", boardHint: "Share client stories you could refer, or help you need, briefly. (Do not post client contact details.)", post: "Share", noPosts: "No posts yet.",
+      leader: { title: "Manage tent circles", create: "Create a circle", name: "Name", purpose: "Purpose (optional)", add: "Add member", pick: "Members without a circle", close: "Close circle", remove: "Remove", free: "Members without a circle", empty: "No circles yet.", max: "Up to 6 per circle", error: "Could not process. They may already be in another circle, or it is full." },
     },
     visitors: {
       nav: "Invite guests", title: "Invite guests", sub: "Invite people who would be a good fit to your chapter gathering. When a guest actually attends, your chapter leader confirms it and it counts toward your growth index.",
