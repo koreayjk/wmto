@@ -856,6 +856,8 @@ export const en: Messages = {
         referral_received: "{name} referred a client to you. Please reach out and update the status.",
         referral_contacted: "{name} reached out to the client you referred.",
         referral_closed: "Your referral with {name} was completed. Consider sending thanks.",
+        companion_buddy: "You are now {name}'s companion. Meet 1:1 first and say hello.",
+        companion_newcomer: "{name} is your companion. Set up your first 1:1.",
         absence_notice: "{name} let us know they cannot make '{title}'.",
         category_request: "{name} requested an industry change.",
         category_approved: "Your industry change was approved.",
@@ -913,6 +915,13 @@ export const en: Messages = {
     },
     absence: { title: "Let us know you can't come", reason: { schedule: "Schedule conflict", health: "Not feeling well", travel: "Trip / travel", family: "Family matter", other: "Other" }, note: "One-line note (optional)", send: "Let them know", done: "Notice sent", cancel: "Cancel", hint: "Giving notice does not hurt your attendance score or care list." },
     catChange: { title: "Change industry", current: "Current industry", note: "Each tent has one member per industry, so changing needs approval from your tent leader or the team.", pick: "Industry you want", why: "Why (optional)", send: "Request change", pending: "Your change request is under review.", review: "Industry change requests", approve: "Approve", decline: "Decline", taken: "That industry is already taken in this tent." },
+    first90: {
+      title: "First 90 days", sub: "Seven steps we walk together so new members take root in the tent.", day: "Day {n} of membership", left: "{n} days left", buddy: "Companion", noBuddy: "No companion yet. Your tent leader will assign one soon.",
+      steps: { profile: "Complete your profile (photo, phone, industry, intro)", buddy: "Meet 1:1 with your companion", one_to_one: "Two 1:1 meetings with other members", referral: "Send your first referral", visitor: "Invite one guest", learning: "Two learning units (lesson, scripture or reading)", attendance: "Attend three gatherings" },
+      go: { profile: "/connect/profile", buddy: "/connect/one-to-one", one_to_one: "/connect/one-to-one", referral: "/connect/referrals", visitor: "/connect/visitors", learning: "/connect/academy", attendance: "/connect/events" },
+      done: "Done", progress: "{a}/{b}",
+      leader: { title: "New members, first 90 days", sub: "Progress and companions for members within their first 90 days.", none: "No members within their first 90 days right now.", pick: "Choose a companion", assign: "Assign", change: "Change", steps: "{a}/{b} steps" },
+    },
     visitors: {
       nav: "Invite guests", title: "Invite guests", sub: "Invite people who would be a good fit to your chapter gathering. When a guest actually attends, your chapter leader confirms it and it counts toward your growth index.",
       invite: "Invite a new guest", name: "Guest name", contact: "Contact (optional)", category: "What they do", planned: "Planned date (optional)", note: "Note (optional)", send: "Record invitation", saved: "Invitation recorded.",

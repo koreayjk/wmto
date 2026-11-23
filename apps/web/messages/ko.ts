@@ -867,6 +867,8 @@ export const ko = {
         referral_received: "{name} 님이 고객을 소개했어요. 연락해 진행 상태를 알려 주세요.",
         referral_contacted: "{name} 님이 소개한 고객에게 연락했어요.",
         referral_closed: "{name} 님과 소개가 성사로 마무리됐어요. 감사 인사를 전해 보세요.",
+        companion_buddy: "{name} 님의 동행 짝이 되셨어요. 먼저 1:1로 만나 안부를 나눠 보세요.",
+        companion_newcomer: "{name} 님이 동행 짝이에요. 첫 1:1 만남을 잡아 보세요.",
         absence_notice: "{name} 님이 '{title}'에 못 간다고 미리 알렸어요.",
         category_request: "{name} 님이 업종 변경을 신청했어요.",
         category_approved: "업종 변경이 승인됐어요.",
@@ -924,6 +926,13 @@ export const ko = {
     },
     absence: { title: "못 가요 미리 알리기", reason: { schedule: "일정이 겹쳐요", health: "몸이 좋지 않아요", travel: "출장·여행", family: "집안 일", other: "기타" }, note: "한 줄 메모(선택)", send: "알리기", done: "미리 알렸어요", cancel: "취소", hint: "미리 알리면 출석 점수와 돌봄 목록에서 불이익이 없어요." },
     catChange: { title: "업종 변경", current: "현재 업종", note: "업종은 한 텐트에 한 분이라, 바꾸려면 텐트장·운영진의 승인이 필요해요.", pick: "바꾸고 싶은 업종", why: "바꾸려는 이유(선택)", send: "변경 신청", pending: "변경 신청이 검토 중이에요.", review: "업종 변경 신청", approve: "승인", decline: "거절", taken: "그 업종은 이 텐트에 이미 있어 바꿀 수 없어요." },
+    first90: {
+      title: "첫 90일 걸음", sub: "새로 오신 분이 텐트에 뿌리내리도록 일곱 걸음을 함께 걸어요.", day: "입회 {n}일째", left: "{n}일 남음", buddy: "동행 짝", noBuddy: "아직 동행 짝이 없어요. 텐트장이 곧 정해 드려요.",
+      steps: { profile: "프로필 채우기 (사진·연락처·업종·소개)", buddy: "동행 짝과 1:1 만나기", one_to_one: "다른 사업가와 1:1 만남 2회", referral: "첫 소개 보내기", visitor: "손님 한 분 초대하기", learning: "배움 2단위 (강의나 말씀·책)", attendance: "모임에 3번 참석하기" },
+      go: { profile: "/connect/profile", buddy: "/connect/one-to-one", one_to_one: "/connect/one-to-one", referral: "/connect/referrals", visitor: "/connect/visitors", learning: "/connect/academy", attendance: "/connect/events" },
+      done: "완료", progress: "{a}/{b}",
+      leader: { title: "새 회원 첫 90일", sub: "입회 90일 안의 분들의 걸음과 동행 짝입니다.", none: "지금 입회 90일 안의 분이 없어요.", pick: "동행 짝 고르기", assign: "짝 지정", change: "바꾸기", steps: "{a}/{b}걸음" },
+    },
     visitors: {
       nav: "손님 초대", title: "손님 초대", sub: "함께하면 좋을 분을 챕터 모임에 초대하세요. 손님이 실제로 참석하면 챕터 리더가 확인해 성장 지표에 반영됩니다.",
       invite: "새 손님 초대", name: "손님 이름", contact: "연락처 (선택)", category: "하시는 일", planned: "참석 예정일 (선택)", note: "메모 (선택)", send: "초대 기록하기", saved: "손님 초대를 기록했습니다.",

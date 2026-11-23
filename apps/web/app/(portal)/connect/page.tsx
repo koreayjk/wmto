@@ -22,6 +22,8 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
   const period = periodRaw === "365" ? 365 : periodRaw === "0" ? 0 : 90;
   const { data: actData } = me.role === "mentor" ? await supabase.rpc("my_activity", { p_days: period }) : { data: null };
   const act = (actData ?? null) as Record<string, number> | null;
+  const { data: f90 } = me.role === "mentor" ? await supabase.rpc("my_first90") : { data: null };
+  const first90 = (f90 ?? null) as { day: number; days_left: number; buddy_id: string | null; buddy_name: string | null; steps: { key: string; done: boolean; actual: number; target: number }[] } | null;
 
   const { data: ev } = await supabase
     .from("events")
@@ -295,6 +297,23 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
           </Link>
         )}
       </Card>
+
+      {first90 && (
+        <Card title={m.first90.title}>
+          <p className="text-sm text-soft">{m.first90.sub}</p>
+          <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm"><b className="font-medium">{m.first90.day.replace("{n}", String(first90.day))}</b><span className="text-soft">{m.first90.left.replace("{n}", String(first90.days_left))}</span>
+            <span className="text-soft">{m.first90.buddy}: {first90.buddy_name ?? m.first90.noBuddy}</span></p>
+          <ul className="mt-5 divide-y divide-black/[0.06]">
+            {first90.steps.map((s) => (
+              <li key={s.key} className="flex items-center justify-between gap-4 py-3">
+                <span className="flex items-center gap-3 text-sm"><span aria-hidden className={`grid h-5 w-5 place-items-center rounded-full text-[11px] ${s.done ? "bg-accent text-white" : "ring-1 ring-inset ring-black/20 text-transparent"}`}>✓</span>
+                  <span className={s.done ? "text-soft line-through" : ""}>{m.first90.steps[s.key as keyof typeof m.first90.steps]}</span></span>
+                {s.done ? <span className="text-xs text-accent">{m.first90.done}</span> : <Link href={m.first90.go[s.key as keyof typeof m.first90.go]} className="text-xs underline">{m.first90.progress.replace("{a}", String(s.actual)).replace("{b}", String(s.target))}</Link>}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       {act && (
         <Card title={m.activity.title}>

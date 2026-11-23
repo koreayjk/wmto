@@ -19,6 +19,14 @@ type Dash = {
 const BANDS = { attendance: [0.8, 0.6], referrals: [0.5, 0.25], oneToOne: [0.5, 0.25], conversion: [0.4, 0.2] } as const;
 const tone = (v: number | null, [good, watch]: readonly [number, number]) => (v === null ? "none" : v >= good ? "good" : v >= watch ? "watch" : "care");
 
+async function assignCompanion(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  await r.supabase.rpc("assign_companion", { p_newcomer: String(fd.get("newcomer")), p_buddy: String(fd.get("buddy")) });
+  revalidatePath("/connect/dashboard");
+}
+
 async function decideCategory(fd: FormData) {
   "use server";
   const r = await requireMe();
@@ -42,7 +50,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     .map((r) => ("chapters" in r ? (Array.isArray(r.chapters) ? r.chapters[0] : r.chapters) : r)).filter(Boolean) as { id: string; name: string }[];
   if (!chapters.length) return <div className="space-y-6"><PageTitle eyebrow="Overview">{t.title}</PageTitle><p className="text-soft">{t.empty}</p></div>;
   const current = chapters.find((c) => c.id === want) ?? chapters[0];
-  const [{ data }, { data: wl }, { data: cc }] = await Promise.all([supabase.rpc("chapter_dashboard", { p_chapter: current.id }), supabase.rpc("chapter_watchlist", { p_chapter: current.id }), supabase.rpc("pending_category_changes")]);
+  const [{ data }, { data: wl }, { data: cc }, { data: nc }, { data: peerRows }] = await Promise.all([supabase.rpc("chapter_dashboard", { p_chapter: current.id }), supabase.rpc("chapter_watchlist", { p_chapter: current.id }), supabase.rpc("pending_category_changes"), supabase.rpc("chapter_newcomers", { p_chapter: current.id }), supabase.rpc("chapter_peers")]);
+  const newcomers = (nc ?? []) as { id: string; name: string; day: number; buddy_id: string | null; buddy_name: string | null; done: number; total: number }[];
+  const peers = ((peerRows ?? []) as { id: string; name: string }[]);
+  const f9 = getMessages(locale).connect.first90;
   const catReq = (cc ?? []) as { id: string; name: string; chapter_name: string | null; from_name: string | null; to_name: string; note: string | null }[];
   const cm = getMessages(locale).connect.catChange;
   const watch = (wl ?? { absence: [], stalled_referrals: 0, early: [] }) as { absence: { id: string; name: string; missed: number }[]; stalled_referrals: number; early: { id: string; name: string; term_end: string; level: string; total: number }[] };
@@ -100,6 +111,23 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           <ol className="space-y-2 text-sm leading-relaxed">{t.coach.steps.map((s, i) => <li key={s} className="flex gap-3"><span className="gilt font-medium tabular-nums">{i + 1}</span>{s}</li>)}</ol>
         </Card>
       </div>
+
+      <Card title={f9.leader.title}>
+        <p className="mb-4 text-sm text-soft">{f9.leader.sub}</p>
+        {newcomers.length === 0 ? <p className="text-sm text-soft">{f9.leader.none}</p> : (
+          <ul className="divide-y divide-black/[0.06]">
+            {newcomers.map((n) => (
+              <li key={n.id} className="py-3.5 first:pt-0 last:pb-0">
+                <p className="flex flex-wrap items-baseline justify-between gap-2 text-sm"><span><b className="font-medium">{n.name}</b> <span className="text-xs text-soft">{f9.day.replace("{n}", String(n.day))}</span></span><span className="text-xs text-accent">{f9.leader.steps.replace("{a}", String(n.done)).replace("{b}", String(n.total))}</span></p>
+                <p className="mt-0.5 text-xs text-soft">{f9.buddy}: {n.buddy_name ?? f9.noBuddy}</p>
+                <form action={assignCompanion} className="mt-2 flex flex-wrap items-center gap-2"><input type="hidden" name="newcomer" value={n.id} />
+                  <select name="buddy" defaultValue={n.buddy_id ?? ""} required className="field !w-auto !py-1.5 !text-sm"><option value="" disabled>{f9.leader.pick}</option>{peers.filter((p) => p.id !== n.id).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select>
+                  <button className="cbtn cbtn-quiet cbtn-sm">{n.buddy_id ? f9.leader.change : f9.leader.assign}</button></form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
       {catReq.length > 0 && (
         <Card title={`${cm.review} · ${catReq.length}`}>
