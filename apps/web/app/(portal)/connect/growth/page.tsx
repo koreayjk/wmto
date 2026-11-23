@@ -6,6 +6,7 @@ import { currentMonthKst, fmtDate } from "@/lib/format";
 import { activityScore, WEIGHTS, type ActivityCounts } from "@/lib/score";
 import { mentorStages, partnerStages } from "@/lib/stages";
 import { Card, PageTitle, StageBar } from "@/components/connect/ui";
+import { sendAppeal } from "@/lib/renewal-actions";
 import { GrowthIndex, type GrowthData } from "@/components/connect/GrowthIndex";
 
 export default async function Growth() {
@@ -32,6 +33,21 @@ export default async function Growth() {
     me.role === "mentor" ? supabase.rpc("my_growth") : Promise.resolve({ data: null }),
   ]);
 
+  // 내 회원 기간과 갱신 심사 (사업가만)
+  const rw = getMessages(locale).connect.renewal;
+  let term: { term_end: string | null } | null = null;
+  let review: { status: string; suggestion: string; plan: string | null; appeal_note: string | null; support_until: string | null } | null = null;
+  let isLeader = false;
+  if (me.role === "mentor") {
+    const [{ data: tm }, { data: rv }, { data: ld }] = await Promise.all([
+      supabase.from("members").select("term_end").eq("id", me.id).maybeSingle(),
+      supabase.from("renewal_reviews").select("status,suggestion,plan,appeal_note,support_until").eq("member_id", me.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+      supabase.from("chapter_leaders").select("chapter_id").eq("member_id", me.id).limit(1),
+    ]);
+    term = tm; review = rv; isLeader = (ld ?? []).length > 0;
+  }
+  const daysLeft = term?.term_end ? Math.ceil((new Date(term.term_end).getTime() - Date.now()) / 86400000) : null;
+
   const counts: ActivityCounts = { attendance, mentoring, reports, referrals, letters, matchings };
   const keys = (Object.keys(WEIGHTS) as (keyof typeof WEIGHTS)[]).filter((k) => !(k === "reports" && me.role !== "partner") && !(k === "referrals" && me.role !== "mentor"));
   const stages = me.role === "mentor" ? mentorStages : partnerStages;
@@ -41,6 +57,24 @@ export default async function Growth() {
     <div className="space-y-4">
       <PageTitle eyebrow="Growth">{g.title}</PageTitle>
       {growth.data && <GrowthIndex data={growth.data as GrowthData} t={g.index} />}
+      {me.role === "mentor" && term?.term_end && (
+        <Card title={rw.mine.title}>
+          <p className="font-display text-lg font-semibold">{rw.mine.ends} {term.term_end}{daysLeft !== null && daysLeft >= 0 ? ` · ${daysLeft}${rw.mine.daysLeft}` : ""}</p>
+          {(!review || review.status === "closed") && <p className="mt-2 text-sm text-soft">{rw.mine.none}</p>}
+          {review && (review.status === "open" || review.status === "planned") && <p className="mt-2 text-sm">{rw.mine.reviewing}</p>}
+          {review?.status === "renewed" && <p className="mt-2 text-sm text-accent">{rw.mine.renewed}</p>}
+          {review?.status === "on_hold" && <p className="mt-2 text-sm">{rw.mine.hold}{review.support_until ? ` (${review.support_until})` : ""}</p>}
+          {review?.status === "not_renewed" && <p className="mt-2 text-sm">{rw.mine.notRenewed}</p>}
+          {review?.plan && <p className="mt-2 text-sm text-soft">{rw.plan}: {review.plan}</p>}
+          {review && review.status !== "closed" && review.status !== "renewed" && (
+            <form action={sendAppeal} className="mt-4 space-y-2">
+              <textarea name="note" rows={2} maxLength={1000} defaultValue={review.appeal_note ?? ""} placeholder={rw.mine.appealTitle} className="field" />
+              <button className="cbtn cbtn-quiet cbtn-sm">{rw.mine.appealBtn}</button>
+            </form>
+          )}
+          {isLeader && <a href="/connect/renewal" className="mt-4 inline-block text-sm underline">{rw.nav}</a>}
+        </Card>
+      )}
       <Card title={m.stageTitle}>
         <StageBar stages={stages} current={me.stage} names={names} desc={m.stageDesc} />
         {sugg.data && (
