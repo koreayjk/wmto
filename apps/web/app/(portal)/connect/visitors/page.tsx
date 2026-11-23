@@ -16,6 +16,8 @@ async function invite(fd: FormData) {
   const { error } = await r.supabase.rpc("invite_visitor", {
     p_name: String(fd.get("name") ?? ""), p_contact: String(fd.get("contact") ?? ""), p_category: cat,
     p_planned: /^\d{4}-\d{2}-\d{2}$/.test(planned) ? planned : null, p_note: String(fd.get("note") ?? ""),
+    p_kind: ["guest", "observer", "substitute"].includes(String(fd.get("kind"))) ? String(fd.get("kind")) : "guest",
+    p_for: /^[0-9a-f-]{36}$/i.test(String(fd.get("for_member") ?? "")) ? String(fd.get("for_member")) : null,
   });
   revalidatePath("/connect/visitors");
   redirect(error ? "/connect/visitors?error=form" : "/connect/visitors?saved=1");
@@ -29,7 +31,7 @@ async function setStatus(fd: FormData) {
   revalidatePath("/connect/visitors");
 }
 
-type V = { id: string; chapter_id: string; invited_by: string; name: string; contact: string | null; category_id: number | null; planned_at: string | null; note: string | null; status: "invited" | "attended" | "joined" | "declined"; created_at: string };
+type V = { id: string; chapter_id: string; invited_by: string; name: string; contact: string | null; category_id: number | null; planned_at: string | null; note: string | null; status: "invited" | "attended" | "joined" | "declined"; kind: "guest" | "observer" | "substitute"; created_at: string };
 
 export default async function Visitors({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   const locale = await getPortalLocale();
@@ -49,7 +51,7 @@ export default async function Visitors({ searchParams }: { searchParams: Promise
   const catName = new Map(cats.map((c) => [c.id, locale === "en" ? c.name_en : c.name_ko]));
   const peerName = new Map(((peerData ?? []) as { id: string; name: string }[]).map((p) => [p.id, p.name]));
   const grouped = groupCategories(cats, locale === "en" ? "en" : "ko");
-  const attended90 = mine.filter((v) => v.status === "attended" || v.status === "joined").length;
+  const attended90 = mine.filter((v) => v.kind === "guest" && (v.status === "attended" || v.status === "joined")).length;
 
   return (
     <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start">
@@ -59,6 +61,15 @@ export default async function Visitors({ searchParams }: { searchParams: Promise
 
       <Card title={t.invite}>
         <form action={invite} className="space-y-4">
+          <fieldset>
+            <legend className={labelCls}>{t.kind.label}</legend>
+            <div className="space-y-1.5 text-sm">
+              {(["guest", "observer", "substitute"] as const).map((k) => <label key={k} className="flex items-start gap-2"><input type="radio" name="kind" value={k} defaultChecked={k === "guest"} className="mt-1 accent-[var(--accent)]" /><span>{t.kind[k]}</span></label>)}
+            </div>
+            <p className="mt-1.5 text-xs text-soft">{t.kindNote}</p>
+          </fieldset>
+          <label className="block"><span className={labelCls}>{t.forMember}</span>
+            <select name="for_member" defaultValue="" className="field"><option value="">-</option>{((peerData ?? []) as { id: string; name: string }[]).filter((p) => p.id !== me.id).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
           <label className="block"><span className={labelCls}>{t.name}</span><input name="name" required maxLength={100} className="field" /></label>
           <label className="block"><span className={labelCls}>{t.contact}</span><input name="contact" maxLength={200} className="field" /></label>
           <label className="block">
@@ -105,7 +116,7 @@ export default async function Visitors({ searchParams }: { searchParams: Promise
               {mine.map((v) => (
                 <li key={v.id} className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 last:pb-0">
                   <span>
-                    <b className="font-medium">{v.name}</b>
+                    <b className="font-medium">{v.name}</b>{v.kind !== "guest" && <span className="ml-2 rounded-full bg-tint px-2 py-0.5 text-[11px] text-soft">{t.kindShort[v.kind]}</span>}
                     <span className="ml-2 text-xs text-soft">{[v.category_id ? catName.get(v.category_id) : null, v.planned_at ? fmtDate(v.planned_at, locale) : fmtDate(v.created_at, locale)].filter(Boolean).join(" · ")}</span>
                     {v.note && <span className="mt-0.5 block text-sm text-soft">{v.note}</span>}
                   </span>

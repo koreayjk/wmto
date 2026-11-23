@@ -14,10 +14,14 @@ import type { FeedRow, FundRow } from "@/lib/sponsor";
 
 type Ev = { id: string; title: string; start_at: string; meeting_url: string | null };
 
-export default async function ConnectHome() {
+export default async function ConnectHome({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase, demo } = await requireMe();
   const m = getMessages(locale).connect;
+  const { p: periodRaw } = await searchParams;
+  const period = periodRaw === "365" ? 365 : periodRaw === "0" ? 0 : 90;
+  const { data: actData } = me.role === "mentor" ? await supabase.rpc("my_activity", { p_days: period }) : { data: null };
+  const act = (actData ?? null) as Record<string, number> | null;
 
   const { data: ev } = await supabase
     .from("events")
@@ -291,6 +295,24 @@ export default async function ConnectHome() {
           </Link>
         )}
       </Card>
+
+      {act && (
+        <Card title={m.activity.title}>
+          <p className="mb-4 text-sm text-soft">{m.activity.sub}</p>
+          <p className="mb-6 flex gap-2 text-sm">
+            {([90, 365, 0] as const).map((d2) => <Link key={d2} href={`/connect?p=${d2}`} className={`rounded-full px-3.5 py-1.5 ring-1 ring-inset ${period === d2 ? "bg-accent text-white ring-accent" : "ring-ink/15"}`}>{m.activity.period[d2]}</Link>)}
+          </p>
+          <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+            {([["referrals_given", "/connect/referrals"], ["referrals_received", "/connect/referrals"], ["referrals_won", "/connect/referrals"], ["one_to_one", "/connect/one-to-one"], ["visitors", "/connect/visitors"], ["learning", "/connect/academy"], ["gratitude_sent", "/connect/referrals"], ["gratitude_received", "/connect/referrals"], ["attendance", "/connect/events"]] as const).map(([k, href]) => (
+              <li key={k}>
+                <p className="text-[13px] text-soft">{m.activity.tiles[k]}</p>
+                <p className="mt-1 text-[2rem] font-light leading-none tabular-nums">{act[k] ?? 0}</p>
+                <Link href={href} className="mt-2 inline-block text-xs text-accent underline">{m.activity.go[k]}</Link>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       {showActivity && thisMonth && (
         <div className="grid gap-4 lg:grid-cols-5">

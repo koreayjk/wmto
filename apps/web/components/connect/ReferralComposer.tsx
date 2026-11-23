@@ -10,6 +10,7 @@ export type DirMentor = {
 };
 
 export type ComposerText = {
+  warmthLabel: string; warmth: Record<number, string>; preContacted: string;
   receiver: string; client: string; contact: string; note: string; send: string;
   find: string; search: string; byIndustry: string; byRegion: string; allIndustry: string; allRegion: string;
   noResult: string; chosen: string; choose: string; none: string; mentees: string; people: string; since: string;
@@ -117,6 +118,13 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
         <label className="block"><span className="mb-1.5 block text-sm font-medium">{t.client}</span><input name="client_name" required maxLength={200} className="field" /></label>
         <label className="block"><span className="mb-1.5 block text-sm font-medium">{t.contact}</span><input name="client_contact" maxLength={200} className="field" /></label>
         <label className="block"><span className="mb-1.5 block text-sm font-medium">{t.note}</span><textarea name="note" rows={4} maxLength={3000} className="field" /></label>
+        <fieldset>
+          <legend className="mb-1.5 text-sm font-medium">{t.warmthLabel}</legend>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {[1, 2, 3].map((w) => <label key={w} className="flex items-center gap-2"><input type="radio" name="warmth" value={w} defaultChecked={w === 2} className="accent-[var(--accent)]" />{t.warmth[w]}</label>)}
+          </div>
+        </fieldset>
+        <label className="flex items-start gap-2 text-sm"><input type="checkbox" name="pre_contacted" className="mt-1 h-4 w-4 accent-[var(--accent)]" /><span>{t.preContacted}</span></label>
         <button className="cbtn w-full disabled:opacity-50" disabled={!picked}>{chosen ? t.send : t.choose}</button>
       </form>
     </div>

@@ -8,7 +8,7 @@ import { krRegions } from "@/lib/codes";
 import { Card, PageTitle } from "@/components/connect/ui";
 import { ReferralComposer, type ComposerText, type DirMentor } from "@/components/connect/ReferralComposer";
 
-const STATUSES = ["sent", "contacted", "closed"] as const;
+const STATUSES = ["sent", "contacted", "won", "no_deal", "closed"] as const;
 
 async function send(fd: FormData) {
   "use server";
@@ -21,6 +21,7 @@ async function send(fd: FormData) {
     giver_id: me.id, receiver_id: receiver, client_name: client,
     client_contact: String(fd.get("client_contact") ?? "").trim().slice(0, 200) || null,
     note: String(fd.get("note") ?? "").trim().slice(0, 3000) || null,
+    warmth: [1, 2, 3].includes(Number(fd.get("warmth"))) ? Number(fd.get("warmth")) : 2, pre_contacted: fd.get("pre_contacted") === "on",
   });
   revalidatePath("/connect/referrals");
 }
@@ -34,7 +35,15 @@ async function setStatus(fd: FormData) {
   revalidatePath("/connect/referrals");
 }
 
-type Ref = { id: string; giver_id: string; receiver_id: string; client_name: string; client_contact: string | null; note: string | null; status: (typeof STATUSES)[number]; created_at: string };
+async function thank(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  await r.supabase.rpc("give_gratitude", { p_referral: String(fd.get("id")), p_message: String(fd.get("message") ?? "") });
+  revalidatePath("/connect/referrals");
+}
+
+type Ref = { id: string; giver_id: string; receiver_id: string; client_name: string; client_contact: string | null; note: string | null; warmth: number; pre_contacted: boolean; status: (typeof STATUSES)[number]; created_at: string };
 
 export default async function Referrals() {
   const locale = await getPortalLocale();
@@ -42,13 +51,15 @@ export default async function Referrals() {
   if (me.role !== "mentor") redirect("/connect");
   const t = getMessages(locale).connect.referral;
 
-  const [{ data: dir }, { data: refs }] = await Promise.all([
+  const [{ data: dir }, { data: refs }, { data: grat }] = await Promise.all([
     supabase.rpc("mentor_directory"),
     supabase.from("referrals").select("*").order("created_at", { ascending: false }).limit(100),
+    supabase.from("gratitude").select("referral_id,message,from_member"),
   ]);
+  const thanked = new Map(((grat ?? []) as { referral_id: string; message: string; from_member: string }[]).map((g) => [g.referral_id, g]));
   const mentors = (dir ?? []) as DirMentor[];
   const cm = getMessages(locale).connect;
-  const composerText: ComposerText = { ...t.picker, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames, regions: getMessages(locale).apply.options.region, regionOrder: krRegions, dateLocale: locale === "en" ? "en-US" : "ko-KR" };
+  const composerText: ComposerText = { ...t.picker, warmthLabel: t.warmth.label, warmth: { 1: t.warmth[1], 2: t.warmth[2], 3: t.warmth[3] }, preContacted: t.preContacted, receiver: t.receiver, client: t.client, contact: t.contact, note: t.note, send: t.send, ways: cm.contribution, stages: cm.stageNames, regions: getMessages(locale).apply.options.region, regionOrder: krRegions, dateLocale: locale === "en" ? "en-US" : "ko-KR" };
   const name = new Map(mentors.map((x) => [x.id, x.name]));
   const all = (refs ?? []) as Ref[];
   const received = all.filter((r) => r.receiver_id === me.id);
@@ -74,6 +85,7 @@ export default async function Referrals() {
               <li key={r.id} className="py-4 first:pt-0 last:pb-0">
                 <p className="flex items-center justify-between gap-3 text-xs text-clay"><span>{t.from} {who(r.giver_id)} · {fmtDate(r.created_at, locale)}</span></p>
                 <p className="mt-0.5 font-display text-base font-semibold">{r.client_name}{r.client_contact && <span className="ml-2 text-sm font-normal text-soft">{r.client_contact}</span>}</p>
+                <p className="mt-1 text-xs text-soft">{t.warmth[r.warmth as 1 | 2 | 3]}{r.pre_contacted ? ` · ${t.preContacted}` : ""}</p>
                 {r.note && <p className="mt-1 whitespace-pre-line text-sm text-soft">{r.note}</p>}
                 <form action={setStatus} className="mt-2.5 flex items-center gap-2">
                   <input type="hidden" name="id" value={r.id} />
@@ -82,6 +94,9 @@ export default async function Referrals() {
                   </select>
                   <button className="cbtn cbtn-sm">{t.update}</button>
                 </form>
+                {r.status === "won" && (thanked.get(r.id)
+                  ? <p className="mt-2 text-sm text-accent">{t.gratitude.done}</p>
+                  : (<form action={thank} className="mt-3 space-y-2"><input type="hidden" name="id" value={r.id} /><p className="text-xs text-soft">{t.gratitude.wonHint}</p><textarea name="message" required rows={2} maxLength={2000} placeholder={t.gratitude.placeholder} className="field" /><button className="cbtn cbtn-quiet cbtn-sm">{t.gratitude.send}</button></form>))}
               </li>
             ))}
           </ul>
@@ -96,6 +111,7 @@ export default async function Referrals() {
                 <p className="flex justify-between gap-3 text-xs text-clay"><span>{t.to} {who(r.receiver_id)} · {fmtDate(r.created_at, locale)}</span><span className="rounded-full bg-tint px-2.5 py-0.5 font-semibold text-accent">{t.status[r.status]}</span></p>
                 <p className="mt-0.5 font-display text-base font-semibold">{r.client_name}</p>
                 {r.note && <p className="mt-1 whitespace-pre-line text-sm text-soft">{r.note}</p>}
+                {thanked.get(r.id) && <p className="mt-2 rounded-xl bg-tint px-3 py-2 text-sm"><b className="text-accent">{t.gratitude.received}</b> · {thanked.get(r.id)!.message}</p>}
               </li>
             ))}
           </ul>

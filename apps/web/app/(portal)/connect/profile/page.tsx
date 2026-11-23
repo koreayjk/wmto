@@ -29,6 +29,8 @@ async function saveProfile(fd: FormData) {
     const { error } = await supabase.from("mentor_profiles").update({
       business_name: opt(fd, "business_name"), industry: cat?.name_ko ?? opt(fd, "industry"),
       ...(cid ? { category_id: cid } : {}), contribution_types: types,
+      intro: opt(fd, "intro", 1500), keywords: opt(fd, "keywords", 300), years_in_business: /^\d{1,2}$/.test(String(fd.get("years") ?? "")) ? Number(fd.get("years")) : null,
+      website: opt(fd, "website", 200), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), mission_heart: opt(fd, "mission_heart", 1000),
     }).eq("member_id", me.id);
     if (error?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
   } else if (me.role === "partner") {
@@ -82,6 +84,15 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const cats = me.role === "mentor" ? groupCategories(await loadCategories(supabase), locale === "en" ? "en" : "ko") : [];
   const { data: loc } = await supabase.from("members").select("region,district").eq("id", me.id).maybeSingle();
   const roleLabel = me.role ? f.options.role[me.role] : "-";
+  // 프로필 완성도(사업가): 비어 있는 항목을 알려 줍니다.
+  const filled = (v: unknown) => !(v == null || v === "" || (Array.isArray(v) && v.length === 0));
+  const checks: [string, boolean][] = me.role === "mentor" ? [
+    ["photo", !!me.photo_url], ["phone", !!me.phone], ["region", !!loc?.region], ["business_name", filled(p.business_name)], ["category", filled(p.category_id)],
+    ["intro", filled(p.intro)], ["keywords", filled(p.keywords)], ["years", filled(p.years_in_business)], ["website", filled(p.website)],
+    ["church", filled(p.church)], ["faith", filled(p.faith_story)], ["mission", filled(p.mission_heart)],
+  ] : [];
+  const pct = checks.length ? Math.round((checks.filter(([, ok]) => ok).length / checks.length) * 100) : 0;
+  const missingKeys = checks.filter(([, ok]) => !ok).map(([k]) => k);
 
   return (
     <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,23rem)_minmax(0,1fr)] lg:items-start">
@@ -93,6 +104,16 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         <AvatarUploader action={uploadAvatar} hasPhoto={!!me.photo_url} name={t.photo.title} labels={t.photo}
           preview={me.photo_url ? <Avatar name={me.name} url={me.photo_url} size={88} /> : <Avatar name={me.name} size={88} />} />
       </Card>
+      {checks.length > 0 && (
+        <Card title={t.complete.title}>
+          <div className="flex items-center gap-4"><span className="text-[2rem] font-light tabular-nums leading-none">{pct}%</span>
+            <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/[0.07]"><span className="block h-full rounded-full bg-accent" style={{ width: `${pct}%` }} /></span></div>
+          <p className="mt-3 text-xs text-soft">{t.complete.hint}</p>
+          {missingKeys.length === 0 ? <p className="mt-3 text-sm text-accent">{t.complete.done}</p> : (
+            <p className="mt-3 text-sm"><b className="font-medium">{t.complete.missing}</b><br /><span className="text-soft">{missingKeys.map((k) => (t.complete.items as Record<string, string>)[k]).join(" · ")}</span></p>
+          )}
+        </Card>
+      )}
       <Card>
         <p className="text-sm text-soft">{t.role}: {roleLabel}{me.stage ? ` · ${t.stage}: ${c.stageNames[me.stage as keyof typeof c.stageNames]}` : ""}</p>
         <p className="mt-1 text-sm text-soft">{me.email}</p>
@@ -143,6 +164,16 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
                 ) : <input name="industry" defaultValue={(p.industry as string) ?? ""} className="field" />}
                 {cats.length > 0 && <span className="mt-2 block text-xs text-soft">{t.categoryNote}</span>}
               </label>
+              <h3 className="pt-2 text-[13px] font-medium text-soft">{t.more.title}</h3>
+              <label className="block"><span className={labelCls}>{t.more.intro}</span><textarea name="intro" rows={3} maxLength={1500} defaultValue={(p.intro as string) ?? ""} placeholder={t.more.introHint} className="field" /></label>
+              <label className="block"><span className={labelCls}>{t.more.keywords}</span><input name="keywords" maxLength={300} defaultValue={(p.keywords as string) ?? ""} placeholder={t.more.keywordsHint} className="field" /></label>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block"><span className={labelCls}>{t.more.years}</span><input name="years" type="number" min={0} max={99} defaultValue={(p.years_in_business as number | null) ?? ""} className="field" /></label>
+                <label className="block"><span className={labelCls}>{t.more.website}</span><input name="website" type="url" maxLength={200} defaultValue={(p.website as string) ?? ""} className="field" /></label>
+              </div>
+              <label className="block"><span className={labelCls}>{t.more.church}</span><input name="church" maxLength={120} defaultValue={(p.church as string) ?? ""} className="field" /></label>
+              <label className="block"><span className={labelCls}>{t.more.faith}</span><textarea name="faith_story" rows={3} maxLength={1000} defaultValue={(p.faith_story as string) ?? ""} placeholder={t.more.faithHint} className="field" /></label>
+              <label className="block"><span className={labelCls}>{t.more.mission}</span><textarea name="mission_heart" rows={3} maxLength={1000} defaultValue={(p.mission_heart as string) ?? ""} placeholder={t.more.missionHint} className="field" /></label>
               <fieldset>
                 <legend className={labelCls}>{f.fields.contributionTypes}</legend>
                 <div className="flex flex-wrap gap-x-5 gap-y-2">
