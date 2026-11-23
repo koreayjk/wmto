@@ -14,6 +14,7 @@ export type Me = {
   country: string | null;
   photo_url: string | null;
   status: "applicant" | "active" | "inactive";
+  mission_status: "none" | "requested" | "approved" | "revoked";
   /** 역할별 프로필 한 줄. 컬럼은 역할마다 다릅니다. */
   profile: Record<string, unknown> | null;
   stage: string | null;
@@ -33,7 +34,7 @@ export const getMe = cache(async () => {
   if (viewId) {
     const { data: adm } = await supabase.from("admins").select("user_id").eq("user_id", uid).maybeSingle();
     if (adm) {
-      const { data: vm } = await supabase.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("id", viewId).maybeSingle();
+      const { data: vm } = await supabase.from("members").select("id,role,name,email,phone,country,photo_url,status,mission_status").eq("id", viewId).maybeSingle();
       if (vm) {
         let vp: Record<string, unknown> | null = null;
         if (vm.role) {
@@ -47,7 +48,7 @@ export const getMe = cache(async () => {
   }
 
   const [{ data: m }, { data: dv }] = await Promise.all([
-    supabase.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("auth_user_id", uid).maybeSingle(),
+    supabase.from("members").select("id,role,name,email,phone,country,photo_url,status,mission_status").eq("auth_user_id", uid).maybeSingle(),
     supabase.from("demo_viewers").select("user_id").eq("user_id", uid).maybeSingle(),
   ]);
   if (!m) {
@@ -58,7 +59,7 @@ export const getMe = cache(async () => {
       const vc = await createSupabaseServerClient({ viewAs: id });
       // 회원 정보와 세 역할의 프로필을 한 번에 조회합니다(왕복 1회).
       const [{ data: vm }, mp, pp, sp] = await Promise.all([
-        vc.from("members").select("id,role,name,email,phone,country,photo_url,status").eq("id", id).maybeSingle(),
+        vc.from("members").select("id,role,name,email,phone,country,photo_url,status,mission_status").eq("id", id).maybeSingle(),
         vc.from("mentor_profiles").select("*").eq("member_id", id).maybeSingle(),
         vc.from("partner_profiles").select("*").eq("member_id", id).maybeSingle(),
         vc.from("sponsor_profiles").select("*").eq("member_id", id).maybeSingle(),
@@ -86,3 +87,9 @@ export async function requireMe() {
   if (r.me.status !== "active") redirect("/connect/login?error=inactive");
   return r;
 }
+
+/** 선교(WMTO) 기능 페이지 가드. 사업가는 선교 권한이 승인돼야 들어갈 수 있고, 아니면 신청 화면으로 보냅니다. */
+export function requireMission(me: Me) {
+  if (me.role === "mentor" && me.mission_status !== "approved") redirect("/connect/mission");
+}
+export const hasMission = (me: { role: string | null; mission_status?: string }) => me.role !== "mentor" || me.mission_status === "approved";

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { requireMe } from "@/lib/me";
+import { requireMe, requireMission } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtMoney } from "@/lib/format";
@@ -9,6 +9,7 @@ import type { FundRow } from "@/lib/sponsor";
 export default async function Fund() {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
+  requireMission(me);
   if (me.role !== "sponsor" && me.role !== "mentor") redirect("/connect");
   const f = getMessages(locale).connect.sponsor.fund;
   const { data } = await supabase.rpc("fund_overview");

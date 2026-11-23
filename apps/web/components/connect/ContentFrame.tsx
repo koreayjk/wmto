@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 /** 화면마다 어울리는 배경 사진. 메뉴까지 화면 전체에 깔리는 은은한 장면입니다. */
 const SCENES: Record<string, string> = {
   "/connect/tent": "tent", "/connect/mentoring": "mentoring", "/connect/events": "time", "/connect/thanks": "letters",
-  "/connect/growth": "growth", "/connect/matching": "matching", "/connect/referrals": "matching", "/connect/one-to-one": "matching", "/connect/visitors": "matching", "/connect/report": "report",
+  "/connect/growth": "growth", "/connect/matching": "matching", "/connect/referrals": "matching", "/connect/one-to-one": "matching", "/connect/visitors": "matching", "/connect/mission": "matching", "/connect/report": "report",
   "/connect/fund": "fund", "/connect/giving": "fund", "/connect/news": "news", "/connect/academy": "academy",
 };
 

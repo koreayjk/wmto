@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { requireMe } from "@/lib/me";
+import { requireMe, requireMission } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDateTime, kstLocalToIso, nowKstLocal } from "@/lib/format";
@@ -37,6 +37,7 @@ type Feed = {
 export default async function Mentoring({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
+  requireMission(me);
   if (me.role !== "mentor" && me.role !== "partner") redirect("/connect");
   const m = getMessages(locale).connect;
   const t = m.mentoring;

@@ -817,6 +817,15 @@ export const en: Messages = {
       status: { pending: "Awaiting", confirmed: "Confirmed", declined: "Declined", expired: "Expired" },
       errors: { form: "Could not save. Please check what you entered.", photo: "A proof photo is required or could not be uploaded. Please choose it again.", chapter: "You can only log a 1:1 with someone in your chapter.", dup: "The same person counts once within 30 days.", expired: "The 7-day confirmation window has passed." },
     },
+    mission: {
+      nav: "Join the mission", title: "Join the mission", sub: "Beyond business networking, we connect members who care about missions with the mission work (WMTO). Once opened, mission partner accompaniment (mentoring), self-reliance reports and the fund appear.",
+      statusLabel: "My status", status: { none: "You have not applied yet", requested: "Your request is under review", approved: "Mission access is open", revoked: "Mission access is closed. You can apply again" },
+      what: "What opens", whatList: ["Respond to missionary requests and keep mentoring notes", "See missionary self-reliance reports", "See the mission fund (gifts and loans)"],
+      request: "Request mission access", message: "Your heart for this (optional)", messageHint: "Share why you want to join and how you would like to serve.", send: "Request", cancel: "Cancel request", sent: "Requested. Your chapter leader or the team will review it.", openNow: "Go to mission pages",
+      reviewTitle: "Mission access requests", reviewEmpty: "No requests to review.", approve: "Approve", decline: "Decline", from: "From", note: "Note",
+      manageTitle: "Mission access in your chapter", manageSub: "Open or close access directly without a request.", grant: "Open", revoke: "Close", opened: "Open",
+      errors: { form: "Could not save. Please try again shortly." },
+    },
     visitors: {
       nav: "Invite guests", title: "Invite guests", sub: "Invite people who would be a good fit to your chapter gathering. When a guest actually attends, your chapter leader confirms it and it counts toward your growth index.",
       invite: "Invite a new guest", name: "Guest name", contact: "Contact (optional)", category: "What they do", planned: "Planned date (optional)", note: "Note (optional)", send: "Record invitation", saved: "Invitation recorded.",

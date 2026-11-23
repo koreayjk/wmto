@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { getMe } from "@/lib/me";
+import { getMe, hasMission } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { BottomNav, type NavItem } from "@/components/connect/BottomNav";
@@ -63,7 +63,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   const active = r && r.me.status === "active" ? r.me : null;
 
   const items: NavItem[] = [{ href: "/connect", label: m.nav.home }, { href: "/connect/events", label: m.nav.events }];
-  if (active?.role === "mentor" || active?.role === "partner") {
+  if ((active?.role === "mentor" && hasMission(active)) || active?.role === "partner") {
     items.push({ href: "/connect/mentoring", label: m.nav.mentoring }, { href: "/connect/report", label: m.nav.report });
   }
   if (active?.role === "sponsor") {
@@ -72,25 +72,27 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   items.push({
     href: "/connect/more",
     label: m.nav.more,
-    also: ["/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
+    also: ["/connect/mission", "/connect/one-to-one", "/connect/visitors", "/connect/tent", "/connect/growth", "/connect/matching", "/connect/referrals", "/connect/thanks", "/connect/academy", "/connect/profile", "/connect/fund"],
   });
 
   const it = m.more.items;
   const role = active?.role;
   const network: { href: string; label: string }[] = [{ href: "/connect/tent", label: m.tent.title }];
   if (role === "partner") network.push({ href: "/connect/matching", label: it.matching.name }, { href: "/connect/thanks", label: it.thanks.name });
-  if (role === "mentor") network.push({ href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, { href: "/connect/matching", label: it.requests.name }, { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
+  const missionOk = !!active && hasMission(active);
+  if (role === "mentor") network.push({ href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, ...(missionOk ? [{ href: "/connect/matching", label: it.requests.name }] : [{ href: "/connect/mission", label: m.mission.nav }]), { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
   const activity = [{ href: "/connect/events", label: m.nav.events }];
   const reports: { href: string; label: string }[] = [];
   if (role === "mentor" || role === "partner") {
-    activity.push({ href: "/connect/mentoring", label: m.nav.mentoring });
-    reports.push({ href: "/connect/report", label: m.report.title }, { href: "/connect/growth", label: it.growth.name });
+    if (role === "partner" || missionOk) activity.push({ href: "/connect/mentoring", label: m.nav.mentoring });
+    if (role === "partner" || missionOk) reports.push({ href: "/connect/report", label: m.report.title });
+    reports.push({ href: "/connect/growth", label: it.growth.name });
   }
   const groups: SideGroup[] = [{ items: [{ href: "/connect", label: m.nav.home }] }];
   if (role === "sponsor") {
     groups.push({ title: m.sponsor.group, items: [{ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews }, { href: "/connect/fund", label: m.sponsor.navFund }] });
   }
-  if (role === "mentor") network.push({ href: "/connect/fund", label: m.sponsor.navFund });
+  if (role === "mentor" && missionOk) network.push({ href: "/connect/fund", label: m.sponsor.navFund });
   if (network.length) groups.push({ title: m.side.network, items: network });
   groups.push({ title: m.side.activity, items: activity });
   if (reports.length) groups.push({ title: m.side.report, items: reports });

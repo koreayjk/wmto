@@ -88,6 +88,7 @@ WMTO는 두 가지 서비스를 이어서 씁니다.
    | 13 | `0013_photos_sharing.sql` | 증명사진(Storage 버킷), 멘토링 기록 공유, 사업가 찾기·텐트에 사진 |
    | 14 | `0014_cbc_categories_one_to_ones.sql` | 업종 표준 목록·텐트 내 업종 1인, 텐트 정원 50, 텐트장(chapter_leaders), 1:1 미팅 기록·증빙 버킷 |
    | 15 | `0015_growth_visitors.sql` | 방문자 초대, 성장 지수(`my_growth`) |
+   | 16 | `0016_mission_access.sql` | 선교 권한(신청·승인·지정), 멘토링 기록·매칭 수락 DB 게이트 (기존 사업가는 승인 상태로 시작) |
 
    각 파일 맨 위에 `wmto` 스키마를 만드는 문장이 들어 있어서, SVM의 기존 표(`public` 칸)는 전혀 건드리지 않습니다. 파일을 고치지 말고 그대로 붙여 넣으세요.
 

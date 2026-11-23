@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { requireMe } from "@/lib/me";
+import { requireMe, requireMission } from "@/lib/me";
 import { getMessages, type Locale } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { currentMonthKst, fmtMonth } from "@/lib/format";
@@ -85,6 +85,7 @@ function ReportRows({ rows, locale, nameOf, photoOf }: { rows: Report[]; locale:
 export default async function ReportPage({ searchParams }: { searchParams: Promise<{ saved?: string; month?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase } = await requireMe();
+  requireMission(me);
   if (me.role !== "mentor" && me.role !== "partner") redirect("/connect");
   const t = getMessages(locale).connect.report;
   const sp = await searchParams;
