@@ -15,6 +15,8 @@ export async function submitApplication(_prev: ApplyState, fd: FormData): Promis
     return { ok: false, error: "required" };
   }
   const input = parsed.data;
+  // WMTO 사이트의 사업가 가입 폼은 기여 방식을 하나 이상 고르게 합니다(CBC 화면은 제외).
+  if (input.type === "mentor_join" && input.variant !== "cbc" && input.contributionTypes.length === 0) return { ok: false, error: "required" };
 
   try {
     const db = createSupabaseAdminClient();

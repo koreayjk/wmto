@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { L } from "@/components/L";
 import { useActionState, useEffect, useRef, type ReactNode } from "react";
@@ -47,7 +48,7 @@ const input = (name: string, props: React.InputHTMLAttributes<HTMLInputElement> 
   <input name={name} className="field" {...props} />
 );
 
-export function ApplyForm({ type, categories = [] }: { type: ApplicationType; categories?: { group: string; items: { id: number; label: string }[] }[] }) {
+export function ApplyForm({ type, categories = [], backHref, variant }: { variant?: "cbc"; type: ApplicationType; categories?: { group: string; items: { id: number; label: string }[] }[]; backHref?: string }) {
   const m = getMessages(localeFromPathname(usePathname())).apply;
   const [state, action, pending] = useActionState(submitApplication, initial);
   const errRef = useRef<HTMLDivElement>(null);
@@ -60,9 +61,13 @@ export function ApplyForm({ type, categories = [] }: { type: ApplicationType; ca
       <div className="mt-14 border-t border-line pt-14">
         <h2 className="display text-3xl">{m.thanks.title}</h2>
         <p className="mt-4 text-lg text-soft">{m.thanks.body}</p>
-        <L href="/" className="mt-8 inline-block border border-ink/30 px-6 py-3 hover:bg-ink hover:text-paper rounded-lg">
-          {m.thanks.back}
-        </L>
+        {backHref ? (
+          <Link href={backHref} className="mt-8 inline-block border border-ink/30 px-6 py-3 hover:bg-ink hover:text-paper rounded-lg">{m.thanks.back}</Link>
+        ) : (
+          <L href="/" className="mt-8 inline-block border border-ink/30 px-6 py-3 hover:bg-ink hover:text-paper rounded-lg">
+            {m.thanks.back}
+          </L>
+        )}
       </div>
     );
   }
@@ -70,6 +75,7 @@ export function ApplyForm({ type, categories = [] }: { type: ApplicationType; ca
   return (
     <form action={action} className="mt-10 space-y-6">
       <input type="hidden" name="type" value={type} />
+      {variant && <input type="hidden" name="variant" value={variant} />}
       {state.error && (
         <div ref={errRef} role="alert" tabIndex={-1} className="rounded-2xl bg-[#fdf1ee] p-5 text-[#8a2f1a] outline-none ring-1 ring-[#e9b9ac]">
           <p className="font-bold">{m.errorTitle}</p>
@@ -111,9 +117,11 @@ export function ApplyForm({ type, categories = [] }: { type: ApplicationType; ca
               {categories.length > 0 && <p className="mt-2 text-sm text-soft">{m.categoryNote}</p>}
             </Field>
           </div>
-          <Field label={f.contributionTypes} required>
-            <Checks name="contributionTypes" values={contributionTypes} labels={m.options.contribution} />
-          </Field>
+          {variant !== "cbc" && (
+            <Field label={f.contributionTypes} required>
+              <Checks name="contributionTypes" values={contributionTypes} labels={m.options.contribution} />
+            </Field>
+          )}
         </>
       )}
 

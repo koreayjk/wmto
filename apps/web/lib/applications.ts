@@ -43,7 +43,9 @@ export const applicationSchema = z.discriminatedUnion("type", [
     businessName: optional(200),
     industry: optional(200),
     categoryId: optional(10),
-    contributionTypes: list(contributionTypes).pipe(z.array(z.enum(contributionTypes)).min(1)),
+    contributionTypes: list(contributionTypes),
+    // CBC 참여 문의 화면에서 온 신청이면 "cbc" (선교 기여 방식 선택을 요구하지 않음)
+    variant: optional(10),
   }),
   z.object({
     ...base,

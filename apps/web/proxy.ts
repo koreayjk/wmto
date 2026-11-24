@@ -62,6 +62,8 @@ export async function proxy(request: NextRequest) {
     internal = isEn ? inner : `/ko${inner === "/" ? "" : inner}`;
   } else if (pathname === "/" || pathname === "/en") {
     internal = `/cbc/${isEn ? "en" : "ko"}`;
+  } else if (pathname === "/join" || pathname === "/en/join") {
+    internal = `/cbc/${isEn ? "en" : "ko"}/join`;
   } else {
     internal = isEn ? pathname : `/ko${pathname}`;
   }
