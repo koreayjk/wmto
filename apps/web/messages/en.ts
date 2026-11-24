@@ -670,7 +670,7 @@ export const en: Messages = {
   admin: ko.admin,
 
   connect: {
-    appName: "CBC Connect",
+    appName: "CBC",
     nav: { home: "Home", events: "Events", mentoring: "Mentoring", report: "Reports", more: "More", profile: "Profile" },
     login: {
       title: "Log in",

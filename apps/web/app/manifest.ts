@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
-import { BRAND } from "@/lib/brand";
+import { BRAND, BRAND_FULL } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${BRAND} Connect`,
+    name: `${BRAND} · ${BRAND_FULL}`,
     short_name: BRAND,
     description: "크리스천 사업가 네트워크 회원 앱 (선교 사역 WMTO 포함)",
     lang: "ko",

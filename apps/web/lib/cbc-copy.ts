@@ -1,4 +1,4 @@
-import { BRAND } from "./brand";
+import { BRAND, BRAND_FULL, BRAND_FULL_KO } from "./brand";
 
 export type CbcLocale = "ko" | "en";
 
@@ -14,10 +14,10 @@ type Copy = {
 };
 
 const ko: Copy = {
-  meta: { title: `${BRAND} · 크리스천 사업가 네트워크`, description: "일터에서 서로 소개하고 세워 주는 크리스천 사업가 모임. 업종마다 한 사람, 정기 모임, 1:1 만남, 손님 초대, 성장 기록을 한 앱에서." },
+  meta: { title: `${BRAND} · ${BRAND_FULL_KO}`, description: "일터에서 서로 소개하고 세워 주는 크리스천 사업가 모임. 업종마다 한 사람, 정기 모임, 1:1 만남, 손님 초대, 성장 기록을 한 앱에서." },
   nav: { mission: "선교 사역(WMTO)", login: "회원 로그인", other: "English" },
   hero: {
-    eyebrow: "크리스천 사업가 네트워크",
+    eyebrow: `${BRAND_FULL_KO} · 크리스천 사업가 네트워크`,
     title: "일터에서 서로 소개하고,\n함께 자라는 모임",
     sub: "같은 업종은 한 모임에 한 분. 경쟁하지 않고 서로의 고객을 연결해 주는 사업가 모임입니다. 정기 모임과 1:1 만남, 감사와 배움을 하나의 앱에서 이어 갑니다.",
     join: "입회 문의", login: "회원 로그인",
@@ -44,14 +44,14 @@ const ko: Copy = {
     cta: "선교 사역 알아보기", note: "선교 권한은 신청 후 승인되며, 모든 회원에게 자동으로 열리지는 않습니다.",
   },
   final: { title: "함께할 분을 기다립니다", text: "입회 문의를 남겨 주시면 가까운 지역 텐트를 안내해 드립니다.", join: "입회 문의", contact: "문의하기" },
-  footer: { privacy: "개인정보처리방침", contact: "문의", note: `© ${new Date().getFullYear()} ${BRAND}` },
+  footer: { privacy: "개인정보처리방침", contact: "문의", note: `© ${new Date().getFullYear()} ${BRAND} · ${BRAND_FULL_KO}` },
 };
 
 const en: Copy = {
-  meta: { title: `${BRAND} · Christian business network`, description: "A Christian business community where members refer and build each other up. One owner per industry, regular gatherings, 1:1s, guests and growth in one app." },
+  meta: { title: `${BRAND} · ${BRAND_FULL}`, description: "A Christian business community where members refer and build each other up. One owner per industry, regular gatherings, 1:1s, guests and growth in one app." },
   nav: { mission: "Mission work (WMTO)", login: "Member login", other: "한국어" },
   hero: {
-    eyebrow: "Christian business network",
+    eyebrow: `${BRAND_FULL} · Christian business network`,
     title: "A community that refers,\nand grows, together",
     sub: "One business per industry in each group, so we don't compete — we connect each other's clients. Gatherings, 1:1 meetings, gratitude and learning, all in one app.",
     join: "Ask to join", login: "Member login",
@@ -78,7 +78,7 @@ const en: Copy = {
     cta: "Learn about the mission work", note: "Mission access is granted after a request and approval. It does not open automatically for everyone.",
   },
   final: { title: "We are waiting for you", text: "Leave an inquiry and we will point you to a group near you.", join: "Ask to join", contact: "Contact us" },
-  footer: { privacy: "Privacy policy", contact: "Contact", note: `© ${new Date().getFullYear()} ${BRAND}` },
+  footer: { privacy: "Privacy policy", contact: "Contact", note: `© ${new Date().getFullYear()} ${BRAND} · ${BRAND_FULL}` },
 };
 
 export const cbcCopy = { ko, en };
