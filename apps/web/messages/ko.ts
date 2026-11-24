@@ -782,6 +782,7 @@ export const ko = {
       language: "언어",
       install: "홈 화면에 추가하면 앱처럼 사용할 수 있습니다.",
       more: { title: "나를 소개하는 글", intro: "하시는 일 소개", introHint: "어떤 일을 하고, 어떤 고객을 만나면 좋은지 적어 주세요.", keywords: "찾기용 키워드", keywordsHint: "쉼표로 구분해 주세요. 예: 인테리어, 리모델링, 사무실", years: "사업 햇수", website: "웹사이트", church: "섬기는 교회", faith: "신앙 한 줄 이야기", faithHint: "일터에서 하나님을 어떻게 만났는지 편하게 적어 주세요.", mission: "선교·사역에 대한 마음", missionHint: "관심 있는 지역이나 사역이 있다면 적어 주세요." },
+      mail: { title: "메일로 알림 받기", text: "켜면 새 알림을 하루에 한 번, 한 통으로 모아 메일로 보내 드려요. 기본은 꺼져 있고 언제든 끌 수 있어요.", on: "메일로도 받기", off: "앱에서만 받기" },
       complete: { title: "프로필 완성도", hint: "채울수록 다른 분들이 나를 더 잘 알고 소개할 수 있어요.", done: "잘 채우셨어요.", missing: "채우면 좋은 것", items: { photo: "증명사진", phone: "연락처", business_name: "사업체 이름", category: "업종", intro: "하시는 일 소개", keywords: "찾기용 키워드", years: "사업 햇수", website: "웹사이트", church: "섬기는 교회", faith: "신앙 한 줄 이야기", mission: "선교·사역에 대한 마음", region: "지역" } },
     },
     more: {

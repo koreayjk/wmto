@@ -771,6 +771,7 @@ export const en: Messages = {
       language: "Language",
       install: "Add this app to your home screen to use it like an app.",
       more: { title: "About me", intro: "What you do", introHint: "Describe your work and the kind of clients you would like to meet.", keywords: "Keywords for finding you", keywordsHint: "Separate with commas. e.g. interior, remodeling, office", years: "Years in business", website: "Website", church: "Church you serve", faith: "A line of faith story", faithHint: "Share how you met God at work.", mission: "Heart for mission", missionHint: "Tell us about regions or ministries you care about." },
+      mail: { title: "Get notifications by email", text: "When on, we send new notifications once a day in a single email. It is off by default and you can turn it off anytime.", on: "Also by email", off: "In the app only" },
       complete: { title: "Profile completeness", hint: "The more you fill in, the better others can know and refer you.", done: "Nicely filled in.", missing: "Worth adding", items: { photo: "Photo", phone: "Phone", business_name: "Business name", category: "Industry", intro: "What you do", keywords: "Keywords", years: "Years in business", website: "Website", church: "Church", faith: "Faith story", mission: "Heart for mission", region: "Region" } },
     },
     more: {

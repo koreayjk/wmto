@@ -171,6 +171,23 @@ begin
   perform pg_temp.as_user(B);
   assert pg_temp.fails(format('select decide_renewal(%L, %L)', (select id from renewal_queue() limit 1), 'not_renew')), 'leader cannot not_renew';
 
+  -- 15. 메일 알림: 동의 전에는 대기열에 안 쌓이고, 동의 후에만 쌓이며, 끄면 대기분이 지워짐
+  perform pg_temp.as_user(A);
+  assert not my_email_pref(), 'email pref default off';
+  reset role;   -- 발송 대기열은 서버(서비스 키)만 읽는다
+  assert (select count(*) from email_outbox) = 0, 'no outbox before consent';
+  perform pg_temp.as_user(A);
+  perform set_email_pref(true);
+  assert my_email_pref(), 'email pref on';
+  assert pg_temp.fails($q$select count(*) from email_outbox$q$), 'members cannot read outbox';
+  perform pg_temp.as_user(B);
+  perform assign_companion(ma, mb);   -- 새 알림이 A 에게 생김(동의 후)
+  reset role;
+  assert (select count(*) from email_outbox where member_id = ma and sent_at is null) = 1, 'outbox queued after consent';
+  perform pg_temp.as_user(A);
+  perform set_email_pref(false);
+  reset role;
+  assert (select count(*) from email_outbox where member_id = ma and sent_at is null) = 0, 'pending cleared when turned off';
   raise notice 'SMOKE OK';
 end $$;
 

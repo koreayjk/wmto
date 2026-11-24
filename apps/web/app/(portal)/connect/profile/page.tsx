@@ -47,6 +47,14 @@ async function saveProfile(fd: FormData) {
   redirect("/connect/profile?saved=1");
 }
 
+async function setEmailPref(fd: FormData) {
+  "use server";
+  const r = await requireMe();
+  if (r.viewAs || r.demo) return;
+  await r.supabase.rpc("set_email_pref", { p_on: fd.get("on") === "1" });
+  revalidatePath("/connect/profile");
+}
+
 async function requestCategoryChange(fd: FormData) {
   "use server";
   const r = await requireMe();
@@ -98,6 +106,8 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const { data: loc } = await supabase.from("members").select("region,district").eq("id", me.id).maybeSingle();
   const roleLabel = me.role ? f.options.role[me.role] : "-";
   const { data: pendingChange } = me.role === "mentor" ? await supabase.from("category_change_requests").select("id").eq("member_id", me.id).eq("status", "pending").maybeSingle() : { data: null };
+  const { data: mailPref } = await supabase.rpc("my_email_pref");
+  const mailOn = mailPref === true;
   const hasCategory = !!p.category_id;
   const currentCatName = hasCategory ? (cats.flatMap((g) => g.items).find((i) => i.id === Number(p.category_id))?.label ?? (p.industry as string) ?? "") : "";
   // 프로필 완성도(사업가): 비어 있는 항목을 알려 줍니다.
@@ -145,6 +155,13 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
               </button>
             ))}
           </span>
+        </form>
+      </Card>
+      <Card title={t.mail.title}>
+        <p className="mb-4 text-sm leading-relaxed text-soft">{t.mail.text}</p>
+        <form action={setEmailPref} className="flex gap-2">
+          <button name="on" value="1" aria-pressed={mailOn} className={`rounded-full border px-4 py-2 text-sm ${mailOn ? "border-accent bg-accent text-white" : "border-black/10 text-soft"}`}>{t.mail.on}</button>
+          <button name="on" value="0" aria-pressed={!mailOn} className={`rounded-full border px-4 py-2 text-sm ${!mailOn ? "border-accent bg-accent text-white" : "border-black/10 text-soft"}`}>{t.mail.off}</button>
         </form>
       </Card>
       <p className="px-1 text-sm text-soft">{t.install}</p>
