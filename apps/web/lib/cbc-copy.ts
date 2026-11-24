@@ -44,7 +44,7 @@ const ko: Copy = {
     cta: "선교 사역 알아보기", note: "선교 권한은 신청 후 승인되며, 모든 회원에게 자동으로 열리지는 않습니다.",
   },
   final: { title: "함께할 분을 기다립니다", text: "입회 문의를 남겨 주시면 가까운 지역 텐트를 안내해 드립니다.", join: "입회 문의", contact: "문의하기" },
-  footer: { privacy: "개인정보처리방침", contact: "문의", note: `${BRAND}는 서비스 이름(가칭)이며 변경될 수 있습니다.` },
+  footer: { privacy: "개인정보처리방침", contact: "문의", note: `© ${new Date().getFullYear()} ${BRAND}` },
 };
 
 const en: Copy = {
@@ -78,7 +78,7 @@ const en: Copy = {
     cta: "Learn about the mission work", note: "Mission access is granted after a request and approval. It does not open automatically for everyone.",
   },
   final: { title: "We are waiting for you", text: "Leave an inquiry and we will point you to a group near you.", join: "Ask to join", contact: "Contact us" },
-  footer: { privacy: "Privacy policy", contact: "Contact", note: `${BRAND} is a working name and may change.` },
+  footer: { privacy: "Privacy policy", contact: "Contact", note: `© ${new Date().getFullYear()} ${BRAND}` },
 };
 
 export const cbcCopy = { ko, en };
