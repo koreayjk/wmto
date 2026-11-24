@@ -25,3 +25,6 @@
 | 사업가 패널 | mentor-panel.jpg | Maite Paternain | https://unsplash.com/photos/SEb14_nBjc4 |
 | 선교사 패널 | partner-panel.jpg | Collab Media | https://unsplash.com/photos/a-woman-using-a-sewing-machine-to-sew-clothes-upKXvfgKABY |
 필리핀 선교본부 시설 사진(`base`)은 아직 자리표시입니다. 실제 시설 사진이 필요합니다.
+
+## CBC 홈페이지 사진 (`apps/web/public/images/cbc/`)
+AI로 생성한 **연출 이미지**(hero, gathering, one-to-one, referral, prayer, workplace, learning)이며 실제 회원·모임 사진이 아닙니다. 실제 사진이 생기면 같은 이름으로 교체하세요. 실존 인물로 오인되지 않도록 "실제 모임 사진"이라고 소개하지 않습니다.
