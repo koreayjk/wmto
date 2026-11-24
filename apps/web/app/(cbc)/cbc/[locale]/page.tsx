@@ -38,19 +38,19 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
       </header>
 
       <main id="main">
-        <section className="bg-tint">
+        <section className="bg-[#071D3D] text-white">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
-              <p className="gilt text-[12px] font-medium uppercase tracking-[0.3em]">{c.hero.eyebrow}</p>
+              <p className="text-[12px] font-medium uppercase tracking-[0.3em] text-[#E0B85A]">{c.hero.eyebrow}</p>
               <h1 className="display mt-5 max-w-3xl whitespace-pre-line text-[2.3rem] leading-[1.15] sm:text-[3rem] lg:text-[3.4rem]">{c.hero.title}</h1>
-              <p className="mt-6 max-w-2xl text-lg text-ink/80 md:text-xl">{c.hero.sub}</p>
+              <p className="mt-6 max-w-2xl text-lg text-white/80 md:text-xl">{c.hero.sub}</p>
               <div className="mt-10 flex flex-wrap gap-3">
-                <Link href={join} className={`${btn} bg-accent text-white hover:bg-[var(--accent-hover)]`}>{c.hero.join}<ArrowRight size={18} weight="bold" aria-hidden /></Link>
-                <Link href="/connect/login" className={`${btn} text-ink ring-1 ring-inset ring-ink/15 hover:bg-black/[0.04]`}>{c.hero.login}</Link>
+                <Link href={join} className={`${btn} bg-[#E0B85A] text-[#071D3D] hover:bg-[#ebc872]`}>{c.hero.join}<ArrowRight size={18} weight="bold" aria-hidden /></Link>
+                <Link href="/connect/login" className={`${btn} text-white ring-1 ring-inset ring-white/30 hover:bg-white/10`}>{c.hero.login}</Link>
               </div>
             </div>
             <div>
-              <div className="aspect-[4/3] overflow-hidden rounded-3xl shadow-[0_30px_60px_-30px_rgba(7,29,61,0.45)]"><Photo name="hero" alt={c.photos.hero} /></div>
+              <div className="aspect-[4/3] overflow-hidden rounded-3xl ring-1 ring-white/15 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)]"><Photo name="hero" alt={c.photos.hero} /></div>
             </div>
           </div>
         </section>
@@ -156,6 +156,55 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        <section className="bg-tint">
+          <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+            <p className="gilt text-[12px] font-medium uppercase tracking-[0.3em]">{c.system.eyebrow}</p>
+            <h2 className="display mt-4 text-[1.8rem] md:text-[2.3rem]">{c.system.title}</h2>
+            <p className="mt-4 max-w-3xl text-lg text-ink/75">{c.system.sub}</p>
+            <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {c.system.items.map((it) => (
+                <li key={it.title} className="rounded-2xl bg-white p-7 ring-1 ring-black/5">
+                  <h3 className="font-display text-xl font-semibold">{it.title}</h3>
+                  <p className="mt-2 leading-relaxed text-soft">{it.text}</p>
+                  <ul className="mt-4 space-y-1.5 border-t border-black/10 pt-4 text-sm">
+                    {it.points.map((p) => <li key={p} className="flex gap-2.5"><span aria-hidden className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#B8923A]" />{p}</li>)}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+          <div className="grid gap-14 lg:grid-cols-2">
+            <div>
+              <h2 className="display text-[1.8rem] md:text-[2.2rem]">{c.levels.title}</h2>
+              <p className="mt-3 text-soft">{c.levels.sub}</p>
+              <ol className="mt-8 space-y-3">
+                {c.levels.items.map((lv, i) => (
+                  <li key={lv.name} className="flex items-center gap-4 rounded-2xl bg-tint p-4" style={{ marginLeft: `${i * 14}px` }}>
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#071D3D] font-display text-sm font-semibold text-[#E0B85A]">{i + 1}</span>
+                    <span><b className="font-display text-lg">{lv.name}</b><span className="block text-sm text-soft">{lv.text}</span></span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <h2 className="display text-[1.8rem] md:text-[2.2rem]">{c.agenda.title}</h2>
+              <p className="mt-3 text-soft">{c.agenda.sub}</p>
+              <ol className="mt-8 border-l-2 border-[#B8923A]/40 pl-6">
+                {c.agenda.items.map((a) => (
+                  <li key={a.title} className="relative pb-6 last:pb-0">
+                    <span aria-hidden className="absolute -left-[31px] top-1.5 h-3 w-3 rounded-full bg-[#B8923A]" />
+                    <b className="font-display text-lg">{a.title}</b>
+                    <p className="text-sm leading-relaxed text-soft">{a.text}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </section>
 

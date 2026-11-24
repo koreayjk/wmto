@@ -14,6 +14,9 @@ type Copy = {
   stats: { title: string; items: { value: string; unit: string; label: string }[]; note: string };
   visit: { title: string; sub: string; steps: { title: string; text: string }[] };
   links: { title: string; items: { title: string; text: string }[] };
+  system: { eyebrow: string; title: string; sub: string; items: { title: string; text: string; points: string[] }[] };
+  levels: { title: string; sub: string; items: { name: string; text: string }[] };
+  agenda: { title: string; sub: string; items: { title: string; text: string }[] };
   photos: Record<"hero" | "workplace" | "gathering" | "oneToOne" | "referral" | "prayer", string>;
   how: { title: string; items: { title: string; text: string }[] };
   journey: { title: string; sub: string; steps: { title: string; text: string }[] };
@@ -94,6 +97,40 @@ const ko: Copy = {
       { title: "회원 로그인", text: "회원 앱에서 모임과 활동을 이어 갑니다." },
       { title: "선교 사역(WMTO)", text: "선교에 마음이 있는 회원을 위한 사역입니다." },
       { title: "문의하기", text: "궁금한 점을 남겨 주세요." },
+    ],
+  },
+  system: {
+    eyebrow: "운영 체계",
+    title: "CBC는 이렇게 설계되어 있습니다",
+    sub: "모임이 일회성 만남으로 끝나지 않도록, 구조와 기록과 돌봄을 함께 갖췄습니다.",
+    items: [
+      { title: "텐트 구성", text: "지역 단위 모임입니다. 업종 독점 원칙으로 회원 간 경쟁을 없앴습니다.", points: ["한 텐트 최대 50명", "업종당 한 분", "빈 업종은 대기자 명단으로 안내"] },
+      { title: "리더십과 돌봄", text: "텐트장과 부텐트장이 회원을 돌보고, 매달 텐트를 함께 점검합니다.", points: ["텐트장·부텐트장·담당자", "월간 텐트 점검 기록", "새 회원 동행 짝 지정"] },
+      { title: "소개와 감사", text: "소개의 진행 상태를 기록하고, 성사되면 감사로 마무리합니다.", points: ["소개 보내기·받기와 진행 상태", "감사 기록", "소개에 대가 없음"] },
+      { title: "1:1 만남", text: "모임 밖의 일대일 만남이 관계의 깊이를 만듭니다. 상대 확인으로 기록이 완성됩니다.", points: ["만남 기록과 상대 확인", "사진은 두 분 동의 시에만", "만남이 성장 기록에 반영"] },
+      { title: "성장 기록", text: "최근 90일의 활동을 7가지 영역으로 돌아보고 다음 걸음을 제안합니다.", points: ["순위가 아닌 성장 단계", "새 회원은 목표 완화", "연 1회 갱신 대화"] },
+      { title: "배움과 선교", text: "아카데미로 함께 배우고, 마음이 있는 회원에게는 선교 사역의 문이 열립니다.", points: ["아카데미 이수 기록", "선교 권한은 신청·승인", "선교는 선택 사항"] },
+    ],
+  },
+  levels: {
+    title: "성장 단계: 말뚝에서 등불까지",
+    sub: "텐트를 세우는 과정에 빗댄 네 단계입니다. 점수가 아니라 방향을 보여 주는 지표입니다.",
+    items: [
+      { name: "말뚝", text: "이제 막 시작했거나 활동이 적은 단계입니다. 리더가 먼저 연락드립니다." },
+      { name: "기둥", text: "기본 활동을 꾸준히 이어 가는 단계입니다." },
+      { name: "천막", text: "꾸준히 서로를 세워 주는 단계입니다." },
+      { name: "등불", text: "다른 사람의 길을 밝혀 주는 단계입니다." },
+    ],
+  },
+  agenda: {
+    title: "정기 모임은 이렇게 흘러갑니다",
+    sub: "텐트마다 세부 진행은 다를 수 있으며, 아래는 기본 흐름의 예시입니다.",
+    items: [
+      { title: "인사와 기도", text: "서로 안부를 묻고 함께 기도로 시작합니다." },
+      { title: "내 일 소개", text: "이번 주 한 분이 자신의 일과 원하는 연결을 자세히 나눕니다." },
+      { title: "소개와 필요 나눔", text: "회원들이 소개할 수 있는 분과 필요한 도움을 나눕니다." },
+      { title: "감사 나눔", text: "성사된 소개와 받은 도움에 감사를 전합니다." },
+      { title: "마무리", text: "다음 모임을 안내하고 기도로 마칩니다." },
     ],
   },
   photos: { hero: "카페 테이블에 둘러앉아 웃으며 이야기하는 사업가들", workplace: "자기 가게에서 미소 짓는 사업가", gathering: "정기 모임에서 둘러앉아 이야기를 나누는 회원들", oneToOne: "커피를 사이에 두고 일대일로 대화하는 두 사업가", referral: "악수하며 명함을 건네는 두 사업가", prayer: "조용히 함께 기도하는 사업가들" },
@@ -213,6 +250,40 @@ const en: Copy = {
       { title: "Member login", text: "Continue gatherings and activity in the member app." },
       { title: "Mission work (WMTO)", text: "For members with a heart for missions." },
       { title: "Contact us", text: "Leave your questions." },
+    ],
+  },
+  system: {
+    eyebrow: "How we are organized",
+    title: "How CBC is designed",
+    sub: "So that gatherings do not end as one-off meetings, we combine structure, records and care.",
+    items: [
+      { title: "Tent structure", text: "A regional group. The one-per-industry rule removes competition between members.", points: ["Up to 50 members per tent", "One owner per industry", "Open industries go to a waiting list"] },
+      { title: "Leadership and care", text: "The tent leader and deputy care for members and review the tent together each month.", points: ["Leader, deputy and coordinators", "Monthly tent review record", "A companion for new members"] },
+      { title: "Referrals and thanks", text: "Referral progress is recorded and closed with thanks when it succeeds.", points: ["Sending and receiving referrals with status", "Thank-you records", "No payment for referrals"] },
+      { title: "1:1 meetings", text: "One-on-one meetings outside gatherings deepen relationships. Your counterpart's confirmation completes the record.", points: ["Meeting record with confirmation", "Photos only with both people's consent", "Meetings count toward growth"] },
+      { title: "Growth record", text: "Reviews the last 90 days across seven areas and suggests your next step.", points: ["Growth levels, not rankings", "Lighter goals for new members", "A yearly renewal conversation"] },
+      { title: "Learning and mission", text: "Learn together in the academy; for members with a heart for it, mission work opens.", points: ["Academy completion records", "Mission access by request and approval", "Mission work is optional"] },
+    ],
+  },
+  levels: {
+    title: "Growth levels: from peg to lantern",
+    sub: "Four levels borrowed from pitching a tent. They show direction, not a score to chase.",
+    items: [
+      { name: "Peg", text: "Just starting, or with little activity. A leader reaches out first." },
+      { name: "Pole", text: "Keeping up the basic activities steadily." },
+      { name: "Canvas", text: "Steadily building up one another." },
+      { name: "Lantern", text: "Lighting the way for others." },
+    ],
+  },
+  agenda: {
+    title: "How a regular gathering flows",
+    sub: "Details vary by tent. This is an example of the basic flow.",
+    items: [
+      { title: "Welcome and prayer", text: "Greet each other and open in prayer together." },
+      { title: "Introduce my work", text: "One member shares their work and the connections they want in depth." },
+      { title: "Referrals and needs", text: "Members share people they can introduce and help they need." },
+      { title: "Thanks", text: "Give thanks for referrals that worked and help received." },
+      { title: "Closing", text: "Announce the next gathering and close in prayer." },
     ],
   },
   photos: { hero: "Business owners laughing around a cafe table", workplace: "A smiling owner in her own shop", gathering: "Members talking in a circle at a regular gathering", oneToOne: "Two owners in a one-on-one conversation over coffee", referral: "Two owners shaking hands and exchanging a card", prayer: "Business people quietly praying together" },
