@@ -18,7 +18,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
     <>
       <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3.5">
-          <Link href={en ? "/en" : "/"} className="display text-xl font-semibold tracking-tight">{BRAND}</Link>
+          <Link href={en ? "/en" : "/"} aria-label={BRAND} className="flex items-center">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/brand/cbc-mark.svg" alt={BRAND} width={52} height={32} className="h-8 w-auto" /></Link>
           <nav className="flex items-center gap-1 text-sm sm:gap-3">
             <Link href={mission} className="hidden rounded-full px-3 py-2 text-soft hover:text-ink sm:inline" style={{ whiteSpace: "nowrap" }}>{c.nav.mission}</Link>
             <Link href={en ? "/" : "/en"} hrefLang={en ? "ko" : "en"} className="rounded-full px-3 py-2 text-soft hover:text-ink" style={{ whiteSpace: "nowrap" }}>{c.nav.other}</Link>

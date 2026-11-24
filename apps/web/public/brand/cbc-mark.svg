@@ -1,0 +1,14 @@
+<svg viewBox="60 236 904 554" width="904" height="554" xmlns="http://www.w3.org/2000/svg">
+  <title>CBC monogram</title>
+  <desc>Deep navy serif monogram with fine gold detailing, two mirrored C letters framing a central B on white.</desc>
+    <g id="framing-letters" fill="#071D3D" stroke="#C79C43" stroke-width="5" stroke-linejoin="round">
+    <path id="left-c" d="M 409,310 L 416,453 L 403,453 C 386,374 341,328 278,328 C 189,328 139,409 139,513 C 139,626 190,695 277,695 C 338,695 383,658 412,599 L 426,606 C 397,689 338,735 253,735 C 142,735 72,642 72,518 C 72,388 152,288 268,288 C 319,288 357,305 384,324 L 398,310 Z" />
+    <g id="right-c" transform="translate(1024 0) scale(-1 1)">
+      <path d="M 409,310 L 416,453 L 403,453 C 386,374 341,328 278,328 C 189,328 139,409 139,513 C 139,626 190,695 277,695 C 338,695 383,658 412,599 L 426,606 C 397,689 338,735 253,735 C 142,735 72,642 72,518 C 72,388 152,288 268,288 C 319,288 357,305 384,324 L 398,310 Z" />
+    </g>
+  </g>
+  <g id="central-b">
+    <path fill="#071D3D" stroke="#C79C43" stroke-width="6" stroke-linejoin="round" fill-rule="evenodd" d="M 322,248 L 519,248 C 624,248 680,295 680,367 C 680,425 645,466 589,482 C 662,497 702,547 702,616 C 702,712 627,777 520,777 L 322,777 L 322,765 C 362,759 378,741 378,700 L 378,324 C 378,283 362,266 322,260 Z M 463,283 L 463,467 L 494,467 C 558,467 588,428 588,374 C 588,319 557,283 503,283 Z M 463,506 L 463,739 L 507,739 C 575,739 610,693 610,623 C 610,548 570,506 505,506 Z" />
+    <path d="M 337,258 L 518,258 M 337,767 L 518,767" fill="none" stroke="#E0BD70" stroke-width="2" />
+  </g>
+</svg>

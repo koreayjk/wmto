@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 rounded-[2rem] bg-white/85 py-2.5 pl-5 pr-3 shadow-[0_14px_30px_-18px_rgba(14,70,58,0.45),0_0_0_1px_rgba(22,24,29,0.06)] backdrop-blur-xl">
           <span className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
+            <img src="/brand/cbc-mark.svg" alt="" width={46} height={28} className="h-7 w-auto" />
             <b className="font-display text-[15px] tracking-tight">{BRAND} {m.title}</b>
           </span>
           <AdminNav links={links} />

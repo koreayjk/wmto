@@ -60,7 +60,7 @@ export default async function Thanks() {
           ) : (
             <form action={send} className="stationery px-8 pb-9 pt-10 sm:px-12">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/logo-mark.svg" alt="" width={26} height={26} className="mx-auto h-[26px] w-[26px] opacity-70" />
+              <img src="/brand/cbc-mark.svg" alt="" width={42} height={26} className="mx-auto h-[26px] w-auto opacity-70" />
               <label className="mt-8 flex items-baseline gap-3 border-b border-black/10 pb-3">
                 <span className="gilt text-[11px] font-medium uppercase tracking-[0.24em]">{t.toShort}</span>
                 <select name="recipient_id" required defaultValue={mentors[0].id} className="serif !w-auto !border-0 !bg-transparent !p-0 text-lg outline-none">

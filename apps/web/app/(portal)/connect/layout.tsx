@@ -144,8 +144,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
           <div className={`sticky flex flex-col overflow-y-auto px-5 py-8 ${r?.demo ? "top-[3.25rem] h-[calc(100svh-3.25rem)]" : r?.viewAs ? "top-9 h-[calc(100svh-2.25rem)]" : "top-0 h-svh"}`}>
             <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/logo-mark.svg" alt="" width={32} height={32} className="h-8 w-8" />
-              <span className="font-display text-lg font-bold tracking-wide">{BRAND}</span>
+              <img src="/brand/cbc-mark.svg" alt={BRAND} width={52} height={32} className="h-8 w-auto" />
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Christian Business Connect</span>
             </div>
             <Sidebar groups={groups} />
@@ -157,8 +156,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
           <div className="mx-auto flex h-16 max-w-xl items-center px-5 lg:h-[3.6rem] lg:max-w-none lg:px-10 xl:px-14">
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
-              <span className="font-display text-lg font-bold tracking-wide">{BRAND}</span>
+              <img src="/brand/cbc-mark.svg" alt={BRAND} width={46} height={28} className="h-7 w-auto" />
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Christian Business Connect</span>
             </span>
             {active && (
