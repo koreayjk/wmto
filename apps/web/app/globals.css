@@ -59,7 +59,7 @@ input[type="checkbox"] { accent-color: var(--accent); }
   text-wrap: balance;
 }
 h1, h2, h3 { text-wrap: balance; }
-p { text-wrap: pretty; }
+p, li, dd, summary { text-wrap: pretty; }
 
 /* 스크롤 등장: 제목에만 짧게 */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); }

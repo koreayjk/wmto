@@ -60,7 +60,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-14 md:py-20 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <p className={`${EYEBROW} text-[#E0B85A]`}>{c.hero.eyebrow}</p>
-              <h1 className="display mt-5 max-w-3xl whitespace-pre-line text-[2.3rem] leading-[1.15] sm:text-[3rem] lg:text-[3.4rem]">{c.hero.title}</h1>
+              <h1 className="display mt-5 max-w-3xl whitespace-pre-line text-[2rem] leading-[1.18] min-[400px]:text-[2.3rem] sm:text-[3rem] lg:text-[3.4rem]">{c.hero.title}</h1>
               <p className="mt-6 max-w-2xl text-lg text-white/85 md:text-xl">{c.hero.sub}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link href={join} className={`${btn} bg-[#E0B85A] text-[#071D3D] hover:bg-[#ebc872]`}>{c.hero.join}<ArrowRight size={18} weight="bold" aria-hidden /></Link>

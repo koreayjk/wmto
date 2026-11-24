@@ -1,3 +1,4 @@
+import { keepKoDeep } from "./typo";
 import { ko, type Messages } from "@/messages/ko";
 import { en } from "@/messages/en";
 
@@ -8,7 +9,7 @@ export const LOCALE_COOKIE = "wmto-locale";
 
 export const isLocale = (v: unknown): v is Locale => v === "ko" || v === "en";
 
-const catalogs: Record<Locale, Messages> = { ko, en };
+const catalogs: Record<Locale, Messages> = { ko: keepKoDeep(ko), en };
 
 export function getMessages(locale: Locale = defaultLocale): Messages {
   return catalogs[locale];

@@ -1,3 +1,4 @@
+import { keepKoDeep } from "./typo";
 import { BRAND, BRAND_FULL, BRAND_FULL_KO } from "./brand";
 
 export type CbcLocale = "ko" | "en";
@@ -304,5 +305,6 @@ const en: Copy = {
   footer: { privacy: "Privacy policy", contact: "Contact", note: `© ${new Date().getFullYear()} ${BRAND} · ${BRAND_FULL}` },
 };
 
-export const cbcCopy = { ko, en };
+// 한국어 줄바꿈 보정(검색·공유용 meta 는 그대로 둡니다)
+export const cbcCopy = { ko: keepKoDeep(ko, new Set(["meta"])), en };
 export const isCbcLocale = (v: unknown): v is CbcLocale => v === "ko" || v === "en";
