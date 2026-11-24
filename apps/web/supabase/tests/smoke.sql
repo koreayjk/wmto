@@ -188,6 +188,23 @@ begin
   perform set_email_pref(false);
   reset role;
   assert (select count(*) from email_outbox where member_id = ma and sent_at is null) = 0, 'pending cleared when turned off';
+  -- 16. 회비 청구(수동 입금 확인): 운영진만 설정·발행·확인, 회원은 미납일 때만 계좌 안내
+  perform pg_temp.as_user(A);
+  assert pg_temp.fails($q$select set_setting('fee_account','x')$q$), 'member cannot set settings';
+  assert pg_temp.fails($q$select count(*) from app_settings$q$) or (select count(*) from app_settings) = 0, 'members cannot read settings';
+  assert (my_billing()->>'account') is null, 'no account before invoice';
+  perform pg_temp.as_user(D);
+  perform set_setting('fee_account', '은행 000-0000');
+  assert pg_temp.fails($q$select set_setting('fee_amount','abc')$q$), 'bad amount rejected';
+  rid := issue_invoice(ma, 'renewal', 120000, current_date + 14, '갱신 회비');
+  perform pg_temp.as_user(A);
+  assert (my_billing()->>'open')::int = 1 and (my_billing()->>'account') = '은행 000-0000', 'account shown when unpaid';
+  assert pg_temp.fails(format('select decide_invoice(%L, %L)', rid, 'paid')), 'member cannot confirm payment';
+  perform pg_temp.as_user(D);
+  perform decide_invoice(rid, 'paid', '입금 확인');
+  assert pg_temp.fails(format('select decide_invoice(%L, %L)', rid, 'void')), 'cannot change decided invoice';
+  perform pg_temp.as_user(A);
+  assert (my_billing()->>'open')::int = 0 and (my_billing()->>'account') is null, 'account hidden after paid';
   raise notice 'SMOKE OK';
 end $$;
 

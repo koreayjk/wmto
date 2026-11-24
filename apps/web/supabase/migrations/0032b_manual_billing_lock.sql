@@ -1,0 +1,11 @@
+set search_path = wmto;
+revoke all on function set_setting(text, text) from public, anon;
+revoke all on function issue_invoice(uuid, text, int, date, text) from public, anon;
+revoke all on function decide_invoice(uuid, text, text) from public, anon;
+revoke all on function my_billing() from public, anon;
+grant execute on function set_setting(text, text) to authenticated;
+grant execute on function issue_invoice(uuid, text, int, date, text) to authenticated;
+grant execute on function decide_invoice(uuid, text, text) to authenticated;
+grant execute on function my_billing() to authenticated;
+revoke insert, update, delete on invoices, app_settings from anon, authenticated;
+revoke select on app_settings from anon;

@@ -48,6 +48,10 @@ export default async function Growth() {
   }
   const daysLeft = term?.term_end ? Math.ceil((new Date(term.term_end).getTime() - Date.now()) / 86400000) : null;
 
+  const { data: bill } = me.role === "mentor" ? await supabase.rpc("my_billing") : { data: null };
+  const billing = (bill ?? null) as { open: number; account: string | null; note: string | null; invoices: { id: string; kind: "joining" | "renewal" | "other"; amount: number; status: "issued" | "paid" | "waived" | "void"; due_on: string | null; issued_at: string }[] } | null;
+  const bm = getMessages(locale).connect.billing;
+
   const counts: ActivityCounts = { attendance, mentoring, reports, referrals, letters, matchings };
   const keys = (Object.keys(WEIGHTS) as (keyof typeof WEIGHTS)[]).filter((k) => !(k === "reports" && me.role !== "partner") && !(k === "referrals" && me.role !== "mentor"));
   const stages = me.role === "mentor" ? mentorStages : partnerStages;
@@ -57,6 +61,21 @@ export default async function Growth() {
     <div className="space-y-4">
       <PageTitle eyebrow="Growth">{g.title}</PageTitle>
       {growth.data && <GrowthIndex data={growth.data as GrowthData} t={g.index} />}
+      {billing && billing.invoices.length > 0 && (
+        <Card title={bm.title}>
+          <p className={`text-sm ${billing.open > 0 ? "font-medium" : "text-soft"}`}>{billing.open > 0 ? bm.open : bm.none}</p>
+          {billing.open > 0 && billing.account && <p className="mt-3 rounded-xl bg-tint px-4 py-3 text-sm"><b className="font-medium">{bm.account}</b> · {billing.account}{billing.note ? <span className="mt-1 block text-soft">{bm.note}: {billing.note}</span> : null}</p>}
+          <ul className="mt-4 divide-y divide-black/[0.06] text-sm">
+            {billing.invoices.map((i) => (
+              <li key={i.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5">
+                <span>{bm.kind[i.kind]} · {i.amount.toLocaleString("ko-KR")}{bm.won}{i.status === "issued" && i.due_on ? <span className="ml-2 text-xs text-soft">{bm.due} {fmtDate(i.due_on, locale)}</span> : null}</span>
+                <span className={`text-xs font-semibold ${i.status === "paid" ? "text-accent" : i.status === "issued" ? "gilt" : "text-soft"}`}>{bm.status[i.status]}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-soft">{bm.hint}</p>
+        </Card>
+      )}
       {me.role === "mentor" && term?.term_end && (
         <Card title={rw.mine.title}>
           <p className="font-display text-lg font-semibold">{rw.mine.ends} {term.term_end}{daysLeft !== null && daysLeft >= 0 ? ` · ${daysLeft}${rw.mine.daysLeft}` : ""}</p>

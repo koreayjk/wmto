@@ -11,7 +11,7 @@ export async function getViewAsId(): Promise<string | null> {
 }
 
 // 보기 모드에서 허용하는 요청: 조회(GET/HEAD)와 조회용 RPC 만. 나머지는 모두 막아 "보기 전용"을 지킵니다.
-const READ_RPC = /\/rest\/v1\/rpc\/(open_matching_requests|mentor_directory|mentoring_feed|chapter_peers|my_growth|pending_mission_requests|has_mission_access|renewal_queue|chapter_dashboard|my_email_pref|my_circle|chapter_circles|my_circle_posts|testimonial_candidates|tent_testimonials|get_meeting_plan|meeting_recap|suggest_featured|event_signup_summary|my_first90|chapter_newcomers|chapter_watchlist|my_weekly_records|pending_category_changes|my_activity|admission_overview|my_tents|tent_overview|sponsor_overview|sponsor_gifts|sponsor_partner_feed|fund_overview)(\?|$)/;
+const READ_RPC = /\/rest\/v1\/rpc\/(open_matching_requests|mentor_directory|mentoring_feed|chapter_peers|my_growth|pending_mission_requests|has_mission_access|renewal_queue|chapter_dashboard|my_billing|my_email_pref|my_circle|chapter_circles|my_circle_posts|testimonial_candidates|tent_testimonials|get_meeting_plan|meeting_recap|suggest_featured|event_signup_summary|my_first90|chapter_newcomers|chapter_watchlist|my_weekly_records|pending_category_changes|my_activity|admission_overview|my_tents|tent_overview|sponsor_overview|sponsor_gifts|sponsor_partner_feed|fund_overview)(\?|$)/;
 
 export const viewOnlyFetch: typeof fetch = async (input, init) => {
   const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;

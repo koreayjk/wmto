@@ -876,6 +876,9 @@ export const ko = {
         testimonial_published: "{name} 님이 추천사를 공개했어요.",
         circle_added: "'{name}' 동역 소그룹에 함께하게 됐어요.",
         circle_post: "{name} 님이 소그룹에 소개 기회를 나눴어요.",
+        invoice_issued: "회비 {amount}원 청구서가 도착했어요. 활동·성장에서 입금 안내를 확인해 주세요.",
+        invoice_paid: "회비 입금이 확인됐어요. 감사합니다.",
+        invoice_waived: "이번 회비는 면제됐어요.",
         featured_assigned: "'{title}' 모임에서 나눔 발표를 맡으셨어요.",
         absence_notice: "{name} 님이 '{title}'에 못 간다고 미리 알렸어요.",
         category_request: "{name} 님이 업종 변경을 신청했어요.",
@@ -962,6 +965,12 @@ export const ko = {
       mine: "내 소그룹", none: "아직 소그룹에 속하지 않았어요. 텐트장이 함께할 분들과 묶어 드려요.", members: "함께하는 분", leave: "나가기",
       board: "이번 주 소개 기회", boardHint: "소개해 드릴 수 있는 고객 이야기나, 필요한 도움을 짧게 나눠 주세요. (고객 연락처는 적지 마세요)", post: "나누기", noPosts: "아직 글이 없어요.",
       leader: { title: "텐트 소그룹 관리", create: "소그룹 만들기", name: "이름", purpose: "목적(선택)", add: "구성원 추가", pick: "소그룹 없는 분", close: "소그룹 닫기", remove: "빼기", free: "아직 소그룹이 없는 분", empty: "만든 소그룹이 없어요.", max: "한 소그룹은 최대 6명", error: "처리하지 못했어요. 이미 다른 소그룹이거나 정원이 찼을 수 있어요." },
+    },
+    billing: {
+      title: "회비 안내", open: "입금하실 회비가 있어요", none: "지금 입금하실 회비는 없어요.", due: "입금 기한", account: "입금 계좌", note: "안내",
+      kind: { joining: "입회 회비", renewal: "갱신 회비", other: "회비" },
+      status: { issued: "입금 대기", paid: "입금 확인됨", waived: "면제", void: "취소" },
+      hint: "입금하시면 운영진이 확인합니다. 입금 확인은 갱신 심사와 별개로 진행돼요.", won: "원",
     },
     visitors: {
       nav: "손님 초대", title: "손님 초대", sub: "함께하면 좋을 분을 챕터 모임에 초대하세요. 손님이 실제로 참석하면 챕터 리더가 확인해 성장 지표에 반영됩니다.",
