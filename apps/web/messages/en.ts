@@ -645,7 +645,7 @@ export const en: Messages = {
         skill: "Skills",
       },
     },
-    consent: "I agree to the collection and use of my personal information , and I confirm I am 14 or older (required)",
+    consent: "I agree to the collection and use of my personal information, and I confirm I am 14 or older (required)",
     consentHelp:
       "Data collected: name, email, phone, country of residence, and what you enter / Purpose: receiving your application and replying / Retention: until the purpose is fulfilled",
     select: "Select",
