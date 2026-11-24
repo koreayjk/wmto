@@ -72,7 +72,7 @@ export default async function AdminViewAs({ searchParams }: { searchParams: Prom
   return (
     <>
       <h1 className="display mb-2 text-[2rem] md:text-[2.4rem]">앱 화면 보기</h1>
-      <p className="text-soft">회원을 고르면 그 회원의 시점으로 회원 앱(WMTO Connect)을 볼 수 있습니다. <b className="font-semibold text-ink">읽기 전용</b>이라 저장되거나 바뀌는 것은 없습니다.</p>
+      <p className="text-soft">회원을 고르면 그 회원의 시점으로 회원 앱(CBC)을 볼 수 있습니다. <b className="font-semibold text-ink">읽기 전용</b>이라 저장되거나 바뀌는 것은 없습니다.</p>
 
       <h2 className="mt-12 mb-3 text-[12px] font-medium tracking-[0.14em] text-soft">지금 돌아가고 있는 활동</h2>
       <ul className="alist divide-y divide-black/[0.06]">

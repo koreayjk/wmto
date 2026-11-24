@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import { AdminNav } from "@/components/connect/AdminNav";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -40,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
-            <b className="font-display text-[15px] tracking-tight">WMTO {m.title}</b>
+            <b className="font-display text-[15px] tracking-tight">{BRAND} {m.title}</b>
           </span>
           <AdminNav links={links} />
           <form action={logout} className="ml-auto">

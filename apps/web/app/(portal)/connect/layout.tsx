@@ -145,8 +145,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
             <div className="mb-10 flex items-center gap-2.5 px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={32} height={32} className="h-8 w-8" />
-              <span className="font-display text-lg font-bold tracking-wide">WMTO</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
+              <span className="font-display text-lg font-bold tracking-wide">{BRAND}</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-clay">Christian Business Connect</span>
             </div>
             <Sidebar groups={groups} />
           </div>
@@ -158,8 +158,8 @@ export default async function ConnectLayout({ children }: { children: React.Reac
             <span className="flex items-center gap-2 lg:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
-              <span className="font-display text-lg font-bold tracking-wide">WMTO</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-clay">Connect</span>
+              <span className="font-display text-lg font-bold tracking-wide">{BRAND}</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-clay">Christian Business Connect</span>
             </span>
             {active && (
               <span className="pointer-events-auto ml-auto flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">

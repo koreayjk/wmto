@@ -83,9 +83,9 @@ export const en: Messages = {
 
   home: {
     connect: {
-      eyebrow: "WMTO Connect",
-      title: "One place for the road we walk together: WMTO Connect",
-      body: "The app for WMTO members. Meet in a regional tent, walk with the missionaries you mentor, and exchange mentoring notes, thank-you letters, and giving news. Try it with sample data before you join.",
+      eyebrow: "CBC",
+      title: "One place for the road we walk together: CBC",
+      body: "The app for CBC members. Meet in a regional tent, walk with the missionaries you mentor, and exchange mentoring notes, thank-you letters, and giving news. Try it with sample data before you join.",
       screens: [
         { key: "tent", label: "Tent", title: "Our local gathering", text: "You join the tent for your area automatically and share regular gatherings, notices, and recaps. A tent holds up to 50 members and only one business owner per industry; when it is full or the industry is taken, a new tent opens in the same region. Tents share regular gatherings, notices, and recaps." },
         { key: "mentoring", label: "Mentoring log", title: "Every meeting, in order", text: "Record what you shared, the next steps, and prayer topics. Notes are shared by default with other mentors helping the same missionary, or kept between the two of you if personal." },
@@ -100,7 +100,7 @@ export const en: Messages = {
       demo: "Try the app",
       login: "Member login",
       note: "The demo is read-only with sample data and needs no login. Login is for approved members only.",
-      frameAlt: "WMTO Connect screen",
+      frameAlt: "CBC member app screen",
     },
     hero: {
       eyebrow: "WMTO Self-Sustaining Mission Business Network",
@@ -1115,7 +1115,7 @@ export const en: Messages = {
       },
     },
     demo: {
-      title: "Try WMTO Connect",
+      title: "Try the CBC member app",
       sub: "Look around the screens of a business owner, a missionary, and a sponsor with sample data.",
       points: [
         "Enter with one click. No sign-up or login.",
