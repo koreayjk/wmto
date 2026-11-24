@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CbcShell } from "@/components/cbc/CbcShell";
 import { notFound } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 import { cbcCopy, isCbcLocale } from "@/lib/cbc-copy";
@@ -33,17 +34,7 @@ export default async function CbcJoin({ params, searchParams }: { params: Promis
     try { categories = groupCategories(await loadCategories(createSupabaseAdminClient()), locale); } catch { categories = []; }
   }
   return (
-    <div className="break-keep">
-      <header className="border-b border-black/[0.06] bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 py-2">
-          <Link href={en ? "/en" : "/"} aria-label={BRAND} className="flex min-h-[44px] items-center">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/brand/cbc-mark.svg" alt={BRAND} width={52} height={32} className="h-8 w-auto" /></Link>
-          <nav className="flex items-center gap-1 text-sm">
-            <Link href={en ? "/" : "/en"} hrefLang={en ? "ko" : "en"} className="inline-flex min-h-[44px] items-center rounded-full px-3 text-ink/80 hover:text-ink">{c.nav.other}</Link>
-            <Link href="/connect/login" className="inline-flex min-h-[44px] items-center rounded-full px-3 text-ink/80 hover:text-ink">{c.nav.login}</Link>
-          </nav>
-        </div>
-      </header>
-      <main id="main" className="bg-paper pb-24 pt-14 md:pt-20">
+    <CbcShell locale={locale} switchHref={en ? "/join" : "/en/join"}>
         <div className="mx-auto max-w-2xl px-6">
           <h1 className="display text-4xl md:text-5xl">{t.title}</h1>
           <p className="mt-4 text-soft">{t.sub}</p>
@@ -54,13 +45,6 @@ export default async function CbcJoin({ params, searchParams }: { params: Promis
           </nav>
           <ApplyForm key={type} variant="cbc" type={type} categories={categories} backHref={en ? "/en" : "/"} />
         </div>
-      </main>
-      <footer className="border-t border-black/[0.06]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-sm text-soft">
-          <span>{c.footer.note}</span>
-          <Link href={en ? "/wmto/en/privacy" : "/wmto/privacy"} className="inline-flex min-h-[44px] items-center hover:text-ink">{c.footer.privacy}</Link>
-        </div>
-      </footer>
-    </div>
+    </CbcShell>
   );
 }

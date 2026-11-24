@@ -21,7 +21,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
   const en = locale === "en";
   const join = en ? "/en/join" : "/join";
   const contact = en ? "/en/join?type=contact" : "/join?type=contact";
-  const privacy = en ? "/wmto/en/privacy" : "/wmto/privacy";
+  const privacy = en ? "/en/privacy" : "/privacy";
   const mission = en ? "/wmto/en" : "/wmto";
   const btn = "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-3 text-[15px] font-semibold transition active:scale-[0.98]";
   const navLink = "min-h-[44px] items-center rounded-full px-3 text-ink/80 hover:text-ink";

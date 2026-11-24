@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
   // ───── 공개 사이트 ─────
   // 루트(/, /en)는 CBC 첫 화면, 선교 사역 소개(WMTO)는 /wmto(영어 /wmto/en) 아래에 있습니다.
   const first = pathname.split("/")[1];
-  const SITE_PAGES = ["about", "mentor", "partner", "sponsor", "camp", "fund", "stories", "events", "apply", "privacy"];
+  const SITE_PAGES = ["about", "mentor", "partner", "sponsor", "camp", "fund", "stories", "events", "apply"];
   // 예전 주소(/about, /en/about …)는 새 주소로 안내합니다.
   if (SITE_PAGES.includes(first) || (first === "en" && SITE_PAGES.includes(pathname.split("/")[2] ?? ""))) {
     const url = request.nextUrl.clone();
@@ -64,6 +64,8 @@ export async function proxy(request: NextRequest) {
     internal = `/cbc/${isEn ? "en" : "ko"}`;
   } else if (pathname === "/join" || pathname === "/en/join") {
     internal = `/cbc/${isEn ? "en" : "ko"}/join`;
+  } else if (pathname === "/privacy" || pathname === "/en/privacy") {
+    internal = `/cbc/${isEn ? "en" : "ko"}/privacy`;
   } else {
     internal = isEn ? pathname : `/ko${pathname}`;
   }
