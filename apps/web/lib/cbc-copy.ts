@@ -26,12 +26,12 @@ type Copy = {
 };
 
 const ko: Copy = {
-  meta: { title: `${BRAND} · ${BRAND_FULL_KO}`, description: "일터에서 서로 소개하고 세워 주는 크리스천 사업가 모임. 업종마다 한 사람, 정기 모임, 1:1 만남, 손님 초대, 성장 기록을 한 앱에서." },
+  meta: { title: `${BRAND} · ${BRAND_FULL_KO}`, description: "매주 한 번 모여 서로의 일을 나누고 고객을 소개하는 크리스천 사업가 모임. 업종마다 한 사람, 1:1 만남, 손님 초대, 성장 기록을 한 앱에서." },
   nav: { mission: "선교 사역(WMTO)", login: "회원 로그인", other: "English" },
   hero: {
     eyebrow: `${BRAND_FULL_KO} · 크리스천 사업가 네트워크`,
-    title: "일터에서 서로 소개하고,\n함께 자라는 모임",
-    sub: "같은 업종은 한 모임에 한 분. 경쟁하지 않고 서로의 고객을 연결해 주는 사업가 모임입니다. 정기 모임과 1:1 만남, 감사와 배움을 하나의 앱에서 이어 갑니다.",
+    title: "매주 만나 서로 소개하고,\n함께 자라는 사업가 모임",
+    sub: "일주일에 한 번 같은 지역의 사업가가 모여 서로의 일을 나누고 고객을 소개합니다. 같은 업종은 한 모임에 한 분이라 경쟁 없이 연결됩니다. 1:1 만남, 감사와 배움은 하나의 앱에서 이어 갑니다.",
     join: "참여 문의", login: "회원 로그인",
   },
   concept: {
@@ -56,7 +56,7 @@ const ko: Copy = {
     eyebrow: "모임은 이렇게 돌아갑니다",
     title: "업종마다 한 분, 정기적으로 만나는 지역 모임",
     text: "CBC의 기본 단위는 지역 모임인 '텐트'입니다. 같은 업종의 사업가는 한 텐트에 한 분만 들어옵니다. 서로 경쟁하지 않으니 마음 놓고 고객을 소개할 수 있습니다.",
-    items: ["지역별 텐트, 한 텐트 최대 50명", "업종당 한 분 — 경쟁이 아닌 협력", "정기 모임에서 서로의 일과 필요를 나눔", "텐트장과 운영진이 함께 돌봄"],
+    items: ["지역별 텐트, 한 텐트 최대 50명", "업종당 한 분 — 경쟁이 아닌 협력", "매주 한 번 정기 모임에서 서로의 일과 필요를 나눔", "텐트장과 운영진이 함께 돌봄"],
   },
   menu: { about: "CBC 소개", how: "운영 방식", join: "첫 방문", faq: "자주 묻는 질문" },
   system: {
@@ -134,12 +134,12 @@ const ko: Copy = {
 };
 
 const en: Copy = {
-  meta: { title: `${BRAND} · ${BRAND_FULL}`, description: "A Christian business community where members refer and build each other up. One owner per industry, regular gatherings, 1:1s, guests and growth in one app." },
+  meta: { title: `${BRAND} · ${BRAND_FULL}`, description: "A Christian business community that meets weekly to share each other's work and refer clients. One owner per industry, 1:1s, guests and growth in one app." },
   nav: { mission: "Mission work (WMTO)", login: "Member login", other: "한국어" },
   hero: {
     eyebrow: `${BRAND_FULL} · Christian business network`,
-    title: "A community that refers,\nand grows, together",
-    sub: "One business per industry in each group, so we don't compete — we connect each other's clients. Gatherings, 1:1 meetings, gratitude and learning, all in one app.",
+    title: "Meet weekly, refer each other,\ngrow together",
+    sub: "Once a week, business owners from the same region gather to share their work and refer clients. With one business per industry in each group, we connect instead of compete. 1:1 meetings, gratitude and learning continue in one app.",
     join: "Ask to join", login: "Member login",
   },
   concept: {
@@ -164,7 +164,7 @@ const en: Copy = {
     eyebrow: "How a group runs",
     title: "One owner per industry, meeting regularly in your region",
     text: "The basic unit of CBC is the regional group, called a 'tent'. Only one owner from each industry joins a tent. Because we do not compete, we can refer clients with an open heart.",
-    items: ["Regional tents, up to 50 members each", "One per industry — cooperation, not competition", "Regular gatherings to share work and needs", "Cared for by the tent leader and the team"],
+    items: ["Regional tents, up to 50 members each", "One per industry — cooperation, not competition", "A weekly gathering to share work and needs", "Cared for by the tent leader and the team"],
   },
   menu: { about: "About CBC", how: "How it works", join: "First visit", faq: "FAQ" },
   system: {
