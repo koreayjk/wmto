@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
     title: c.title, description: c.description,
     alternates: { canonical: locale === "en" ? "/en" : "/", languages: { ko: "/", en: "/en" } },
-    openGraph: { title: c.title, description: c.description, locale: locale === "en" ? "en_US" : "ko_KR", type: "website" },
+    openGraph: { title: c.title, description: c.description, locale: locale === "en" ? "en_US" : "ko_KR", type: "website", images: [{ url: "/brand/og-cbc.png", width: 1200, height: 630 }] },
   };
 }
 
