@@ -23,6 +23,12 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
       <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3.5">
           <Link href={en ? "/en" : "/"} aria-label={BRAND} className="flex items-center">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/brand/cbc-mark.svg" alt={BRAND} width={52} height={32} className="h-8 w-auto" /></Link>
+          <nav className="hidden items-center gap-1 text-sm lg:flex">
+            <a href="#about" className="rounded-full px-3 py-2 text-ink/80 hover:text-ink">{c.menu.about}</a>
+            <a href="#how" className="rounded-full px-3 py-2 text-ink/80 hover:text-ink">{c.menu.how}</a>
+            <a href="#visit" className="rounded-full px-3 py-2 text-ink/80 hover:text-ink">{c.menu.join}</a>
+            <a href="#faq" className="rounded-full px-3 py-2 text-ink/80 hover:text-ink">{c.menu.faq}</a>
+          </nav>
           <nav className="flex items-center gap-1 text-sm sm:gap-3">
             <Link href={mission} className="hidden rounded-full px-3 py-2 text-soft hover:text-ink sm:inline" style={{ whiteSpace: "nowrap" }}>{c.nav.mission}</Link>
             <Link href={en ? "/" : "/en"} hrefLang={en ? "ko" : "en"} className="rounded-full px-3 py-2 text-soft hover:text-ink" style={{ whiteSpace: "nowrap" }}>{c.nav.other}</Link>
@@ -43,11 +49,43 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
                 <Link href="/connect/login" className={`${btn} text-ink ring-1 ring-inset ring-ink/15 hover:bg-black/[0.04]`}>{c.hero.login}</Link>
               </div>
             </div>
-            <div className="aspect-[4/3] overflow-hidden rounded-3xl shadow-[0_30px_60px_-30px_rgba(7,29,61,0.45)]"><Photo name="hero" alt={c.photos.hero} /></div>
+            <div>
+              <div className="aspect-[4/3] overflow-hidden rounded-3xl shadow-[0_30px_60px_-30px_rgba(7,29,61,0.45)]"><Photo name="hero" alt={c.photos.hero} /></div>
+            </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <section className="border-b border-black/[0.06] bg-white">
+          <div className="mx-auto max-w-6xl px-6 py-12">
+            <h2 className="font-display text-xl font-semibold">{c.start.title}</h2>
+            <ol className="mt-6 grid gap-4 md:grid-cols-[1fr_1fr_1fr_auto] md:items-stretch">
+              {c.start.steps.map((st, i) => (
+                <li key={st.title} className="flex gap-4 rounded-2xl bg-tint p-5">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-white">{i + 1}</span>
+                  <span><b className="block font-display text-lg">{st.title}</b><span className="mt-1 block text-sm leading-relaxed text-soft">{st.text}</span></span>
+                </li>
+              ))}
+              <li className="flex items-center"><Link href={join} className={`${btn} w-full bg-accent text-white hover:bg-[var(--accent-hover)]`}>{c.start.cta}<ArrowRight size={18} weight="bold" aria-hidden /></Link></li>
+            </ol>
+          </div>
+        </section>
+
+        <section className="bg-[#071D3D] text-white">
+          <div className="mx-auto max-w-6xl px-6 py-14">
+            <h2 className="text-center font-display text-lg text-white/80">{c.stats.title}</h2>
+            <ul className="mt-8 grid grid-cols-2 gap-y-8 text-center md:grid-cols-4">
+              {c.stats.items.map((it) => (
+                <li key={it.label}>
+                  <span className="font-display text-5xl font-semibold text-[#E0B85A]">{it.value}</span><span className="ml-1 text-lg text-white/90">{it.unit}</span>
+                  <span className="mt-2 block text-sm text-white/70">{it.label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-8 text-center text-xs text-white/50">{c.stats.note}</p>
+          </div>
+        </section>
+
+        <section id="about" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-24 md:py-32">
           <p className="gilt text-[12px] font-medium uppercase tracking-[0.3em]">{c.concept.eyebrow}</p>
           <h2 className="display mt-4 max-w-3xl text-[1.8rem] leading-tight md:text-[2.4rem]">{c.concept.title}</h2>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-ink/80">{c.concept.lead}</p>
@@ -88,7 +126,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
           <div className="aspect-[3/2] overflow-hidden rounded-3xl"><Photo name="gathering" alt={c.photos.gathering} /></div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <section id="how" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-24 md:py-32">
           <h2 className="display text-[1.8rem] md:text-[2.3rem]">{c.how.title}</h2>
           <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {c.how.items.map((it, i) => (
@@ -102,6 +140,22 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
           <div className="mt-14 grid gap-4 sm:grid-cols-2">
             <div className="aspect-[3/2] overflow-hidden rounded-2xl"><Photo name="one-to-one" alt={c.photos.oneToOne} /></div>
             <div className="aspect-[3/2] overflow-hidden rounded-2xl"><Photo name="referral" alt={c.photos.referral} /></div>
+          </div>
+        </section>
+
+        <section id="visit" className="scroll-mt-20 bg-white">
+          <div className="mx-auto max-w-6xl px-6 pt-8 pb-24 md:pb-32">
+            <h2 className="display text-[1.8rem] md:text-[2.2rem]">{c.visit.title}</h2>
+            <p className="mt-3 max-w-2xl text-soft">{c.visit.sub}</p>
+            <ol className="mt-10 grid gap-5 md:grid-cols-4">
+              {c.visit.steps.map((st, i) => (
+                <li key={st.title} className="rounded-2xl border border-black/10 p-6">
+                  <span className="font-display text-3xl font-semibold text-[#B8923A]">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-3 font-display text-lg font-semibold">{st.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-soft">{st.text}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
@@ -139,7 +193,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
           <p className="mt-4 text-sm text-soft">{c.mission.note}</p>
         </section>
 
-        <section className="mx-auto max-w-3xl px-6 py-20 md:py-28">
+        <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20 md:py-28">
           <h2 className="display text-[1.6rem] md:text-[2rem]">{c.faq.title}</h2>
           <div className="mt-8 divide-y divide-black/10 border-y border-black/10">
             {c.faq.items.map((f) => (
@@ -150,6 +204,23 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
             ))}
           </div>
           <p className="mt-5 text-sm text-soft">{c.faq.more}</p>
+        </section>
+
+        <section className="bg-tint">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <h2 className="font-display text-xl font-semibold">{c.links.title}</h2>
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[join, "/connect/login", mission, contact].map((href, i) => (
+                <li key={href}>
+                  <Link href={href} className="group flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-black/5 transition hover:ring-accent/40">
+                    <b className="font-display text-lg">{c.links.items[i].title}</b>
+                    <span className="mt-2 flex-1 text-sm leading-relaxed text-soft">{c.links.items[i].text}</span>
+                    <ArrowRight size={18} weight="bold" aria-hidden className="mt-4 text-accent transition group-hover:translate-x-1" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
 
         <section className="bg-accent text-white">

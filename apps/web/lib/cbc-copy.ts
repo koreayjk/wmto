@@ -9,6 +9,11 @@ type Copy = {
   concept: { eyebrow: string; title: string; lead: string; pillars: { word: string; title: string; text: string }[] };
   why: { title: string; items: { title: string; text: string }[] };
   rhythm: { eyebrow: string; title: string; text: string; items: string[] };
+  menu: { about: string; how: string; join: string; faq: string };
+  start: { title: string; steps: { title: string; text: string }[]; cta: string };
+  stats: { title: string; items: { value: string; unit: string; label: string }[]; note: string };
+  visit: { title: string; sub: string; steps: { title: string; text: string }[] };
+  links: { title: string; items: { title: string; text: string }[] };
   photos: Record<"hero" | "workplace" | "gathering" | "oneToOne" | "referral" | "prayer", string>;
   how: { title: string; items: { title: string; text: string }[] };
   journey: { title: string; sub: string; steps: { title: string; text: string }[] };
@@ -51,6 +56,45 @@ const ko: Copy = {
     title: "업종마다 한 분, 정기적으로 만나는 지역 모임",
     text: "CBC의 기본 단위는 지역 모임인 '텐트'입니다. 같은 업종의 사업가는 한 텐트에 한 분만 들어옵니다. 서로 경쟁하지 않으니 마음 놓고 고객을 소개할 수 있습니다.",
     items: ["지역별 텐트, 한 텐트 최대 50명", "업종당 한 분 — 경쟁이 아닌 협력", "정기 모임에서 서로의 일과 필요를 나눔", "텐트장과 운영진이 함께 돌봄"],
+  },
+  menu: { about: "CBC 소개", how: "운영 방식", join: "입회 안내", faq: "자주 묻는 질문" },
+  start: {
+    title: "시작은 세 단계입니다",
+    steps: [
+      { title: "텐트 찾기", text: "내 지역과 업종에 맞는 텐트를 확인합니다." },
+      { title: "입회 문의", text: "간단한 양식으로 문의를 남깁니다." },
+      { title: "가입 완료", text: "운영진 확인 후 승인되면 회원 앱이 열립니다." },
+    ],
+    cta: "입회 문의하기",
+  },
+  stats: {
+    title: "숫자로 보는 CBC의 구조",
+    items: [
+      { value: "50", unit: "명", label: "한 텐트 최대 인원" },
+      { value: "1", unit: "업종 1인", label: "텐트 안에서 업종마다 한 분" },
+      { value: "90", unit: "일", label: "성장 기록 기준 기간" },
+      { value: "6", unit: "가지", label: "함께하는 활동" },
+    ],
+    note: "회원 수와 텐트 수는 모임이 시작되면 이곳에 공개합니다.",
+  },
+  visit: {
+    title: "처음 방문하면 이렇게 진행됩니다",
+    sub: "회원의 초대를 받았거나 직접 문의하신 분은 먼저 한 번 모임을 둘러볼 수 있습니다.",
+    steps: [
+      { title: "인사와 안내", text: "텐트장이 맞이하고, 모임이 어떻게 진행되는지 알려 드립니다." },
+      { title: "모임 참관", text: "정기 모임에 참석해 회원들이 서로의 일을 나누는 모습을 봅니다." },
+      { title: "소개 시간", text: "방문자도 자신의 일을 짧게 소개하고, 필요한 연결을 이야기합니다." },
+      { title: "입회 결정", text: "함께하고 싶다면 입회를 신청하고, 업종과 텐트를 확인합니다." },
+    ],
+  },
+  links: {
+    title: "더 알아보기",
+    items: [
+      { title: "입회 문의", text: "텐트와 입회 절차를 안내받습니다." },
+      { title: "회원 로그인", text: "회원 앱에서 모임과 활동을 이어 갑니다." },
+      { title: "선교 사역(WMTO)", text: "선교에 마음이 있는 회원을 위한 사역입니다." },
+      { title: "문의하기", text: "궁금한 점을 남겨 주세요." },
+    ],
   },
   photos: { hero: "카페 테이블에 둘러앉아 웃으며 이야기하는 사업가들", workplace: "자기 가게에서 미소 짓는 사업가", gathering: "정기 모임에서 둘러앉아 이야기를 나누는 회원들", oneToOne: "커피를 사이에 두고 일대일로 대화하는 두 사업가", referral: "악수하며 명함을 건네는 두 사업가", prayer: "조용히 함께 기도하는 사업가들" },
   how: {
@@ -131,6 +175,45 @@ const en: Copy = {
     title: "One owner per industry, meeting regularly in your region",
     text: "The basic unit of CBC is the regional group, called a 'tent'. Only one owner from each industry joins a tent. Because we do not compete, we can refer clients with an open heart.",
     items: ["Regional tents, up to 50 members each", "One per industry — cooperation, not competition", "Regular gatherings to share work and needs", "Cared for by the tent leader and the team"],
+  },
+  menu: { about: "About CBC", how: "How it works", join: "Joining", faq: "FAQ" },
+  start: {
+    title: "Getting started takes three steps",
+    steps: [
+      { title: "Find a tent", text: "See which tent fits your region and industry." },
+      { title: "Send an inquiry", text: "Leave a short inquiry form." },
+      { title: "Complete sign-up", text: "After the team confirms, you are approved and the member app opens." },
+    ],
+    cta: "Ask to join",
+  },
+  stats: {
+    title: "CBC's structure in numbers",
+    items: [
+      { value: "50", unit: "", label: "members at most per tent" },
+      { value: "1", unit: " per industry", label: "one owner per industry in a tent" },
+      { value: "90", unit: " days", label: "window for the growth record" },
+      { value: "6", unit: "", label: "ways we work together" },
+    ],
+    note: "Member and tent counts will be published here once gatherings begin.",
+  },
+  visit: {
+    title: "What your first visit looks like",
+    sub: "If a member invited you, or you reached out yourself, you can first look in on a gathering.",
+    steps: [
+      { title: "Welcome and orientation", text: "The tent leader greets you and explains how a gathering runs." },
+      { title: "Observe a gathering", text: "Attend a regular gathering and see members share their work." },
+      { title: "Introduce yourself", text: "Visitors briefly introduce their work and the connections they need." },
+      { title: "Decide to join", text: "If you want to join, apply and we confirm your industry and tent." },
+    ],
+  },
+  links: {
+    title: "Learn more",
+    items: [
+      { title: "Ask to join", text: "Get guidance on tents and the joining process." },
+      { title: "Member login", text: "Continue gatherings and activity in the member app." },
+      { title: "Mission work (WMTO)", text: "For members with a heart for missions." },
+      { title: "Contact us", text: "Leave your questions." },
+    ],
   },
   photos: { hero: "Business owners laughing around a cafe table", workplace: "A smiling owner in her own shop", gathering: "Members talking in a circle at a regular gathering", oneToOne: "Two owners in a one-on-one conversation over coffee", referral: "Two owners shaking hands and exchanging a card", prayer: "Business people quietly praying together" },
   how: {
