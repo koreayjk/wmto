@@ -645,7 +645,7 @@ export const en: Messages = {
         skill: "Skills",
       },
     },
-    consent: "I agree to the collection and use of my personal information (required)",
+    consent: "I agree to the collection and use of my personal information , and I confirm I am 14 or older (required)",
     consentHelp:
       "Data collected: name, email, phone, country of residence, and what you enter / Purpose: receiving your application and replying / Retention: until the purpose is fulfilled",
     select: "Select",
@@ -662,7 +662,7 @@ export const en: Messages = {
       generic: "Something went wrong while sending. Please try again in a moment.",
       required: "Please check the required fields.",
       email: "Please check the format of your email address.",
-      consent: "Please agree to the collection and use of your personal information.",
+      consent: "Please agree to the collection and use of your personal information and confirm you are 14 or older.",
     },
   },
 
