@@ -788,7 +788,7 @@ export const en: Messages = {
     },
     tent: {
       title: "Tent", sub: "Our gathering that meets regularly, by region or online.",
-      capacity: "{n} of {max} business owners", splitNote: "Tents form by region (province or country). Each tent has only one business owner per industry and holds up to 50 members; when it is full, a new tent opens in the same region.",
+      capacity: "{n} business owners", splitNote: "Tents form by region (province or country). Each tent has only one business owner per industry and the team plants a new tent in the same region at the right time (tent planting) once it has grown well.",
       mine: "My tents", viaOwn: "My tent", viaMentor: "Mentor's tent", online: "Online",
       partnerNote: "Missionaries do not need to apply. When a business owner welcomes you into their tent, you become part of it, and whoever wants to mentor you steps forward with \"Mentor this missionary\".",
       noTent: "You are not in a tent yet. It will appear here once the team assigns one. Missionaries join a tent when a business owner there welcomes them.",
@@ -886,7 +886,7 @@ export const en: Messages = {
     },
     dashboard: {
       nav: "Tent overview", title: "Tent overview", sub: "See at a glance how your tent is growing. Based on the last 90 days. Scores are for supporting people, not for ranking them.",
-      pickChapter: "Choose a tent", size: "Members", sizeOf: "up to {cap}", newMembers: "New in the last 6 months", renewalDue: "Terms ending within 60 days",
+      pickChapter: "Choose a tent", size: "Members", sizeOf: "limit {cap}", newMembers: "New in the last 6 months", renewalDue: "Terms ending within 60 days",
       attendance: "Gathering attendance", referrals: "Referrals per member per week", oneToOne: "1:1s per member per week", visitors: "Guests invited", attended: "attended", joined: "joined", conversion: "Guest to member", none: "No data",
       health: { title: "Tent health", good: "Strong", watch: "Keep an eye", care: "Needs care", note: "Thresholds are provisional and will be tuned." },
       levels: { title: "Member growth levels", peg: "Peg", pole: "Pole", canvas: "Canvas", lantern: "Lantern" },

@@ -63,7 +63,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const pct = (v: number | null) => (v === null ? t.none : `${Math.round(v * 100)}%`);
   const num = (v: number | null) => (v === null ? t.none : String(v));
   const tiles: { label: string; value: string; sub?: string; tone?: string }[] = [
-    { label: t.size, value: String(d.size), sub: t.sizeOf.replace("{cap}", String(d.cap)) },
+    { label: t.size, value: String(d.size), sub: d.cap > 0 ? t.sizeOf.replace("{cap}", String(d.cap)) : undefined },
     { label: t.attendance, value: pct(d.attendance_rate), tone: tone(d.attendance_rate, BANDS.attendance) },
     { label: t.referrals, value: num(d.referrals_per_member_week), tone: tone(d.referrals_per_member_week, BANDS.referrals) },
     { label: t.oneToOne, value: num(d.one_to_one_per_member_week), tone: tone(d.one_to_one_per_member_week, BANDS.oneToOne) },

@@ -799,7 +799,7 @@ export const ko = {
     },
     tent: {
       title: "텐트", sub: "지역(또는 온라인)에서 정기적으로 만나는 우리 모임입니다.",
-      capacity: "사업가 {n}명 / {max}명", splitNote: "텐트는 계신 지역(시·도, 나라)별로 만들어지고, 한 텐트에는 같은 업종의 사업가가 한 분만 함께합니다. 정원은 50명이며 가득 차면 같은 지역에 새 텐트가 열립니다.",
+      capacity: "사업가 {n}명", splitNote: "텐트는 계신 지역(시·도, 나라)별로 만들어지고, 한 텐트에는 같은 업종의 사업가가 한 분만 함께합니다. 텐트가 알맞게 자라면 운영진이 같은 지역에 새 텐트를 세웁니다(텐트 플랜팅).",
       mine: "내 텐트", viaOwn: "내 텐트", viaMentor: "멘토의 텐트", online: "온라인",
       partnerNote: "선교사는 따로 신청하지 않아도 됩니다. 텐트의 사업가가 \"우리 텐트로 모시기\"를 하면 텐트의 가족이 되고, 그중 멘토가 되고 싶은 분이 직접 \"멘토로 함께하기\"를 해 주십니다.",
       noTent: "아직 속한 텐트가 없습니다. 운영진이 배정하면 이곳에 나타납니다. 선교사는 텐트의 사업가가 모시면 그 텐트에 들어옵니다.",
@@ -897,7 +897,7 @@ export const ko = {
     },
     dashboard: {
       nav: "텐트 현황", title: "텐트 현황", sub: "텐트가 건강하게 자라고 있는지 한눈에 봅니다. 최근 90일 기준이며, 점수는 줄 세우기가 아니라 곁에서 돕기 위한 자료입니다.",
-      pickChapter: "텐트 선택", size: "회원 수", sizeOf: "최대 {cap}명", newMembers: "최근 6개월 새로 온 분", renewalDue: "60일 안에 기간이 끝나는 분",
+      pickChapter: "텐트 선택", size: "회원 수", sizeOf: "정원 {cap}명", newMembers: "최근 6개월 새로 온 분", renewalDue: "60일 안에 기간이 끝나는 분",
       attendance: "모임 출석률", referrals: "1인당 주간 소개", oneToOne: "1인당 주간 1:1 만남", visitors: "초대한 손님", attended: "참석", joined: "입회", conversion: "손님 → 입회", none: "자료 없음",
       health: { title: "텐트 건강 지표", good: "든든해요", watch: "살펴봐요", care: "돌봄이 필요해요", note: "기준은 임시이며 운영하며 조정합니다." },
       levels: { title: "회원 성장 단계", peg: "말뚝", pole: "기둥", canvas: "천막", lantern: "등불" },

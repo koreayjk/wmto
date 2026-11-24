@@ -18,6 +18,16 @@ async function autoAssign() {
   revalidatePath("/admin/tents");
 }
 
+async function plant(fd: FormData) {
+  "use server";
+  const { supabase } = await requireAdmin();
+  const key = String(fd.get("region_key") ?? "");
+  if (!key) return;
+  await supabase.rpc("plant_tent", { p_region_key: key });
+  await supabase.rpc("assign_unassigned_tents");
+  revalidatePath("/admin/tents");
+}
+
 async function assign(fd: FormData) {
   "use server";
   await requireAdmin();
@@ -50,11 +60,15 @@ async function removeLeader(fd: FormData) {
 
 export default async function AdminTents() {
   const { supabase } = await requireAdmin();
-  const [{ data: tents }, { data: people }, { data: leaders }] = await Promise.all([
+  const [{ data: tents }, { data: people }, { data: leaders }, { data: regionRows }, { data: waiting }] = await Promise.all([
     supabase.from("chapters").select("id,name,region").order("name"),
     supabase.from("members").select("id,name,role,chapter_id").eq("status", "active").in("role", ["mentor", "sponsor", "partner"]).order("name").limit(500),
     supabase.from("chapter_leaders").select("chapter_id,member_id,role_key"),
+    supabase.from("chapters").select("region_key,base").not("region_key", "is", null),
+    supabase.from("members").select("id,name,region,country").eq("status", "active").eq("role", "mentor").is("chapter_id", null).limit(200),
   ]);
+  const regions = Array.from(new Map(((regionRows ?? []) as { region_key: string; base: string }[]).map((r) => [r.region_key, r.base])).entries());
+  const waitingRows = (waiting ?? []) as { id: string; name: string; region: string | null; country: string | null }[];
   const leaderRows = (leaders ?? []) as { chapter_id: string; member_id: string; role_key: string }[];
   const list = tents ?? [];
   const all = people ?? [];
@@ -65,6 +79,21 @@ export default async function AdminTents() {
       <p className="max-w-2xl text-soft">지역별 모임입니다. 사업가·후원자는 계신 지역(시·도, 나라)에 맞는 텐트에 자동으로 들어가고, 한 텐트에는 같은 업종의 사업가가 한 분만 들어가고 정원은 50명이며, 가득 차면 같은 지역에 새 텐트가 열립니다. 지역 정보가 없는 분만 여기서 직접 배정합니다. 선교사는 텐트의 사업가가 "우리 텐트로 모시기"를 하면 그 텐트에 들어오고, 멘토는 텐트원이 이어서 직접 맡습니다.</p>
 
       <form action={autoAssign} className="mt-6"><button className="cbtn cbtn-quiet">지역 정보로 자동 배정 (텐트 없는 사업가·후원자)</button></form>
+
+      <section className="mt-8 rounded-2xl bg-tint p-6">
+        <h2 className="font-display text-lg font-semibold">텐트 플랜팅 (새 텐트 세우기)</h2>
+        <p className="mt-1 max-w-2xl text-sm text-soft">텐트는 정원으로 자동 분할되지 않습니다. 같은 업종이 겹쳐 들어갈 곳이 없거나 텐트가 알맞게 자랐을 때, 운영진이 이곳에서 같은 지역에 새 텐트를 세우세요. 세운 뒤에는 대기 중인 사업가가 자동으로 배정됩니다.</p>
+        {waitingRows.length > 0 && (
+          <p className="mt-3 text-sm"><b>텐트 배정 대기 {waitingRows.length}명</b>: {waitingRows.map((w) => `${w.name}(${w.region ?? w.country ?? "지역 없음"})`).join(", ")}</p>
+        )}
+        <form action={plant} className="mt-4 flex flex-wrap gap-3">
+          <select name="region_key" required defaultValue="" className="field !w-64">
+            <option value="" disabled>지역 선택</option>
+            {regions.map(([k, base]) => <option key={k} value={k}>{base}</option>)}
+          </select>
+          <button className="cbtn">새 텐트 세우기</button>
+        </form>
+      </section>
 
       <form action={addTent} className="mt-8 flex flex-wrap gap-3">
         <input name="name" required placeholder="텐트 이름 (예: 부산 텐트)" className="field !w-64" />
