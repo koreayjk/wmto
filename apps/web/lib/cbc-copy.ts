@@ -17,6 +17,7 @@ type Copy = {
   slots: { filled: string; you: string; open: string; note: string };
   path: { title: string; sub: string; steps: { title: string; text: string }[] };
   photoNote: string;
+  synergy: { eyebrow: string; title: string; sub: string; roles: { tag: string; name: string; note: string }[]; steps: { who: string; title: string; text: string }[]; gainsTitle: string; gains: { who: string; text: string }[]; whyTitle: string; why: { title: string; text: string }[]; math: { value: string; unit: string; text: string }; note: string };
   photos: Record<"hero" | "workplace" | "gathering" | "oneToOne" | "referral" | "prayer", string>;
   faq: { title: string; items: { q: string; a: string }[]; more: string };
   trust: { title: string; items: string[] };
@@ -108,6 +109,37 @@ const ko: Copy = {
     ],
   },
   photoNote: "사진은 이해를 돕기 위한 연출 이미지입니다.",
+  synergy: {
+    eyebrow: "CBC의 시너지",
+    title: "한 번의 소개가, 세 사람의 일이 됩니다",
+    sub: "아래는 CBC에서 일어나는 일을 이해하기 쉽게 꾸민 예시 이야기입니다.",
+    roles: [
+      { tag: "나", name: "영상 제작사 대표", note: "CBC 텐트 회원" },
+      { tag: "B", name: "바디샵 사장님", note: "같은 텐트 회원" },
+      { tag: "A", name: "마케팅 회사 대표", note: "나의 지인(회원 아님)" },
+    ],
+    steps: [
+      { who: "A", title: "필요가 생깁니다", text: "A씨의 차량이 파손됐습니다. 믿고 맡길 바디샵을 찾느라 후기만 뒤지고 있습니다." },
+      { who: "나", title: "매주 모임에서 쌓은 신뢰가 있습니다", text: "저는 텐트 모임에서 매주 만나며 B 사장님의 일하는 방식과 정직함을 알고 있었습니다." },
+      { who: "나", title: "자신 있게 소개합니다", text: "\"제가 아는 분인데 정직하게 잘 고쳐 주세요.\" 한마디로 A씨와 B 사장님을 연결합니다." },
+      { who: "B", title: "소개받은 손님을 정성껏 맞습니다", text: "소개로 온 손님이라 더 신경 써서 수리하고, A씨는 만족합니다." },
+      { who: "A", title: "고마움이 일감으로 돌아옵니다", text: "A씨는 고마운 마음에, 마침 필요했던 영상 제작을 저에게 맡깁니다." },
+    ],
+    gainsTitle: "한 번의 소개로 모두가 얻은 것",
+    gains: [
+      { who: "A씨", text: "믿을 수 있는 업체를 헤매지 않고 바로 만났습니다." },
+      { who: "B 사장님", text: "광고비 없이, 신뢰를 가진 새 고객을 얻었습니다." },
+      { who: "나", text: "감사가 일감으로 돌아왔고, 두 사람과의 관계가 깊어졌습니다." },
+    ],
+    whyTitle: "CBC라서 가능한 이유",
+    why: [
+      { title: "경쟁자가 아닙니다", text: "텐트에는 바디샵이 한 곳뿐이라, 소개가 망설임 없이 B 사장님께 모입니다." },
+      { title: "서로를 압니다", text: "매주 만나 서로의 일을 듣기 때문에, 믿을 만한 사람만 소개할 수 있습니다." },
+      { title: "순환합니다", text: "소개와 감사를 앱에 남기면, 받은 도움이 다음 소개로 이어집니다." },
+    ],
+    math: { value: "1,225", unit: "개", text: "한 텐트 50명 사이에 이어질 수 있는 1:1 관계의 수(50명 × 49 ÷ 2). 사람이 늘수록 연결은 더 빠르게 늘어납니다." },
+    note: "소개의 대가로 돈을 주고받지 않습니다. 위 이야기의 일감은 소개 대가가 아니라, 신뢰가 만든 정상적인 거래입니다.",
+  },
   photos: { hero: "카페 테이블에 둘러앉아 웃으며 이야기하는 사업가들", workplace: "자기 가게에서 미소 짓는 사업가", gathering: "정기 모임에서 둘러앉아 이야기를 나누는 회원들", oneToOne: "커피를 사이에 두고 일대일로 대화하는 두 사업가", referral: "악수하며 명함을 건네는 두 사업가", prayer: "조용히 함께 기도하는 사업가들" },
   faq: {
     title: "자주 묻는 질문",
@@ -216,6 +248,37 @@ const en: Copy = {
     ],
   },
   photoNote: "Photos are illustrative images to aid understanding.",
+  synergy: {
+    eyebrow: "The CBC synergy",
+    title: "One introduction becomes work for three people",
+    sub: "Below is an illustrative story to show what happens in CBC.",
+    roles: [
+      { tag: "Me", name: "Video production owner", note: "CBC tent member" },
+      { tag: "B", name: "Body shop owner", note: "Member of the same tent" },
+      { tag: "A", name: "Marketing company owner", note: "My acquaintance (not a member)" },
+    ],
+    steps: [
+      { who: "A", title: "A need appears", text: "Mr. A's car was damaged. He is scrolling reviews, looking for a body shop he can trust." },
+      { who: "Me", title: "Weekly gatherings built trust", text: "Meeting every week in our tent, I already knew how B works and that he is honest." },
+      { who: "Me", title: "I introduce with confidence", text: "\"I know him — he fixes cars honestly and well.\" One sentence connects A and B." },
+      { who: "B", title: "B takes care of the referred customer", text: "Because the customer came by referral, B puts extra care into the repair and A is satisfied." },
+      { who: "A", title: "Gratitude comes back as work", text: "Grateful, A hires me for a video project he happened to need." },
+    ],
+    gainsTitle: "What everyone gained from one introduction",
+    gains: [
+      { who: "A", text: "Found a trustworthy shop right away, without wandering." },
+      { who: "B", text: "Gained a trusting new customer without ad spend." },
+      { who: "Me", text: "Thanks came back as work, and two relationships deepened." },
+    ],
+    whyTitle: "Why it works in CBC",
+    why: [
+      { title: "No competitors", text: "There is only one body shop in a tent, so referrals flow to B without hesitation." },
+      { title: "We know each other", text: "Meeting weekly and hearing each other's work, we refer only people we trust." },
+      { title: "It circulates", text: "Record the referral and thanks in the app, and help received becomes the next referral." },
+    ],
+    math: { value: "1,225", unit: "", text: "possible 1:1 relationships among the 50 members of one tent (50 × 49 ÷ 2). The more people, the faster connections grow." },
+    note: "No money is exchanged for referrals. The work in this story is not payment for the referral; it is an ordinary deal born of trust.",
+  },
   photos: { hero: "Business owners laughing around a cafe table", workplace: "A smiling owner in her own shop", gathering: "Members talking in a circle at a regular gathering", oneToOne: "Two owners in a one-on-one conversation over coffee", referral: "Two owners shaking hands and exchanging a card", prayer: "Business people quietly praying together" },
   faq: {
     title: "Frequently asked questions",

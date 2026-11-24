@@ -28,7 +28,7 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
   const mission = en ? "/wmto/en" : "/wmto";
   const btn = "inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 py-3 text-[15px] font-semibold transition active:scale-[0.98]";
   const navLink = "min-h-[44px] items-center rounded-full px-3 text-ink/80 hover:text-ink";
-  const menu = [["#about", c.menu.about], ["#how", c.menu.how], ["#visit", c.menu.join], ["#faq", c.menu.faq]] as const;
+  const menu = [["#about", c.menu.about], ["#synergy", c.synergy.eyebrow], ["#how", c.menu.how], ["#visit", c.menu.join], ["#faq", c.menu.faq]] as const;
 
   return (
     <div className="break-keep">
@@ -138,6 +138,65 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
             </ul>
             <figcaption className="mt-3 text-xs text-white/55">{c.slots.note}</figcaption>
           </figure>
+        </section>
+
+        {/* 4-1. 시너지 사례 */}
+        <section id="synergy" className="scroll-mt-20 bg-[#071D3D] text-white">
+          <div className={SECTION}>
+            <p className={`${EYEBROW} text-[#E0B85A]`}>{c.synergy.eyebrow}</p>
+            <h2 className={`${H2} mt-3 max-w-3xl`}>{c.synergy.title}</h2>
+            <p className="mt-4 text-white/70">{c.synergy.sub}</p>
+
+            <ul className="mt-10 grid gap-3 sm:grid-cols-3">
+              {c.synergy.roles.map((r) => (
+                <li key={r.tag} className="flex items-center gap-4 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/15">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#E0B85A] font-display text-lg font-bold text-[#071D3D]">{r.tag}</span>
+                  <span><b className="block font-display text-lg">{r.name}</b><span className="text-sm text-white/65">{r.note}</span></span>
+                </li>
+              ))}
+            </ul>
+
+            <ol className="mt-10 space-y-4">
+              {c.synergy.steps.map((st, i) => (
+                <li key={st.title} className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white font-display text-sm font-bold text-[#071D3D]">{st.who}</span>
+                    {i < c.synergy.steps.length - 1 && <span aria-hidden className="mt-1 w-px flex-1 bg-white/25" />}
+                  </div>
+                  <div className="flex-1 rounded-2xl bg-white/[0.07] p-5 ring-1 ring-white/10">
+                    <h3 className="font-display text-lg font-semibold"><span className="text-[#E0B85A]">{i + 1}.</span> {st.title}</h3>
+                    <p className="mt-1.5 leading-relaxed text-white/80">{st.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <h3 className="mt-14 font-display text-xl font-semibold">{c.synergy.gainsTitle}</h3>
+            <ul className="mt-5 grid gap-4 md:grid-cols-3">
+              {c.synergy.gains.map((g) => (
+                <li key={g.who} className="rounded-2xl bg-[#E0B85A] p-6 text-[#071D3D]">
+                  <b className="font-display text-lg">{g.who}</b>
+                  <p className="mt-2 leading-relaxed">{g.text}</p>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-14 grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+              <div>
+                <h3 className="font-display text-xl font-semibold">{c.synergy.whyTitle}</h3>
+                <ul className="mt-5 space-y-5">
+                  {c.synergy.why.map((w) => (
+                    <li key={w.title} className="flex gap-3"><span aria-hidden className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#E0B85A]" /><span><b className="font-display text-lg">{w.title}</b><span className="mt-0.5 block text-white/75">{w.text}</span></span></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-3xl bg-white/[0.07] p-7 text-center ring-1 ring-white/15">
+                <span className="font-display text-6xl font-semibold text-[#E0B85A]">{c.synergy.math.value}</span><span className="ml-1 text-xl">{c.synergy.math.unit}</span>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">{c.synergy.math.text}</p>
+              </div>
+            </div>
+            <p className="mt-8 text-sm text-white/60">{c.synergy.note}</p>
+          </div>
         </section>
 
         {/* 5. 운영 방식(체계) */}
