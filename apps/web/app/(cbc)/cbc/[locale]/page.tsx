@@ -13,9 +13,6 @@ const EYEBROW = "text-[13px] font-semibold tracking-[0.08em]";
 const H2 = "display text-[1.8rem] leading-tight md:text-[2.3rem]";
 const SECTION = "mx-auto max-w-6xl px-6 py-16 md:py-24";
 
-// 텐트 한 곳의 업종 칸(50)을 보여 주는 설명용 그림: 예시 채움 / 내 자리 / 빈 칸
-const FILLED = 19;
-const YOU = 19;
 
 export default async function CbcHome({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -124,19 +121,18 @@ export default async function CbcHome({ params }: { params: Promise<{ locale: st
             </ul>
           </div>
           <figure className="rounded-3xl bg-[#071D3D] p-6 text-white md:p-8">
-            <div role="img" aria-label={`${c.slots.filled}, ${c.slots.you}, ${c.slots.open}`} className="grid grid-cols-10 gap-1.5 md:gap-2">
-              {Array.from({ length: 50 }, (_, i) => i === YOU
-                ? <span key={i} className="flex aspect-square items-center justify-center rounded-md bg-[#E0B85A] text-[10px] font-bold text-[#071D3D] ring-2 ring-white md:text-xs">{en ? "You" : "나"}</span>
-                : i < FILLED
-                  ? <span key={i} className="aspect-square rounded-md bg-white/85" />
-                  : <span key={i} className="aspect-square rounded-md border border-dashed border-white/35" />)}
-            </div>
-            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/80">
-              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm bg-white/85" />{c.slots.filled}</li>
-              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm bg-[#E0B85A]" />{c.slots.you}</li>
-              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-sm border border-dashed border-white/50" />{c.slots.open}</li>
+            <p className="font-display text-lg font-semibold">{c.slots.tent}</p>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {c.slots.filled.map((t) => <li key={t} className="rounded-full bg-white/90 px-3.5 py-1.5 text-sm font-medium text-[#071D3D]">{t}</li>)}
+              <li className="rounded-full bg-[#E0B85A] px-3.5 py-1.5 text-sm font-bold text-[#071D3D] ring-2 ring-white">★ {c.slots.you}</li>
+              {c.slots.open.map((t) => <li key={t} className="rounded-full border border-dashed border-white/45 px-3.5 py-1.5 text-sm text-white/65">{t}</li>)}
             </ul>
-            <figcaption className="mt-3 text-xs text-white/55">{c.slots.note}</figcaption>
+            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/80">
+              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-white/90" />{c.slots.filledLabel}</li>
+              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-[#E0B85A]" />{c.slots.youLabel}</li>
+              <li className="flex items-center gap-2"><span className="h-3 w-3 rounded-full border border-dashed border-white/55" />{c.slots.openLabel}</li>
+            </ul>
+            <figcaption className="mt-3 text-xs text-white/60">{c.slots.note}</figcaption>
           </figure>
         </section>
 

@@ -14,7 +14,7 @@ type Copy = {
   levels: { title: string; sub: string; items: { name: string; text: string }[] };
   agenda: { title: string; sub: string; items: { title: string; text: string }[] };
   gloss: { title: string; items: { term: string; text: string }[] };
-  slots: { filled: string; you: string; open: string; note: string };
+  slots: { tent: string; filledLabel: string; youLabel: string; openLabel: string; you: string; filled: string[]; open: string[]; note: string };
   path: { title: string; sub: string; steps: { title: string; text: string }[] };
   photoNote: string;
   synergy: { eyebrow: string; title: string; sub: string; roles: { tag: string; name: string; note: string }[]; steps: { who: string; title: string; text: string }[]; gainsTitle: string; gains: { who: string; text: string }[]; whyTitle: string; why: { title: string; text: string }[]; math: { value: string; unit: string; text: string }; note: string };
@@ -56,8 +56,8 @@ const ko: Copy = {
   rhythm: {
     eyebrow: "모임은 이렇게 돌아갑니다",
     title: "업종마다 한 분, 정기적으로 만나는 지역 모임",
-    text: "CBC의 기본 단위는 지역 모임인 '텐트'입니다. 같은 업종의 사업가는 한 텐트에 한 분만 들어옵니다. 서로 경쟁하지 않으니 마음 놓고 고객을 소개할 수 있습니다.",
-    items: ["지역별 텐트, 한 텐트 최대 50명", "업종당 한 분 — 경쟁이 아닌 협력", "매주 한 번 정기 모임에서 서로의 일과 필요를 나눔", "텐트장과 운영진이 함께 돌봄"],
+    text: "CBC의 기본 단위는 지역 모임인 '텐트'입니다. 같은 업종의 사업가는 한 텐트에 한 분만 들어옵니다. 서로 경쟁하지 않으니 마음 놓고 고객을 소개할 수 있습니다. 텐트가 알맞게 자라면 새 텐트를 세워(텐트 플랜팅) 더 많은 지역과 업종으로 연결을 넓혀 갑니다.",
+    items: ["지역별로 세우는 텐트", "업종당 한 분 — 경쟁이 아닌 협력", "알맞은 때 새 텐트를 세우는 텐트 플랜팅", "매주 한 번 정기 모임에서 서로의 일과 필요를 나눔", "텐트장과 운영진이 함께 돌봄"],
   },
   menu: { about: "CBC 소개", how: "운영 방식", join: "첫 방문", faq: "자주 묻는 질문" },
   system: {
@@ -65,7 +65,7 @@ const ko: Copy = {
     title: "CBC는 이렇게 설계되어 있습니다",
     sub: "모임이 일회성 만남으로 끝나지 않도록, 구조와 기록과 돌봄을 함께 갖췄습니다.",
     items: [
-      { title: "텐트 구성", text: "지역 단위 모임입니다. 업종 독점 원칙으로 회원 간 경쟁을 없앴습니다.", points: ["한 텐트 최대 50명", "업종당 한 분", "빈 업종은 대기자 명단으로 안내"] },
+      { title: "텐트 구성", text: "지역 단위 모임입니다. 업종 독점 원칙으로 회원 간 경쟁을 없앴습니다.", points: ["지역별로 세우는 텐트", "업종당 한 분", "알맞은 때 새 텐트를 세우는 텐트 플랜팅", "빈 업종은 대기자 명단으로 안내"] },
       { title: "리더십과 돌봄", text: "텐트장과 부텐트장이 회원을 돌보고, 매달 텐트를 함께 점검합니다.", points: ["텐트장·부텐트장·담당자", "월간 텐트 점검 기록", "새 회원 동행 짝 지정"] },
       { title: "소개와 감사", text: "소개의 진행 상태를 기록하고, 성사되면 감사로 마무리합니다.", points: ["소개 보내기·받기와 진행 상태", "감사 기록", "소개에 대가 없음"] },
       { title: "1:1 만남", text: "모임 밖의 일대일 만남이 관계의 깊이를 만듭니다. 상대 확인으로 기록이 완성됩니다.", points: ["만남 기록과 상대 확인", "사진은 두 분 동의 시에만", "만남이 성장 기록에 반영"] },
@@ -94,8 +94,8 @@ const ko: Copy = {
       { title: "마무리", text: "다음 모임을 안내하고 기도로 마칩니다." },
     ],
   },
-  gloss: { title: "용어 풀이", items: [{ term: "텐트", text: "지역 단위 모임" }, { term: "텐트장", text: "텐트를 돌보는 리더" }, { term: "동역", text: "같은 뜻으로 함께 일함" }, { term: "입회", text: "회원으로 가입하는 일" }] },
-  slots: { filled: "참여 중인 업종(예시)", you: "당신의 업종 자리", open: "비어 있는 업종", note: "그림은 구조를 설명하는 예시이며 실제 회원 현황이 아닙니다." },
+  gloss: { title: "용어 풀이", items: [{ term: "텐트", text: "지역 단위 모임" }, { term: "텐트장", text: "텐트를 돌보는 리더" }, { term: "동역", text: "같은 뜻으로 함께 일함" }, { term: "텐트 플랜팅", text: "새 텐트를 세우는 일" }] },
+  slots: { tent: "서울 ○○ 텐트 (예시)", filledLabel: "참여 중인 업종(예시)", youLabel: "당신의 자리", openLabel: "아직 비어 있는 업종", you: "내 업종", filled: ["바디샵", "세무·회계", "부동산", "보험", "인테리어", "영상 제작", "치과", "법률", "카페", "웹 개발", "인쇄·광고", "이사·물류", "학원", "꽃집", "건강식품", "여행사"], open: ["한의원", "약국", "안경점", "세탁소"], note: "그림은 구조를 설명하는 예시이며 실제 회원 현황이 아닙니다. 한 업종에는 한 분만 들어옵니다." },
   path: {
     title: "첫 방문에서 첫 90일까지",
     sub: "처음 오신 분의 목표는 낮추고, 한 걸음씩 안내합니다.",
@@ -137,7 +137,7 @@ const ko: Copy = {
       { title: "서로를 압니다", text: "매주 만나 서로의 일을 듣기 때문에, 믿을 만한 사람만 소개할 수 있습니다." },
       { title: "순환합니다", text: "소개와 감사를 앱에 남기면, 받은 도움이 다음 소개로 이어집니다." },
     ],
-    math: { value: "1,225", unit: "개", text: "한 텐트 50명 사이에 이어질 수 있는 1:1 관계의 수(50명 × 49 ÷ 2). 사람이 늘수록 연결은 더 빠르게 늘어납니다." },
+    math: { value: "435", unit: "개", text: "30명 텐트에서 서로 이어질 수 있는 1:1 관계의 수(30 × 29 ÷ 2). 10명이면 45개, 20명이면 190개로, 사람이 늘수록 연결은 더 빠르게 늘어납니다." },
     note: "소개의 대가로 돈을 주고받지 않습니다. 위 이야기의 일감은 소개 대가가 아니라, 신뢰가 만든 정상적인 거래입니다.",
   },
   photos: { hero: "카페 테이블에 둘러앉아 웃으며 이야기하는 사업가들", workplace: "자기 가게에서 미소 짓는 사업가", gathering: "정기 모임에서 둘러앉아 이야기를 나누는 회원들", oneToOne: "커피를 사이에 두고 일대일로 대화하는 두 사업가", referral: "악수하며 명함을 건네는 두 사업가", prayer: "조용히 함께 기도하는 사업가들" },
@@ -195,8 +195,8 @@ const en: Copy = {
   rhythm: {
     eyebrow: "How a group runs",
     title: "One owner per industry, meeting regularly in your region",
-    text: "The basic unit of CBC is the regional group, called a 'tent'. Only one owner from each industry joins a tent. Because we do not compete, we can refer clients with an open heart.",
-    items: ["Regional tents, up to 50 members each", "One per industry — cooperation, not competition", "A weekly gathering to share work and needs", "Cared for by the tent leader and the team"],
+    text: "The basic unit of CBC is the regional group, called a 'tent'. Only one owner from each industry joins a tent. Because we do not compete, we can refer clients with an open heart. When a tent has grown well, we plant a new tent to extend connections to more regions and industries.",
+    items: ["Tents planted region by region", "One per industry — cooperation, not competition", "New tents are planted at the right time (tent planting)", "A weekly gathering to share work and needs", "Cared for by the tent leader and the team"],
   },
   menu: { about: "About CBC", how: "How it works", join: "First visit", faq: "FAQ" },
   system: {
@@ -204,7 +204,7 @@ const en: Copy = {
     title: "How CBC is designed",
     sub: "So that gatherings do not end as one-off meetings, we combine structure, records and care.",
     items: [
-      { title: "Tent structure", text: "A regional group. The one-per-industry rule removes competition between members.", points: ["Up to 50 members per tent", "One owner per industry", "Open industries go to a waiting list"] },
+      { title: "Tent structure", text: "A regional group. The one-per-industry rule removes competition between members.", points: ["Tents planted by region", "One owner per industry", "New tents planted at the right time (tent planting)", "Open industries go to a waiting list"] },
       { title: "Leadership and care", text: "The tent leader and deputy care for members and review the tent together each month.", points: ["Leader, deputy and coordinators", "Monthly tent review record", "A companion for new members"] },
       { title: "Referrals and thanks", text: "Referral progress is recorded and closed with thanks when it succeeds.", points: ["Sending and receiving referrals with status", "Thank-you records", "No payment for referrals"] },
       { title: "1:1 meetings", text: "One-on-one meetings outside gatherings deepen relationships. Your counterpart's confirmation completes the record.", points: ["Meeting record with confirmation", "Photos only with both people's consent", "Meetings count toward growth"] },
@@ -233,8 +233,8 @@ const en: Copy = {
       { title: "Closing", text: "Announce the next gathering and close in prayer." },
     ],
   },
-  gloss: { title: "Terms", items: [{ term: "Tent", text: "a regional group" }, { term: "Tent leader", text: "the leader who cares for a tent" }, { term: "Partnership", text: "working together for the same purpose" }, { term: "Joining", text: "becoming a member" }] },
-  slots: { filled: "Industries taken (example)", you: "Your industry seat", open: "Open industries", note: "The diagram explains the structure; it is not the actual membership." },
+  gloss: { title: "Terms", items: [{ term: "Tent", text: "a regional group" }, { term: "Tent leader", text: "the leader who cares for a tent" }, { term: "Partnership", text: "working together for the same purpose" }, { term: "Tent planting", text: "starting a new tent" }] },
+  slots: { tent: "Seoul ○○ tent (example)", filledLabel: "Industries taken (example)", youLabel: "Your seat", openLabel: "Industries still open", you: "My industry", filled: ["Body shop", "Tax & accounting", "Real estate", "Insurance", "Interior design", "Video production", "Dentist", "Law", "Cafe", "Web development", "Printing & ads", "Moving & logistics", "Tutoring", "Florist", "Health foods", "Travel agency"], open: ["Oriental medicine", "Pharmacy", "Optician", "Laundry"], note: "The diagram explains the structure; it is not the actual membership. Only one owner joins per industry." },
   path: {
     title: "From first visit to your first 90 days",
     sub: "New members get lighter goals and step-by-step guidance.",
@@ -276,7 +276,7 @@ const en: Copy = {
       { title: "We know each other", text: "Meeting weekly and hearing each other's work, we refer only people we trust." },
       { title: "It circulates", text: "Record the referral and thanks in the app, and help received becomes the next referral." },
     ],
-    math: { value: "1,225", unit: "", text: "possible 1:1 relationships among the 50 members of one tent (50 × 49 ÷ 2). The more people, the faster connections grow." },
+    math: { value: "435", unit: "", text: "possible 1:1 relationships in a 30-member tent (30 × 29 ÷ 2). 45 with 10 members, 190 with 20 — connections grow faster as people join." },
     note: "No money is exchanged for referrals. The work in this story is not payment for the referral; it is an ordinary deal born of trust.",
   },
   photos: { hero: "Business owners laughing around a cafe table", workplace: "A smiling owner in her own shop", gathering: "Members talking in a circle at a regular gathering", oneToOne: "Two owners in a one-on-one conversation over coffee", referral: "Two owners shaking hands and exchanging a card", prayer: "Business people quietly praying together" },
