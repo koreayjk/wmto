@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { DB_SCHEMA } from "./schema";
 import { VIEW_AS_HEADER, viewOnlyFetch } from "../viewas";
+import { LOCALE_COOKIE } from "../i18n";
+import { englishDemoFetch } from "../demo-i18n";
 
 const url = () => process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const anon = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
@@ -15,9 +17,14 @@ export function isSupabaseConfigured() {
 /** viewAs: 관리자가 회원 화면을 읽기 전용으로 볼 때의 회원 id (supabase/migrations/0006_view_as.sql) */
 export async function createSupabaseServerClient(opts: { viewAs?: string } = {}) {
   const cookieStore = await cookies();
+  // 영어 화면이면 읽어 온 데모 데이터(한국어로 저장된 가상 내용)를 영어로 바꿔 보여 줍니다.
+  const en = cookieStore.get(LOCALE_COOKIE)?.value === "en";
+  const base: typeof fetch = opts.viewAs ? viewOnlyFetch : fetch;
   return createServerClient(url(), anon(), {
     db: { schema: DB_SCHEMA },
-    ...(opts.viewAs ? { global: { headers: { [VIEW_AS_HEADER]: opts.viewAs }, fetch: viewOnlyFetch } } : {}),
+    ...(opts.viewAs || en
+      ? { global: { ...(opts.viewAs ? { headers: { [VIEW_AS_HEADER]: opts.viewAs } } : {}), fetch: en ? englishDemoFetch(base) : base } }
+      : {}),
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll(list) {
