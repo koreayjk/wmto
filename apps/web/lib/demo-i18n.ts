@@ -72,6 +72,9 @@ export function translateDemo(s: string): string {
   return compose(s) ?? s;
 }
 
+/** 표시 전용(입력칸 값이 아닌 곳): 시·도 이름 단독도 영어로 바꿉니다. */
+export const displayEn = (s: string): string => REGIONS[s] ?? translateDemo(s);
+
 const HAN = /[가-힣]/;
 function walk(v: unknown): unknown {
   if (typeof v === "string") return HAN.test(v) ? (cache.get(v) ?? (cache.set(v, translateDemo(v)), cache.get(v))) : v;

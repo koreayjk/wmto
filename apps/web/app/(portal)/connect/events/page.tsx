@@ -1,3 +1,4 @@
+import { displayEn } from "@/lib/demo-i18n";
 import { revalidatePath } from "next/cache";
 import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
@@ -120,7 +121,7 @@ export default async function Events() {
             <span className="text-soft">{m.events.types[e.type as keyof typeof m.events.types]}</span>
           </p>
           <h3 className="mt-2 font-display text-xl font-medium tracking-tight">{e.title}</h3>
-          <p className="mt-1 text-sm text-soft">{time(s)} – {time(en)}{e.location ? ` · ${e.location}` : ""}</p>
+          <p className="mt-1 text-sm text-soft">{time(s)} – {time(en)}{e.location ? ` · ${locale === "en" ? displayEn(e.location) : e.location}` : ""}</p>
           <div className="mt-3 flex items-center gap-3" aria-label={tl.dayBar}>
             <span className="relative h-px w-44 bg-black/15">
               <span className="absolute -top-[2px] h-[5px] rounded-full bg-accent/70" style={{ left: `${(t0 / 1440) * 100}%`, width: `${Math.max(2, ((t1 - t0) / 1440) * 100)}%` }} />
