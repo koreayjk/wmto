@@ -17,7 +17,7 @@ const T = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isCbcLocale(locale)) return {};
-  return { title: `${T[locale].title} · ${BRAND}`, robots: { index: true, follow: true } };
+  return { title: `${T[locale].title} · ${BRAND}`, robots: { index: true, follow: true }, alternates: { canonical: locale === "en" ? "/en/join" : "/join", languages: { ko: "/join", en: "/en/join" } } };
 }
 
 export default async function CbcJoin({ params, searchParams }: { params: Promise<{ locale: string }>; searchParams: Promise<{ type?: string }> }) {

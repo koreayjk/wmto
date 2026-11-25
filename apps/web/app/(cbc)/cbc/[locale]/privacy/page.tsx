@@ -8,7 +8,7 @@ import { CbcShell } from "@/components/cbc/CbcShell";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (!isCbcLocale(locale)) return {};
-  return { title: `${getMessages(locale).privacy.title} · ${BRAND}` };
+  return { title: `${getMessages(locale).privacy.title} · ${BRAND}`, alternates: { canonical: locale === "en" ? "/en/privacy" : "/privacy", languages: { ko: "/privacy", en: "/en/privacy" } } };
 }
 
 export default async function CbcPrivacy({ params }: { params: Promise<{ locale: string }> }) {
