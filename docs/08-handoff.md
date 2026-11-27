@@ -89,3 +89,12 @@ Next.js 16 App Router(`proxy.ts`), React 19, Tailwind v4, `@supabase/ssr`, zod, 
 6. **지역 이전**: 서울/도쿄 Supabase 프로젝트 + Vercel 지역 동일화(미작성 체크리스트).
 7. 참고 자료에서 남긴 후보: 슬라이드·타이머 등 모임 진행의 화면 송출, 업종 보완 소그룹 자동 추천, 행사 시간 기준 이수, 크로스 텐트 소개, 공개 프로필(기본 비공개, 본인이 켜기), 영어 문구 검수.
 8. 크롬 조사(`docs/12`)에서 못 본 임원 화면·갱신 결제·모바일 앱 자료가 오면 `docs/13` 에 반영.
+
+## 10. 2026-11 말 변경 요약 (CBC 홈페이지·텐트 규칙·영어 데모)
+- **공개 주소**: `/`·`/en`=CBC 홈(컨셉·시너지 사례·텐트 그림·운영 체계·성장 단계·첫 90일·FAQ), `/join`·`/en/join`=CBC 참여 문의(WMTO 메뉴 없음, `variant="cbc"`로 선교 기여 방식 필수 제외), `/privacy`·`/en/privacy`=CBC 개인정보, `/wmto/...`=선교 사역 사이트. 공통 머리글·바닥글 `components/cbc/CbcShell.tsx`, 문구 `lib/cbc-copy.ts`(한국어는 `keepKoDeep`로 줄바꿈 보정).
+- **한국어 줄바꿈**: `lib/typo.ts`(`keepKo`)가 한 글자 낱말·숫자+단위·마지막 짧은 낱말에 NBSP를 넣는다. `getMessages('ko')`와 `cbcCopy.ko`에 적용됨.
+- **텐트 플랜팅(0033/0033b)**: 정원 50 자동 분할 폐지. `tent_cap()`=0(제한 없음), 텐트별 선택 상한 `chapters.max_members`. 겹치는 업종은 자동 배정 보류 → 운영진이 관리자 > 텐트에서 `plant_tent(region_key)`로 새 텐트를 세움. 시험: `supabase/tests/planting.sql`.
+- **영어 데모**: DB의 데모 데이터는 한국어. 영어(`wmto-locale=en`) 화면에서는 `createSupabaseServerClient`의 fetch를 `lib/demo-i18n.ts`가 감싸 JSON 응답의 한글 문자열을 사전(`lib/demo-en.json`, 업종 82 포함)·이름 로마자·조합 문구 규칙으로 바꾼다. 시·도 단독 값은 입력칸 값이라 바꾸지 않는다(표시 전용은 `displayEn`). 데모 시드가 바뀌면 사전을 보강.
+- **디자인 검수 반영**: 상단 CTA는 "참여 문의", 모바일 햄버거·하단 고정 버튼, 금색 글자 대비 보정, 44px 탭 영역.
+- **Next.js 16.4.6**으로 보안 업데이트.
+- **아직 없는 것(실제 정보 필요)**: 회비·입회 조건·새 텐트 세우는 기준, 대표·텐트장 소개, 실제 후기, 모집 중 텐트 현황, 약관·개인정보 전문(법률 검토 후).
