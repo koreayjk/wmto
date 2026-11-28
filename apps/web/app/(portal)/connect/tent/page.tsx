@@ -6,6 +6,7 @@ import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate, fmtDateTime } from "@/lib/format";
 import { Avatar } from "@/components/connect/Avatar";
+import { MemberCardTrigger, type MemberCard } from "@/components/connect/MemberCardDialog";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
 
 type Tent = { id: string; name: string; region: string | null; via: "own" | "mentor" };
@@ -28,6 +29,14 @@ async function addPost(fd: FormData) {
   if (me.role !== "mentor" || !chapter || !title || !body) return;
   await supabase.from("tent_posts").insert({ chapter_id: chapter, author_id: me.id, kind, title, body });
   revalidatePath("/connect/tent");
+}
+
+/** 텐트 회원 상세 카드(팝업용): 같은 텐트 회원만, 휴대전화·이메일은 본인이 공개한 경우에만 내려옵니다. */
+async function memberCard(id: string): Promise<MemberCard | null> {
+  "use server";
+  const { supabase } = await requireMe();
+  const { data, error } = await supabase.rpc("tent_member_card", { p_member: id });
+  return error ? null : (data as MemberCard);
 }
 
 /** 텐트에 모시기: 선교사가 텐트의 구성원이 됩니다. 멘토는 이어서 텐트원이 직접 고릅니다. */
@@ -93,9 +102,10 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   const personCard = (p: Person) => {
     const ways = (p.contribution_types ?? []).map((k) => m.contribution[k as keyof typeof m.contribution]).filter(Boolean).join(" · ");
     return (
-      <li key={p.id} className="flex gap-3 rounded-2xl bg-white/90 p-4 ring-1 ring-black/[0.06]">
+      <li key={p.id}>
+       <MemberCardTrigger id={p.id} load={memberCard} labels={t.card} locale={locale} className="flex w-full gap-3 rounded-2xl bg-white/90 p-4 text-left ring-1 ring-black/[0.06] transition hover:bg-white hover:ring-accent/40">
         <Avatar name={p.name} url={p.photo_url} size={46} />
-        <div className="min-w-0 flex-1">
+        <span className="block min-w-0 flex-1">
         <span className="flex items-center justify-between gap-2">
           <b className="font-display">{p.name}</b>
           {!cbc && stage(p.stage) && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{stage(p.stage)}</span>}
@@ -114,7 +124,8 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
           </>
         )}
         {p.role === "sponsor" && p.country && <span className="mt-0.5 block text-sm text-soft">{p.country}</span>}
-        </div>
+        </span>
+       </MemberCardTrigger>
       </li>
     );
   };

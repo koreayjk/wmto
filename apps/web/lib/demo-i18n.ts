@@ -51,6 +51,7 @@ function compose(s: string): string | null {
   return HAN_RE.test(t) ? null : t;
 }
 
+const STREETS: Record<string, string> = { 테헤란로: "Teheran-ro", 서초대로: "Seocho-daero", 월드컵북로: "World Cup buk-ro", 올림픽로: "Olympic-ro", 공항대로: "Gonghang-daero", 영등포로: "Yeongdeungpo-ro", 동소문로: "Dongsomun-ro", 천호대로: "Cheonho-daero" };
 const BIZ_PREFIX = new Set(["온유", "새벽", "소망", "감람", "다윗", "은혜", "푸른", "나눔", "믿음", "샘물"]);
 const givenSet = new Set(GIVENS);
 const cache = new Map<string, string>();
@@ -62,6 +63,14 @@ export function translateDemo(s: string): string {
     const g = romanizeSyllables(s.slice(1));
     return `${SURNAMES[s[0]]} ${g[0].toUpperCase()}${g.slice(1)}`;
   }
+  // 사업장 주소: 서울특별시 {구} {도로} {번지}
+  const ad = /^서울특별시 (\S+) (\S+) (\d+)$/.exec(s);
+  if (ad && DISTRICTS[ad[1]] && STREETS[ad[2]]) return `${ad[3]} ${STREETS[ad[2]]}, ${DISTRICTS[ad[1]]}, Seoul`;
+  // 데모 소개글·키워드 템플릿
+  const intro = /^(.+) 분야에서 정직과 신뢰로 고객을 섬깁니다\.$/.exec(s);
+  if (intro) { const ind = (dict as Record<string, string>)[intro[1]]; if (ind) return `Serving clients in ${ind} with honesty and trust.`; }
+  const kw = /^(.+), 신뢰, 소개$/.exec(s);
+  if (kw) { const ind = (dict as Record<string, string>)[kw[1]]; if (ind) return `${ind}, trust, referrals`; }
   // 사업장 이름: "접두어 + 업종"(예: 푸른 사진·영상 스튜디오)
   const sp = s.indexOf(" ");
   if (sp > 0) {

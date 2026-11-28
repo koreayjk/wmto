@@ -35,7 +35,7 @@ async function saveProfile(fd: FormData) {
     const { error } = await supabase.from("mentor_profiles").update({
       business_name: opt(fd, "business_name"), ...(!curRow?.category_id && !cid ? { industry: opt(fd, "industry") } : {}), ...(fd.has("mission_heart") ? { contribution_types: types } : {}),
       intro: opt(fd, "intro", 1500), keywords: opt(fd, "keywords", 300), years_in_business: /^\d{1,2}$/.test(String(fd.get("years") ?? "")) ? Number(fd.get("years")) : null,
-      website: opt(fd, "website", 200), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), ...(fd.has("mission_heart") ? { mission_heart: opt(fd, "mission_heart", 1000) } : {}),
+      website: opt(fd, "website", 200), business_address: opt(fd, "business_address", 200), business_phone: opt(fd, "business_phone", 50), share_contact: fd.get("share_contact") === "on", church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), ...(fd.has("mission_heart") ? { mission_heart: opt(fd, "mission_heart", 1000) } : {}),
     }).eq("member_id", me.id);
     if (error?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
   } else if (me.role === "partner") {
@@ -207,6 +207,11 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
                 <label className="block"><span className={labelCls}>{t.more.years}</span><input name="years" type="number" min={0} max={99} defaultValue={(p.years_in_business as number | null) ?? ""} className="field" /></label>
                 <label className="block"><span className={labelCls}>{t.more.website}</span><input name="website" type="url" maxLength={200} defaultValue={(p.website as string) ?? ""} className="field" /></label>
               </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block"><span className={labelCls}>{t.more.address}</span><input name="business_address" maxLength={200} defaultValue={(p.business_address as string) ?? ""} placeholder={t.more.addressHint} className="field" /></label>
+                <label className="block"><span className={labelCls}>{t.more.bizPhone}</span><input name="business_phone" type="tel" maxLength={50} defaultValue={(p.business_phone as string) ?? ""} className="field" /></label>
+              </div>
+              <label className="flex items-start gap-3"><input type="checkbox" name="share_contact" defaultChecked={!!p.share_contact} className="mt-1 h-4 w-4 accent-[var(--clay)]" /><span><span className="block text-sm font-medium">{t.more.shareContact}</span><span className="block text-xs text-soft">{t.more.shareContactHint}</span></span></label>
               <label className="block"><span className={labelCls}>{t.more.church}</span><input name="church" maxLength={120} defaultValue={(p.church as string) ?? ""} className="field" /></label>
               <label className="block"><span className={labelCls}>{t.more.faith}</span><textarea name="faith_story" rows={3} maxLength={1000} defaultValue={(p.faith_story as string) ?? ""} placeholder={t.more.faithHint} className="field" /></label>
               {hasMission(me) && <label className="block"><span className={labelCls}>{t.more.mission}</span><textarea name="mission_heart" rows={3} maxLength={1000} defaultValue={(p.mission_heart as string) ?? ""} placeholder={t.more.missionHint} className="field" /></label>}
