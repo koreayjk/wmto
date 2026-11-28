@@ -116,7 +116,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
   const checks: [string, boolean][] = me.role === "mentor" ? [
     ["photo", !!me.photo_url], ["phone", !!me.phone], ["region", !!loc?.region], ["business_name", filled(p.business_name)], ["category", filled(p.category_id)],
     ["intro", filled(p.intro)], ["keywords", filled(p.keywords)], ["years", filled(p.years_in_business)], ["website", filled(p.website)],
-    ["church", filled(p.church)], ["faith", filled(p.faith_story)], ["mission", filled(p.mission_heart)],
+    ["church", filled(p.church)], ["faith", filled(p.faith_story)], ...(hasMission(me) ? ([["mission", filled(p.mission_heart)]] as [string, boolean][]) : []),
   ] : [];
   const pct = checks.length ? Math.round((checks.filter(([, ok]) => ok).length / checks.length) * 100) : 0;
   const missingKeys = checks.filter(([, ok]) => !ok).map(([k]) => k);

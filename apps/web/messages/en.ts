@@ -691,7 +691,7 @@ export const en: Messages = {
     },
     stageDesc: {
       seed: "Begin with orientation", sower: "Become a mentor to one missionary",
-      harvester: "Be part of a missionary's self-reliance", elder: "Lead a tent and raise up the next mentors",
+      harvester: "Help each other's work bear fruit", elder: "Lead a tent and raise up the next leaders",
       ready: "Find and prepare a business that fits you", launch: "Learn at the camp and start your business",
       growing: "The first sales arrive and the business grows", self_sustaining: "Reach self-reliance and become a mentor to the next missionary",
     },
