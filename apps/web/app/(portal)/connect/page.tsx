@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireMe } from "@/lib/me";
+import { requireMe, hasMission } from "@/lib/me";
 import { fill, getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { currentMonthKst, fmtDate, fmtDateTime, fmtMonth } from "@/lib/format";
@@ -18,6 +18,8 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
   const locale = await getPortalLocale();
   const { me, supabase, demo } = await requireMe();
   const m = getMessages(locale).connect;
+  // CBC 사업가(선교 권한 없음)에게는 선교사·멘토링·후원 내용을 보이지 않습니다.
+  const cbc = me.role === "mentor" && !hasMission(me);
   const { p: periodRaw } = await searchParams;
   const period = periodRaw === "365" ? 365 : periodRaw === "0" ? 0 : 90;
   const { data: actData } = me.role === "mentor" ? await supabase.rpc("my_activity", { p_days: period }) : { data: null };
@@ -103,6 +105,9 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
         {nextCard}
       </>
     );
+  } else if (cbc) {
+    today = eventSoon ? { text: t.event, cta: t.eventCta, href: "/connect/events" } : { text: t.thanksCbc, cta: t.thanksCbcCta, href: "/connect/referrals" };
+    body = <>{nextCard}</>;
   } else if (me.role === "mentor") {
     const [{ data: ms }, { data: openReqs }, { count: unread }] = await Promise.all([
       supabase.from("matchings").select("id,partner_id,contribution_type").eq("status", "active"),
@@ -242,9 +247,10 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
 
   // 이번 달 숫자와 최근 6개월 그래프 (사업가·선교사)
   const showActivity = me.role === "mentor" || me.role === "partner";
+  const allCats = catsFor("mentor");
   const rows = showActivity ? await monthlyActivity(supabase, me, 6) : [];
   const thisMonth = rows[rows.length - 1];
-  const cats = catsFor(me.role);
+  const cats = cbc ? (["attendance", "referrals"] as typeof allCats) : catsFor(me.role);
   const g = m.growth;
   const statHref: Record<string, string> = {
     attendance: "/connect/events", mentoring: "/connect/mentoring", reports: "/connect/report", referrals: "/connect/referrals", letters: "/connect/thanks",
@@ -253,7 +259,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
   // 프로필에서 아직 비어 있는 항목
   const p = (me.profile ?? {}) as Record<string, unknown>;
   const wanted: Record<string, string[]> = {
-    mentor: ["business_name", "industry", "contribution_types"],
+    mentor: cbc ? ["business_name", "industry"] : ["business_name", "industry", "contribution_types"],
     partner: ["mission_field", "sending_org", "business_idea"],
     sponsor: ["sponsor_type", "church_name"],
   };
@@ -266,6 +272,8 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
   const shortcuts: { href: string; label: string }[] =
     me.role === "partner"
       ? [{ href: "/connect/report", label: d.sc.report }, { href: "/connect/mentoring", label: d.sc.mentoring }, { href: "/connect/growth", label: d.sc.growth }]
+      : cbc
+        ? [{ href: "/connect/referrals", label: d.sc.referral }, { href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/growth", label: d.sc.growth }]
       : me.role === "mentor"
         ? [{ href: "/connect/mentoring", label: d.sc.mentoring }, { href: "/connect/referrals", label: d.sc.referral }, { href: "/connect/growth", label: d.sc.growth }]
         : [{ href: "/connect/giving", label: m.sponsor.navGiving }, { href: "/connect/news", label: m.sponsor.navNews }, { href: "/connect/fund", label: m.sponsor.navFund }];
@@ -277,7 +285,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
       {demo && me.role && (
         <Card title={m.demo.tourTitle}>
           <ol className="grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
-            {m.demo.tour[me.role].map((s, i) => (
+            {(cbc ? m.demo.tourCbc : m.demo.tour[me.role]).map((s, i) => (
               <li key={s.href}>
                 <Link href={s.href} className="flex gap-4 border-t border-black/[0.07] py-4 transition-colors duration-500 hover:bg-black/[0.02]">
                   <span className="serif gilt text-xl font-light tabular-nums">{i + 1}</span>
@@ -368,7 +376,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="space-y-4">{body}</div>
         <div className="space-y-4">
-          {nextCard}
+          {!cbc && nextCard}
           {missing.length > 0 && (
             <Card title={d.profileTitle}>
               <p className="text-sm text-soft">{d.profileHint}</p>

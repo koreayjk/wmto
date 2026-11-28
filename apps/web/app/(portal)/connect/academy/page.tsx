@@ -1,4 +1,4 @@
-import { requireMe } from "@/lib/me";
+import { requireMe, hasMission } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate } from "@/lib/format";
@@ -49,8 +49,11 @@ export default async function Academy({ searchParams }: { searchParams: Promise<
   const recent = (done ?? []).filter((d) => Date.now() - new Date(d.completed_at as string).getTime() < 90 * 86400000).length;
   const { data: logs } = me.role === "mentor" ? await supabase.from("learning_logs").select("id,kind,qty,held_on,note,created_at").eq("member_id", me.id).order("held_on", { ascending: false }).limit(20) : { data: [] };
   const todayStr = new Date().toISOString().slice(0, 10);
+  // CBC 사업가(선교 권한 없음)에게는 선교·멘토 교육 강의를 보이지 않습니다.
+  const cbc = me.role === "mentor" && !hasMission(me);
+  const MISSION_RE = /선교|멘토|후원|mission|mentor|sponsor/i;
   const groups = new Map<string, NonNullable<typeof data>>();
-  (data ?? []).forEach((v) => {
+  (data ?? []).filter((v) => !cbc || !MISSION_RE.test(`${v.category ?? ""} ${v.title ?? ""}`)).forEach((v) => {
     const k = v.category || t.uncategorized;
     groups.set(k, [...(groups.get(k) ?? []), v]);
   });

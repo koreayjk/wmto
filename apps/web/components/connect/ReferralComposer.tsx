@@ -85,17 +85,15 @@ export function ReferralComposer({ mentors, t, action }: { mentors: DirMentor[];
                           <span className="min-w-0 flex-1">
                         <span className="flex items-center justify-between gap-2">
                           <b className="font-display">{m.name}</b>
-                          {m.stage && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{t.stages[m.stage] ?? m.stage}</span>}
                         </span>
                         {m.business_name && <span className="mt-0.5 block text-sm">{m.business_name}</span>}
                           </span>
                         </span>
                         <span className="mt-1 block text-xs text-soft">
                           {group === "industry" ? [regionLabel(regionOf(m)), m.district].filter(Boolean).join(" ") : [m.district, industryOf(m)].filter(Boolean).join(" · ")}{m.chapter ? ` · ${m.chapter}` : ""}
-                          {ways && ` · ${ways}`}
                         </span>
                         <span className="mt-1 block text-xs text-soft">
-                          {t.mentees.replace("{n}", String(m.mentee_count))} · {t.since.replace("{d}", new Date(m.joined_at).toLocaleDateString(t.dateLocale, { year: "numeric", month: "short" }))}
+                          {t.since.replace("{d}", new Date(m.joined_at).toLocaleDateString(t.dateLocale, { year: "numeric", month: "short" }))}
                         </span>
                       </button>
                     </li>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireMe } from "@/lib/me";
+import { requireMe, hasMission } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { fmtDate, fmtDateTime } from "@/lib/format";
@@ -54,6 +54,8 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   const { me, supabase } = await requireMe();
   const m = getMessages(locale).connect;
   const t = m.tent;
+  // CBC 사업가(선교 권한 없음)에게는 선교사·후원자·멘토링 내용을 보이지 않습니다.
+  const cbc = me.role === "mentor" && !hasMission(me);
   const { t: want } = await searchParams;
 
   const { data: mine } = await supabase.rpc("my_tents");
@@ -69,7 +71,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   const cur = tents.find((x) => x.id === want) ?? tents[0];
   const [{ data: ov }, pk] = await Promise.all([
     supabase.rpc("tent_overview", { p_chapter: cur.id }),
-    me.role === "mentor" ? supabase.rpc("open_matching_requests") : Promise.resolve({ data: [] }),
+    me.role === "mentor" && !cbc ? supabase.rpc("open_matching_requests") : Promise.resolve({ data: [] }),
   ]);
   const o = ov as Overview | null;
   if (!o) redirect("/connect");
@@ -84,10 +86,9 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
   const past = o.events.filter((e) => new Date(e.start_at).getTime() < now - 2 * 3600_000);
   const next = upcoming[0];
   const stage = (s: string | null) => (s ? m.stageNames[s as keyof typeof m.stageNames] ?? s : null);
-  const stats: [string, number][] = [
-    [t.stats.members, o.members.length], [t.stats.mentors, mentors.length], [t.stats.partners, partners.length],
-    [t.stats.accompany, o.activity.matchings], [t.stats.logs, o.activity.logs_30d],
-  ];
+  const stats: [string, number][] = cbc
+    ? [[t.stats.mentors, mentors.length]]
+    : [[t.stats.members, o.members.length], [t.stats.mentors, mentors.length], [t.stats.partners, partners.length], [t.stats.accompany, o.activity.matchings], [t.stats.logs, o.activity.logs_30d]];
 
   const personCard = (p: Person) => {
     const ways = (p.contribution_types ?? []).map((k) => m.contribution[k as keyof typeof m.contribution]).filter(Boolean).join(" · ");
@@ -97,12 +98,12 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         <div className="min-w-0 flex-1">
         <span className="flex items-center justify-between gap-2">
           <b className="font-display">{p.name}</b>
-          {stage(p.stage) && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{stage(p.stage)}</span>}
+          {!cbc && stage(p.stage) && <span className="rounded-full bg-tint px-2 py-0.5 text-[11px] font-semibold text-accent">{stage(p.stage)}</span>}
         </span>
         {p.role === "mentor" && (
           <>
             <span className="mt-0.5 block text-sm">{[p.business_name, p.industry].filter(Boolean).join(" · ")}</span>
-            <span className="mt-1 block text-xs text-soft">{ways}{ways ? " · " : ""}{t.mentees.replace("{n}", String(p.mentee_count))}</span>
+            {!cbc && <span className="mt-1 block text-xs text-soft">{ways}{ways ? " · " : ""}{t.mentees.replace("{n}", String(p.mentee_count))}</span>}
           </>
         )}
         {p.role === "partner" && (
@@ -144,7 +145,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
       )}
       {me.role === "partner" && <p className="col-span-full max-w-3xl border-l-2 border-[#b8975a]/60 py-1 pl-5 text-sm leading-relaxed text-ink/75">{t.partnerNote}</p>}
 
-      <div className="col-span-full grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <div className={`col-span-full grid grid-cols-2 gap-3 ${cbc ? "sm:grid-cols-4" : "sm:grid-cols-5"}`}>
         {stats.map(([k, v]) => (
           <div key={k} className="cbezel c-rise"><div className="cbezel-in p-5">
             <p className="text-[13px] text-soft">{k}</p>
@@ -208,7 +209,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         )}
       </Card>
 
-      {me.role === "mentor" && (
+      {me.role === "mentor" && !cbc && (
         <Card title={t.seek} className="lg:col-span-full">
           <p className="mb-4 max-w-3xl text-sm leading-relaxed text-soft">{t.seekSub}</p>
           {seeking.length === 0 ? <p className="text-soft">{t.seekEmpty}</p> : (
@@ -230,7 +231,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         </Card>
       )}
 
-      {me.role === "mentor" && (
+      {me.role === "mentor" && !cbc && (
         <Card title={t.pickup} className="lg:col-span-full">
           <p className="mb-4 max-w-3xl text-sm leading-relaxed text-soft">{t.pickupSub}</p>
           {pool.length === 0 ? <p className="text-soft">{t.pickupEmpty}</p> : (
@@ -252,9 +253,9 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         </Card>
       )}
 
-      <Card title={`${t.people} · ${o.members.length}`} className="lg:col-span-full">
+      <Card title={`${t.people} · ${cbc ? mentors.length : o.members.length}`} className="lg:col-span-full">
         <div className="space-y-6">
-          {([["mentor", mentors], ["partner", partners], ["sponsor", sponsors]] as const).map(([role, list]) => list.length > 0 && (
+          {(cbc ? ([["mentor", mentors]] as const) : ([["mentor", mentors], ["partner", partners], ["sponsor", sponsors]] as const)).map(([role, list]) => list.length > 0 && (
             <section key={role}>
               <h3 className="mb-2 flex items-baseline gap-2 text-sm font-semibold">{t.roles[role]}<span className="text-xs font-normal text-soft">{list.length}</span></h3>
               <ul className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{list.map(personCard)}</ul>

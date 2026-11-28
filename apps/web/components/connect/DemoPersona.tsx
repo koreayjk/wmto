@@ -1,7 +1,7 @@
 import { getMessages } from "@/lib/i18n";
 import { fmtMoney } from "@/lib/format";
 import type { Locale } from "@/lib/i18n";
-import type { Me } from "@/lib/me";
+import { hasMission, type Me } from "@/lib/me";
 import type { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Card } from "@/components/connect/ui";
 
@@ -22,7 +22,16 @@ export async function DemoPersona({ me, db, locale }: { me: Me; db: Db; locale: 
   const facts: [string, string][] = [];
   if (months) facts.push([f.joined, num(f.months, months)]);
 
-  if (me.role === "mentor") {
+  if (me.role === "mentor" && !hasMission(me)) {
+    const [{ count: given }, { count: got }, { count: o2o }] = await Promise.all([
+      db.from("referrals").select("id", { count: "exact", head: true }).eq("giver_id", me.id),
+      db.from("referrals").select("id", { count: "exact", head: true }).eq("receiver_id", me.id),
+      db.from("one_to_ones").select("id", { count: "exact", head: true }).or(`member_a.eq.${me.id},member_b.eq.${me.id}`),
+    ]);
+    const biz = [prof.business_name, prof.industry].filter(Boolean).join(" · ");
+    if (biz) facts.push([f.business, biz]);
+    facts.push([f.refGiven, num(f.people, given ?? 0)], [f.refGot, num(f.people, got ?? 0)], [f.o2o, num(f.times, o2o ?? 0)]);
+  } else if (me.role === "mentor") {
     const [{ count: mentees }, { count: logs }] = await Promise.all([
       db.from("matchings").select("id", { count: "exact", head: true }).eq("mentor_id", me.id),
       db.from("mentoring_logs").select("id", { count: "exact", head: true }).eq("created_by", me.id),
@@ -52,7 +61,7 @@ export async function DemoPersona({ me, db, locale }: { me: Me; db: Db; locale: 
     if (type) facts.push([f.type, type]);
     facts.push([f.total, fmtMoney(total, locale)], [f.partners, num(f.people, partners)], [f.gifts, num(f.times, list.length)]);
   }
-  if (me.role !== "sponsor" && stage) facts.splice(1, 0, [f.stage, stage]);
+  if (me.role !== "sponsor" && !(me.role === "mentor" && !hasMission(me)) && stage) facts.splice(1, 0, [f.stage, stage]);
 
   const showcase = me.email.startsWith("demo.showcase.");
   return (

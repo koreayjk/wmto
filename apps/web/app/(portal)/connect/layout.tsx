@@ -81,7 +81,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
   const network: { href: string; label: string }[] = [{ href: "/connect/tent", label: m.tent.title }];
   if (role === "partner") network.push({ href: "/connect/matching", label: it.matching.name }, { href: "/connect/thanks", label: it.thanks.name });
   const missionOk = !!active && hasMission(active);
-  if (role === "mentor") network.push({ href: "/connect/circles", label: m.circles.nav }, { href: "/connect/testimonials", label: m.testimonials.nav }, { href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, ...(missionOk ? [{ href: "/connect/matching", label: it.requests.name }] : [{ href: "/connect/mission", label: m.mission.nav }]), { href: "/connect/referrals", label: it.referrals.name }, { href: "/connect/thanks", label: it.thanks.name });
+  if (role === "mentor") network.push({ href: "/connect/circles", label: m.circles.nav }, { href: "/connect/testimonials", label: m.testimonials.nav }, { href: "/connect/one-to-one", label: m.oneToOne.nav }, { href: "/connect/visitors", label: m.visitors.nav }, ...(missionOk ? [{ href: "/connect/matching", label: it.requests.name }] : r?.demo ? [] : [{ href: "/connect/mission", label: m.mission.nav }]), { href: "/connect/referrals", label: it.referrals.name }, ...(missionOk ? [{ href: "/connect/thanks", label: it.thanks.name }] : []));
   const activity = [{ href: "/connect/events", label: m.nav.events }];
   const reports: { href: string; label: string }[] = [];
   if (role === "mentor" || role === "partner") {
@@ -119,14 +119,6 @@ export default async function ConnectLayout({ children }: { children: React.Reac
       {r?.demo && (
         <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 bg-ink px-4 py-1.5 text-[13px] text-white">
           <span className="hidden sm:inline">{m.demo.bar}</span>
-          <form action={switchDemoMode} className="flex gap-1 rounded-full bg-white/10 p-1" aria-label={m.demo.modes}>
-            {demoModes.map((k) => (
-              <button key={k} name="mode" value={k} aria-pressed={r.viewAs?.role === k}
-                className={`rounded-full px-3.5 py-1 font-medium transition-colors duration-500 ${r.viewAs?.role === k ? "bg-white text-ink" : "text-white/80 hover:bg-white/15"}`}>
-                {getMessages(locale).apply.options.role[k]}
-              </button>
-            ))}
-          </form>
           <form action={exitDemo}><button className="rounded-full px-3 py-1 text-white/70 hover:text-white">{m.demo.exit}</button></form>
         </div>
       )}

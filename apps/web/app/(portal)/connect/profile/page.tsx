@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { hasMission } from "@/lib/me";
 import { requireMe } from "@/lib/me";
 import { getMessages } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
@@ -32,9 +33,9 @@ async function saveProfile(fd: FormData) {
       if (ce?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
     }
     const { error } = await supabase.from("mentor_profiles").update({
-      business_name: opt(fd, "business_name"), ...(!curRow?.category_id && !cid ? { industry: opt(fd, "industry") } : {}), contribution_types: types,
+      business_name: opt(fd, "business_name"), ...(!curRow?.category_id && !cid ? { industry: opt(fd, "industry") } : {}), ...(fd.has("mission_heart") ? { contribution_types: types } : {}),
       intro: opt(fd, "intro", 1500), keywords: opt(fd, "keywords", 300), years_in_business: /^\d{1,2}$/.test(String(fd.get("years") ?? "")) ? Number(fd.get("years")) : null,
-      website: opt(fd, "website", 200), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), mission_heart: opt(fd, "mission_heart", 1000),
+      website: opt(fd, "website", 200), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), ...(fd.has("mission_heart") ? { mission_heart: opt(fd, "mission_heart", 1000) } : {}),
     }).eq("member_id", me.id);
     if (error?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
   } else if (me.role === "partner") {
@@ -208,8 +209,8 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
               </div>
               <label className="block"><span className={labelCls}>{t.more.church}</span><input name="church" maxLength={120} defaultValue={(p.church as string) ?? ""} className="field" /></label>
               <label className="block"><span className={labelCls}>{t.more.faith}</span><textarea name="faith_story" rows={3} maxLength={1000} defaultValue={(p.faith_story as string) ?? ""} placeholder={t.more.faithHint} className="field" /></label>
-              <label className="block"><span className={labelCls}>{t.more.mission}</span><textarea name="mission_heart" rows={3} maxLength={1000} defaultValue={(p.mission_heart as string) ?? ""} placeholder={t.more.missionHint} className="field" /></label>
-              <fieldset>
+              {hasMission(me) && <label className="block"><span className={labelCls}>{t.more.mission}</span><textarea name="mission_heart" rows={3} maxLength={1000} defaultValue={(p.mission_heart as string) ?? ""} placeholder={t.more.missionHint} className="field" /></label>}
+              {hasMission(me) && <fieldset>
                 <legend className={labelCls}>{f.fields.contributionTypes}</legend>
                 <div className="flex flex-wrap gap-x-5 gap-y-2">
                   {contributionTypes.map((v) => (
@@ -219,7 +220,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
                     </label>
                   ))}
                 </div>
-              </fieldset>
+              </fieldset>}
             </>
           )}
           {me.role === "partner" && (
