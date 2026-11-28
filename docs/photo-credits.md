@@ -28,3 +28,13 @@
 
 ## CBC 홈페이지 사진 (`apps/web/public/images/cbc/`)
 AI로 생성한 **연출 이미지**(hero, gathering, one-to-one, referral, prayer, workplace, learning)이며 실제 회원·모임 사진이 아닙니다. 실제 사진이 생기면 같은 이름으로 교체하세요. 실존 인물로 오인되지 않도록 "실제 모임 사진"이라고 소개하지 않습니다.
+
+## 데모 1:1 만남 사진 (`apps/web/public/demo/one-to-one/`)
+무료 사진 사이트 Pexels의 [Pexels 라이선스](https://www.pexels.com/license/)(상업적 이용 가능, 출처 표기 불필요) 사진입니다. 두 사람이 카페에서 이야기하는 장면이며, 데모 1:1 기록에만 쓰입니다. 실제 회원 사진이 아닙니다.
+
+| 파일 | 원본 |
+|---|---|
+| 1.jpg | https://www.pexels.com/photo/two-people-having-coffee-while-talking-3874031/ (Gustavo Fring) |
+| 2.jpg | https://www.pexels.com/photo/coworkers-talking-at-a-cafe-4427912/ |
+| 3.jpg | https://www.pexels.com/photo/two-people-sitting-at-a-table-talking-to-each-other-23496898/ (Vitaly Gariev) |
+| 4.jpg | https://www.pexels.com/photo/man-and-woman-sitting-at-table-having-a-conversation-6321940/ (cottonbro studio) |

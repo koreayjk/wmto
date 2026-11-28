@@ -38,7 +38,7 @@ async function create(fd: FormData) {
     p_learned: String(fd.get("learned") ?? ""), p_can_help: String(fd.get("can_help") ?? ""), p_next: String(fd.get("next_step") ?? ""),
     p_intro: String(fd.get("intro_to") ?? ""), p_prayer: String(fd.get("prayer") ?? ""), p_proof_path: proofPath, p_consent: fd.get("consent") === "on",
   });
-  if (error) redirect("/connect/one-to-one?error=" + (error.message.includes("same chapter") ? "chapter" : "form"));
+  if (error) redirect("/connect/one-to-one?error=" + (error.message.includes("same chapter") ? "chapter" : error.message.includes("photo required") ? "photo" : "form"));
   revalidatePath("/connect/one-to-one");
   redirect("/connect/one-to-one?saved=1");
 }
@@ -89,6 +89,8 @@ export default async function OneToOne({ searchParams }: { searchParams: Promise
   for (const r of list) {
     const visible = r.proof_path && (mine(r) || (r.status === "confirmed" && r.consent_a && r.consent_b));
     if (!visible) continue;
+    // 데모 데이터의 사진은 저장소가 아니라 공개 폴더(/demo/…)에 있습니다.
+    if (r.proof_path!.startsWith("/demo/")) { urls.set(r.id, r.proof_path!); continue; }
     const { data } = await db.storage.from(BUCKET).createSignedUrl(r.proof_path!, 3600);
     if (data?.signedUrl) urls.set(r.id, data.signedUrl);
   }
