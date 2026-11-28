@@ -8,6 +8,10 @@ delete from academy_videos where title like '[데모]%';
 delete from stories        where title like '[데모]%';
 delete from events         where title like '[데모]%';
 
+-- 동역 소그룹은 만든 사람(created_by) 연결 때문에 회원보다 먼저 지웁니다(소그룹 글·구성원은 함께 지워집니다).
+delete from circles where chapter_id in (select id from chapters where name like '[데모]%')
+   or created_by in (select id from members where email like '%@demo.wmto.invalid');
+
 -- 멘토링 기록은 작성자(created_by) 연결 때문에 회원보다 먼저 지워야 합니다.
 delete from mentoring_logs
 where created_by in (select id from members where email like '%@demo.wmto.invalid')

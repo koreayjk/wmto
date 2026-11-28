@@ -7,6 +7,7 @@
 --   2) 이미 로그인할 수 있는 실제 회원(사업가/선교사)이 있으면, 그분의 화면에도 데모 활동이 채워집니다.
 --   3) 시연이 끝나면 clear_demo.sql 을 실행하면 가상 데이터가 모두 지워집니다.
 --
+-- CBC 사업가 화면용 보강(서울 1텐트 40명, 소그룹, 추천사 등)이 맨 끝에 들어 있습니다. 마이그레이션 0036 까지 적용된 DB 에서 실행하세요.
 -- 표시: 데모 회원 이메일은 @demo.wmto.invalid (로그인 불가), 데모 일정·스토리·영상 제목은 [데모] 로 시작합니다.
 set search_path = wmto;
 
@@ -483,6 +484,263 @@ begin
   end loop;
 end
 $demo$;
+
+-- ═════════════════════════════════════════════════════════════════════════
+-- CBC 데모 보강 (사업가 전용 화면용): 선교 권한 없음, 서울 1텐트 40명(업종 모두 다름), 프로필 상세·공개 설정,
+-- 활동(모임 출석·소개·감사·1:1·손님·배움), 1:1 사진, 동역 소그룹, 추천사.
+-- 마이그레이션 0036 까지 적용된 데이터베이스에서 실행하세요. 대표 사업가(김은혜)의 텐트를 대상으로 합니다.
+-- ═════════════════════════════════════════════════════════════════════════
+do $cbc$
+declare
+  sc uuid; ch uuid; chname text;
+  cats int[] := array[101,102,104,106,108,109,110,111,113,115,116,118,122,126,129,130,133,134,136,138,141,142,146,150,152,155,157,158,161,170,171];
+  old_cats int[] := array[145,121,144,119,139,147,149,143];
+  sur text[] := array['김','이','박','최','정','강','조','윤','장','임','한','오','서','신','권','황','안','송','류','홍'];
+  giv text[] := array['민준','서연','지훈','하은','도윤','수빈','예준','지우','현우','채원','주원','소영','태양','은지','성민','유진','동현','미래','재현','나연','승우','혜진','준서','다은','시우','가영','건우','보람','영호','지은','상훈','민서','진우','세린','태호','은서','용준','하린','기범','소희'];
+  prefixes text[] := array['온유','새벽','소망','감람','다윗','은혜','푸른','나눔','믿음','샘물'];
+  dists text[] := array['강남구','서초구','마포구','송파구','강서구','영등포구','성북구','강동구'];
+  churches text[] := array['소망교회','푸른숲교회'];
+  clients text[] := array['동네 카페 사장님','이웃 교회 장로님','거래처 대표님','같은 상가 미용실 원장님','지인의 온라인 쇼핑몰','학부모 모임 대표','식자재 납품 업체','신규 개업 한식당','사진 촬영이 필요한 스타트업','홈페이지가 필요한 병원'];
+  notes text[] := array['가격 협의가 가능하다고 전해 두었습니다.','꼭 한번 만나 보시길 권합니다.','도움이 필요하다고 하셔서 소개합니다.','먼저 전화 드려 보시면 좋겠습니다.'];
+  learned text[] := array['월별 매출과 지출을 기록하는 간단한 장부 양식을 함께 만들었습니다.','다음 달 재료 구매 계획과 거래처 협상 방법을 정리했습니다.','할인 행사의 효과를 숫자로 확인하고 다음 행사를 계획했습니다.','SNS에 올릴 첫 게시물의 사진과 문구를 같이 다듬었습니다.'];
+  nexts text[] := array['가격표를 새로 만들어 이번 주 안에 공유하기','지출 장부를 매일 5분씩 기록하기','단골 손님 3명에게 후기를 부탁하기','거래처 두 곳에 견적 요청하기'];
+  thanks text[] := array['좋은 고객을 소개해 주셔서 감사합니다. 덕분에 이번 달 매출이 늘었습니다.','소개해 주신 덕분에 좋은 거래처를 만났습니다. 감사합니다.','꼼꼼하게 챙겨 주셔서 감사합니다.'];
+  faiths text[] := array['일터에서 먼저 섬기는 사람이 되기를 기도합니다.','정직한 일터가 가장 좋은 전도라고 믿습니다.','받은 은혜를 이웃과 나누는 사업을 꿈꿉니다.'];
+  streets jsonb := '{"강남구":"테헤란로","서초구":"서초대로","마포구":"월드컵북로","송파구":"올림픽로","강서구":"공항대로","영등포구":"영등포로","성북구":"동소문로"}'::jsonb;
+  cnames text[] := array['새벽 기도 모임','식음료·서비스 사업 나눔방','전문직 지식 나눔','온라인·마케팅 스터디','독서 모임','건강·운동 모임'];
+  cpurposes text[] := array['매주 화요일 새벽에 서로의 일터와 가정을 위해 기도합니다.','식당, 카페, 제과제빵 등 서비스 사업의 운영 노하우를 나눕니다.','법률, 세무, 의료 등 전문 지식을 서로의 사업에 나눕니다.','온라인 판매와 마케팅을 함께 공부하고 적용해 봅니다.','한 달에 한 권, 사업과 신앙에 도움이 되는 책을 함께 읽습니다.','함께 걷고 운동하며 건강한 일터를 만들어 갑니다.'];
+  cposts text[] := array['이번 주 기도 제목을 나눕니다. 각자 일터에서 만나는 한 사람을 위해 기도해 주세요.','다음 모임은 이번 주 목요일 저녁입니다. 간단한 다과를 준비하겠습니다.','이번 달 매출이 처음으로 목표를 넘었습니다. 함께 기도해 주셔서 감사합니다.','신메뉴를 준비하고 있습니다. 시식해 주실 분을 찾습니다.','세금 신고 시즌입니다. 궁금한 점을 이곳에 남겨 주시면 함께 답을 찾아보겠습니다.','이번 달 읽을 책은 정직한 경영에 관한 책입니다. 함께 읽고 나눠요.','온라인 광고 성과를 비교한 자료를 공유합니다. 필요하신 분은 말씀해 주세요.','이번 주말 아침 산책을 함께합니다. 가볍게 오세요.','새로 오신 분들을 소그룹에서 환영합니다. 편하게 질문해 주세요.','이번 달 소개 목표는 한 분씩입니다. 서로의 고객을 떠올려 봐요.','고객 응대 때 도움이 된 한마디를 나눕니다. 여러분의 경험을 들려주세요.','지난 모임에서 나눈 내용을 정리해 올립니다. 빠진 부분은 댓글로 알려 주세요.'];
+  tb text[] := array['약속을 정말 잘 지키시는 분입니다. 소개해 드린 고객도 만족해서 다시 찾고 있습니다.','일에 대한 정직함과 꼼꼼함이 인상적입니다. 믿고 소개할 수 있는 사업가입니다.','1:1 만남에서 제 사업의 방향을 함께 고민해 주셔서 큰 도움이 되었습니다.','어려운 시기에 먼저 연락해 주고 기도해 준 고마운 분입니다.','고객을 대하는 태도가 따뜻해서 소개받은 분들이 모두 좋은 평가를 남겼습니다.','모임에서 늘 새로운 아이디어를 나눠 주셔서 배우는 것이 많습니다.','품질에 대한 고집이 있으면서도 가격 이야기는 합리적으로 해 주셔서 안심하고 맡길 수 있습니다.','새로 온 회원들을 먼저 챙기고 환영해 주는 따뜻한 분입니다.','소개를 받으면 빠르게 연락하고 결과를 꼭 알려 주십니다. 그래서 다음 소개가 자연스럽게 이어집니다.','신앙과 일터를 따로 두지 않고 살아가는 모습에 많은 도전을 받습니다.'];
+  ids uuid[]; oth uuid[]; n int; no int; i int; j int; k int; g int; mid uuid; cname text; nm text; a uuid; b uuid; ev uuid; rid uuid; cid uuid; cids uuid[] := '{}';
+  members_in uuid[]; vids uuid[]; cat_i int; other_chs uuid[]; oc int := 0; rk text;
+begin
+  select id, chapter_id into sc, ch from members where email = 'demo.showcase.mentor@demo.wmto.invalid';
+  if sc is null or ch is null then raise notice 'CBC 보강: 대표 사업가의 텐트가 없어 건너뜁니다.'; return; end if;
+  -- 같은 지역에 텐트가 하나뿐이면 텐트 플랜팅으로 두 곳을 더 세웁니다(남는 기존 회원을 옮겨 이 텐트를 40명 안팎으로 맞추기 위해).
+  select region_key into rk from chapters where id = ch;
+  if rk is not null and (select count(*) from chapters where region_key = rk) < 2 then
+    perform plant_tent(rk);
+    perform plant_tent(rk);
+  end if;
+  select name into chname from chapters where id = ch;
+
+  -- 1) 선교 권한 없음(사업가 전용 화면) · 선교 성격의 데모 일정 삭제 · 텐트 공지를 사업가 내용으로
+  update members set mission_status = 'none' where role = 'mentor' and email like '%@demo.wmto.invalid';
+  delete from events where title like '[데모]%' and (title like '%선교사 기도 모임%' or title like '%훈련 캠프%');
+  update tent_posts set body = case title
+    when '새로 오신 분들을 환영합니다' then '이번 달에 새 사업가 두 분이 텐트에 함께하게 되었습니다. 인사하고 서로의 일을 들어 주세요.'
+    when '이번 달 모임 안내' then '이번 달 모임에서는 각자 소개하고 싶은 분을 한 분씩 준비해 오세요. 간단한 저녁을 준비합니다. 편하게 오세요.'
+    when '지난 모임 후기' then '지난 모임에서 사업가 세 분이 서로의 일을 소개했고, 새로운 고객 연결이 여러 건 이루어졌습니다. 이번 달에 각자 한 가지씩 실천하기로 했습니다.'
+    else body end
+   where title in ('새로 오신 분들을 환영합니다','이번 달 모임 안내','지난 모임 후기');
+
+  alter table members disable trigger members_assign_tent;
+
+  -- 2) 기존 사업가의 업종을 서로 다르게(대표는 카페·커피)
+  update mentor_profiles set category_id = 103, industry = '카페·커피', business_name = '온유 카페' where member_id = sc;
+  i := 0;
+  for mid in select m.id from members m join mentor_profiles p on p.member_id = m.id
+              where m.chapter_id = ch and m.role = 'mentor' and m.status = 'active' and m.id <> sc and p.category_id is null order by m.name loop
+    i := i + 1;
+    exit when i > array_length(old_cats, 1);
+    select name_ko into cname from industry_categories where id = old_cats[i];
+    update mentor_profiles set category_id = old_cats[i], industry = cname, business_name = prefixes[1 + i % 10] || ' ' || cname where member_id = mid;
+  end loop;
+
+  -- 업종이 정해지지 않은 나머지 기존 회원은 같은 지역의 다른 데모 텐트로 옮겨, 이 텐트를 40명 안팎으로 맞춥니다.
+  select array_agg(id order by name) into other_chs from chapters where id <> ch and name like '[데모]%' and region_key like 'DEMO:KR:서울%';
+  if other_chs is not null then
+    for mid in select m.id from members m join mentor_profiles p on p.member_id = m.id
+                where m.chapter_id = ch and m.role = 'mentor' and m.status = 'active' and m.id <> sc and p.category_id is null loop
+      oc := oc + 1;
+      update members m set chapter_id = other_chs[1 + oc % array_length(other_chs, 1)],
+        chapter = (select name from chapters where id = other_chs[1 + oc % array_length(other_chs, 1)]) where m.id = mid;
+    end loop;
+  end if;
+
+  -- 3) 새 사업가 31명(업종 모두 다름) → 텐트 약 40명
+  for i in 1..31 loop
+    select name_ko into cname from industry_categories where id = cats[i];
+    continue when exists (select 1 from members m join mentor_profiles p on p.member_id = m.id where m.chapter_id = ch and m.status = 'active' and p.category_id = cats[i]);
+    j := (i * 11 + 7) % 40;
+    loop
+      nm := sur[1 + ((i * 7 + 3) % 20)] || giv[1 + (j % 40)];
+      exit when not exists (select 1 from members where name = nm);
+      j := j + 1;
+    end loop;
+    insert into members (role, name, email, phone, country, region, district, chapter, chapter_id, status, created_at, term_end, mission_status)
+    values ('mentor', nm, 'demo.tent40.' || lpad(i::text, 2, '0') || '@demo.wmto.invalid', '010-' || lpad((3000 + i * 41)::text, 4, '0') || '-' || lpad((4000 + i * 59)::text, 4, '0'),
+            '대한민국', '서울', dists[1 + (i % 8)], chname, ch, 'active', now() - (25 + (i * 13) % 330) * interval '1 day', current_date + (45 + (i * 29) % 300), 'none')
+    returning id into mid;
+    insert into mentor_profiles (member_id, business_name, industry, category_id, church, stage)
+    values (mid, prefixes[1 + (i % 10)] || ' ' || cname, cname, cats[i], churches[1 + (i % 2)], (array['seed','sower','harvester'])[1 + (i % 3)]::mentor_stage);
+  end loop;
+
+  select array_agg(id order by name) into ids from members where chapter_id = ch and role = 'mentor' and status = 'active';
+  select coalesce(array_agg(x), '{}') into oth from unnest(ids) x where x <> sc;
+  n := array_length(ids, 1); no := array_length(oth, 1);
+
+  -- 4) 프로필 상세(사업장 주소·전화·웹사이트·소개·키워드·교회 등)와 공개 설정
+  for i in 1..n loop
+    update mentor_profiles p set
+      business_address = '서울특별시 ' || coalesce(m.district, '강남구') || ' ' || coalesce(streets ->> coalesce(m.district, '강남구'), '천호대로') || ' ' || (20 + (i * 17) % 380),
+      business_phone = '02-' || (500 + (i * 37) % 400) || '-' || lpad((1000 + (i * 211) % 9000)::text, 4, '0'),
+      website = 'https://biz' || i || '.example.com',
+      intro = coalesce(p.industry, '사업') || ' 분야에서 정직과 신뢰로 고객을 섬깁니다.',
+      keywords = coalesce(p.industry, '사업') || ', 신뢰, 소개',
+      years_in_business = 3 + (i * 7) % 25,
+      church = churches[1 + i % 2], faith_story = faiths[1 + i % 3],
+      share = jsonb_build_object('business_address', true, 'business_phone', true, 'website', true,
+        'phone', (abs(hashtext(p.member_id::text)) % 10) < 8, 'email', (abs(hashtext(p.member_id::text || 'e')) % 10) < 5,
+        'church', (abs(hashtext(p.member_id::text || 'c')) % 10) < 7, 'faith_story', (abs(hashtext(p.member_id::text || 'f')) % 10) < 6)
+    from members m where p.member_id = ids[i] and m.id = ids[i];
+  end loop;
+  update mentor_profiles set intro = '서울에서 10년째 카페를 운영하며, 정직한 한 잔과 따뜻한 공간으로 이웃과 함께합니다.', keywords = '커피, 로스팅, 카페, 단체 주문',
+    years_in_business = 10, website = 'https://onyu-cafe.example.com', faith_story = '일터에서 먼저 섬기는 사람이 되기를 기도합니다.', church = '소망교회' where member_id = sc;
+  update members set photo_url = '/people/p01.jpg' where id = sc;
+
+  -- 5) 정기 모임: 지난 12주 + 앞으로 4주
+  for k in -12..4 loop
+    if not exists (select 1 from events where chapter_id = ch and start_at::date = (current_date + k * 7)) then
+      insert into events (type, title, start_at, end_at, location, chapter_id)
+      values ('offline', chname || ' 정기 모임 #' || (20 + k), (current_date + k * 7)::timestamptz + interval '7 hours', (current_date + k * 7)::timestamptz + interval '9 hours', '서울 강남 모임 장소', ch);
+    end if;
+  end loop;
+
+  -- 출석(대표 제외, 회원마다 다른 확률) / 소개 140 / 감사 / 1:1 70 / 손님 10 / 배움 60
+  for ev in select id from events where chapter_id = ch and start_at < now() and start_at > now() - interval '120 days' loop
+    for i in 1..no loop
+      if random() < 0.55 + 0.4 * ((i * 37) % 100) / 100.0 then
+        insert into attendance (event_id, member_id, attended_at) select ev, oth[i], start_at from events where id = ev on conflict do nothing;
+      end if;
+    end loop;
+  end loop;
+  for k in 1..140 loop
+    a := oth[1 + floor(random() * no)::int]; b := oth[1 + floor(random() * no)::int];
+    if a <> b then
+      insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
+      values (a, b, clients[1 + (k % 10)], notes[1 + (k % 4)], (array['sent','contacted','won','won','contacted','closed','won','no_deal'])[1 + (k % 8)]::referral_status, now() - (random() * 150) * interval '1 day');
+    end if;
+  end loop;
+  for rid in select id from referrals where status = 'won' and giver_id = any (oth) and receiver_id = any (oth) and not exists (select 1 from gratitude g where g.referral_id = referrals.id) order by random() limit 30 loop
+    insert into gratitude (referral_id, from_member, to_member, message, created_at)
+    select rid, receiver_id, giver_id, thanks[1 + floor(random() * 3)::int], created_at + interval '5 days' from referrals where id = rid;
+  end loop;
+  for k in 1..70 loop
+    a := oth[1 + floor(random() * no)::int]; b := oth[1 + floor(random() * no)::int];
+    if a <> b then
+      insert into one_to_ones (member_a, member_b, held_at, place, duration_min, learned, can_help, next_step, status, confirmed_at, consent_a, consent_b)
+      values (a, b, now() - (random() * 140) * interval '1 day', (array['온라인','서울 강남 모임 장소'])[1 + (k % 2)], 30 + (k % 4) * 15,
+        learned[1 + (k % 4)], learned[1 + ((k + 1) % 4)], nexts[1 + (k % 4)], 'confirmed', now() - (random() * 130) * interval '1 day', false, false);
+    end if;
+  end loop;
+  for k in 1..10 loop
+    insert into visitors (chapter_id, invited_by, name, status, attended_at, kind, created_at)
+    values (ch, oth[1 + (k * 5) % no], sur[1 + (k * 3) % 20] || giv[1 + (k * 7 + 11) % 40], (array['attended','joined','attended','invited'])[1 + (k % 4)],
+            case when k % 4 = 0 then null else now() - (k * 9) * interval '1 day' end, 'guest', now() - (k * 9 + 5) * interval '1 day');
+  end loop;
+  for k in 1..60 loop
+    insert into learning_logs (member_id, kind, qty, held_on) values (oth[1 + floor(random() * no)::int], (array['scripture','discipleship','business','book','other'])[1 + (k % 5)], 1 + (k % 3), current_date - (k * 2) % 80);
+  end loop;
+  select array_agg(id) into vids from academy_videos where title !~ '선교|멘토|후원';
+  if vids is not null then
+    for k in 1..70 loop
+      insert into academy_completions (member_id, video_id, completed_at)
+      values (oth[1 + (k * 7) % no], vids[1 + (k % array_length(vids, 1))], now() - ((k * 3) % 85) * interval '1 day') on conflict do nothing;
+    end loop;
+  end if;
+  insert into tent_posts (chapter_id, author_id, kind, title, body, created_at) values
+    (ch, oth[1], 'notice', '이번 주 모임 안내', '이번 주 목요일 아침 7시에 모입니다. 각자 소개하고 싶은 분을 한 분씩 떠올려 오세요. 간단한 아침을 준비합니다.', now() - interval '1 day'),
+    (ch, oth[2], 'recap', '지난 모임 후기', '지난주에는 열두 분이 모여 서로의 일을 나눴고, 새로운 고객 연결이 다섯 건 이루어졌습니다. 감사한 한 주였습니다.', now() - interval '6 days'),
+    (ch, oth[3], 'notice', '손님을 초대해 주세요', '다음 달 모임에 손님을 초대해 주세요. 초대한 분의 참석은 텐트장이 확인합니다.', now() - interval '9 days');
+
+  -- 6) 대표 사업가(김은혜)의 최근 90일 활동: 포인트 70점대(천막 단계), 등불까지 조금 남게
+  for ev in select id from events where chapter_id = ch and start_at < now() and start_at > now() - interval '90 days' order by start_at offset 3 loop
+    insert into attendance (event_id, member_id, attended_at) select ev, sc, start_at from events where id = ev on conflict do nothing;
+  end loop;
+  for k in 1..6 loop
+    insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
+    values (sc, oth[1 + (k - 1) % no], clients[k], '꼭 한번 만나 보시길 권합니다.', (array['sent','contacted','won','won','contacted','closed','won','sent','contacted'])[k]::referral_status, now() - (k * 8) * interval '1 day');
+  end loop;
+  for k in 1..4 loop
+    insert into referrals (giver_id, receiver_id, client_name, note, status, created_at)
+    values (oth[k], sc, clients[1 + k], notes[k], (array['won','sent','contacted','won'])[k]::referral_status, now() - (k * 13) * interval '1 day');
+  end loop;
+  insert into gratitude (referral_id, from_member, to_member, message, created_at)
+  select id, sc, giver_id, '좋은 고객을 소개해 주셔서 감사합니다. 덕분에 이번 달 매출이 늘었습니다.', created_at + interval '5 days' from referrals where receiver_id = sc and status = 'won' order by created_at desc limit 1;
+  for k in 1..5 loop
+    insert into one_to_ones (member_a, member_b, held_at, place, duration_min, learned, can_help, next_step, status, confirmed_at, consent_a, consent_b)
+    values (sc, oth[1 + (k * 3) % no], now() - (k * 14) * interval '1 day', '온라인', 40, learned[1 + k % 4], learned[1 + (k + 1) % 4], nexts[1 + k % 4], 'confirmed', now() - (k * 14 - 1) * interval '1 day', false, false);
+  end loop;
+  insert into visitors (chapter_id, invited_by, name, status, attended_at, kind, created_at) values (ch, sc, '조민서', 'attended', now() - interval '20 days', 'guest', now() - interval '30 days');
+  insert into learning_logs (member_id, kind, qty, held_on) values (sc, 'business', 2, current_date - 12), (sc, 'scripture', 1, current_date - 30);
+
+  -- 7) 1:1 사진(정적 파일 /demo/one-to-one/1~4.jpg)과 사진 공개 동의
+  update one_to_ones o set proof_path = '/demo/one-to-one/' || (1 + (abs(hashtext(o.id::text)) % 4)) || '.jpg', consent_a = true, consent_b = true
+   where o.status = 'confirmed' and o.proof_path is null
+     and exists (select 1 from members m where m.id = o.member_a and m.email like '%@demo.wmto.invalid')
+     and exists (select 1 from members m where m.id = o.member_b and m.email like '%@demo.wmto.invalid');
+
+  -- 8) 동역 소그룹 6개(업종에 맞춰 배정)와 글
+  delete from circles where chapter_id = ch;
+  for g in 1..6 loop
+    insert into circles (chapter_id, name, purpose, created_by, created_at) values (ch, cnames[g], cpurposes[g], sc, now() - (60 + g * 7) * interval '1 day') returning id into cid;
+    cids := cids || cid;
+  end loop;
+  k := 0;
+  for i in 1..n loop
+    select coalesce(category_id, 0) into cat_i from mentor_profiles where member_id = ids[i];
+    if cat_i in (101,102,103,104,106,108,152) then g := 2;
+    elsif cat_i in (109,110,111,113,115,116,119,121,122,126,130,120,125,159) then g := 3;
+    elsif cat_i in (142,143,144,146,147,149,148) then g := 4;
+    else k := k + 1; g := (array[1,5,6])[1 + k % 3]; end if;
+    insert into circle_members (circle_id, member_id, joined_at) values (cids[g], ids[i], now() - (20 + i) * interval '1 day') on conflict do nothing;
+  end loop;
+  k := 0;
+  for g in 1..6 loop
+    select array_agg(member_id) into members_in from circle_members where circle_id = cids[g];
+    continue when members_in is null;
+    for i in 1..4 loop
+      k := k + 1;
+      insert into circle_posts (circle_id, author_id, body, created_at)
+      values (cids[g], members_in[1 + (i * 3 + g) % array_length(members_in, 1)], cposts[1 + (k * 5) % 12], now() - (i * 4 + g) * interval '1 day');
+    end loop;
+  end loop;
+
+  -- 9) 추천사: 회원마다 1건 이상, 대표는 받은 6건(대기 2건) + 쓴 3건
+  delete from testimonials where author_id = any (ids) or subject_id = any (ids);
+  for i in 1..n loop
+    a := ids[1 + (i * 7 + 3) % n];
+    if a = ids[i] then a := ids[1 + (i + 1) % n]; end if;
+    insert into testimonials (author_id, subject_id, body, status, created_at, decided_at)
+    values (a, ids[i], tb[1 + (i * 3) % 10], case when i % 9 = 0 then 'pending' else 'published' end, now() - (i * 3 % 120) * interval '1 day', case when i % 9 = 0 then null else now() - (i * 3 % 110) * interval '1 day' end)
+    on conflict do nothing;
+  end loop;
+  for i in 1..30 loop
+    a := ids[1 + (i * 11 + 5) % n]; b := ids[1 + (i * 13 + 2) % n];
+    if a <> b then
+      insert into testimonials (author_id, subject_id, body, status, created_at, decided_at)
+      values (a, b, tb[1 + (i * 7) % 10], 'published', now() - (i * 4 % 150) * interval '1 day', now() - (i * 4 % 140) * interval '1 day') on conflict do nothing;
+    end if;
+  end loop;
+  for i in 1..6 loop
+    a := ids[1 + (i * 5 + 8) % n];
+    if a <> sc then
+      insert into testimonials (author_id, subject_id, body, status, created_at, decided_at)
+      values (a, sc, tb[1 + (i * 2) % 10], case when i > 4 then 'pending' else 'published' end, now() - (i * 6) * interval '1 day', case when i > 4 then null else now() - (i * 5) * interval '1 day' end) on conflict do nothing;
+    end if;
+  end loop;
+  for i in 1..3 loop
+    b := ids[1 + (i * 9 + 4) % n];
+    if b <> sc then
+      insert into testimonials (author_id, subject_id, body, status, created_at, decided_at)
+      values (sc, b, tb[1 + (i * 3 + 1) % 10], 'published', now() - (i * 12) * interval '1 day', now() - (i * 11) * interval '1 day') on conflict do nothing;
+    end if;
+  end loop;
+
+  alter table members enable trigger members_assign_tent;
+end
+$cbc$;
 
 -- 결과 확인
 select
