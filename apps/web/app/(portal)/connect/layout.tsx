@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { getMe, hasMission } from "@/lib/me";
-import { getMessages } from "@/lib/i18n";
+import { getMessages, isLocale, LOCALE_COOKIE } from "@/lib/i18n";
 import { getPortalLocale } from "@/lib/locale";
 import { BottomNav, type NavItem } from "@/components/connect/BottomNav";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { VIEW_AS_COOKIE } from "@/lib/viewas";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -31,6 +32,14 @@ async function exitViewAs() {
   "use server";
   (await cookies()).delete(VIEW_AS_COOKIE);
   redirect("/admin/view-as");
+}
+
+/** 언어 바꾸기(한국어 / English): 쿠키에 저장하고 화면을 다시 그립니다. */
+async function switchLocale(fd: FormData) {
+  "use server";
+  const v = fd.get("locale");
+  if (isLocale(v)) (await cookies()).set(LOCALE_COOKIE, v, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  revalidatePath("/connect", "layout");
 }
 
 /** 공개 데모: 사업가 / 선교사 / 후원자 모드 바꾸기 */
@@ -151,8 +160,13 @@ export default async function ConnectLayout({ children }: { children: React.Reac
               <img src="/brand/cbc-mark.svg" alt={BRAND} width={46} height={28} className="h-7 w-auto" />
               <span className="text-xs uppercase tracking-[0.2em] text-clay">Christian Business Connect</span>
             </span>
+            <form action={switchLocale} aria-label="Language" className="pointer-events-auto ml-auto flex gap-1 rounded-full bg-white/80 p-1 text-xs shadow-[0_0_0_1px_rgba(22,24,29,0.08)]">
+              {([["ko", "한국어"], ["en", "English"]] as const).map(([v, label]) => (
+                <button key={v} name="locale" value={v} aria-pressed={locale === v} className={`rounded-full px-3 py-1.5 font-medium ${locale === v ? "bg-ink text-white" : "text-ink/70 hover:bg-black/[0.05]"}`}>{label}</button>
+              ))}
+            </form>
             {active && (
-              <span className="pointer-events-auto ml-auto flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
+              <span className="pointer-events-auto ml-2 flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
                 <Avatar name={active.name} url={active.photo_url} size={30} />
                 <span className="hidden text-ink/70 sm:inline">{active.name}</span>
                 {stageName && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
