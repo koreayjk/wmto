@@ -13,6 +13,10 @@ import { AvatarUploader } from "@/components/connect/AvatarUploader";
 import { contributionTypes, krRegions, sponsorTypes } from "@/lib/codes";
 import { Card, PageTitle, labelCls } from "@/components/connect/ui";
 
+/** 같은 텐트 회원에게 공개할지 고를 수 있는 항목과 기본값(사업장 정보는 공개, 개인 연락처·신앙 정보는 비공개) */
+const SHARE_KEYS = ["phone", "email", "business_address", "business_phone", "website", "church", "faith_story"] as const;
+const SHARE_DEFAULT: Record<(typeof SHARE_KEYS)[number], boolean> = { phone: false, email: false, business_address: true, business_phone: true, website: true, church: false, faith_story: false };
+
 const opt = (fd: FormData, k: string, max = 300) => String(fd.get(k) ?? "").trim().slice(0, max) || null;
 
 async function saveProfile(fd: FormData) {
@@ -35,7 +39,7 @@ async function saveProfile(fd: FormData) {
     const { error } = await supabase.from("mentor_profiles").update({
       business_name: opt(fd, "business_name"), ...(!curRow?.category_id && !cid ? { industry: opt(fd, "industry") } : {}), ...(fd.has("mission_heart") ? { contribution_types: types } : {}),
       intro: opt(fd, "intro", 1500), keywords: opt(fd, "keywords", 300), years_in_business: /^\d{1,2}$/.test(String(fd.get("years") ?? "")) ? Number(fd.get("years")) : null,
-      website: opt(fd, "website", 200), business_address: opt(fd, "business_address", 200), business_phone: opt(fd, "business_phone", 50), share_contact: fd.get("share_contact") === "on", church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), ...(fd.has("mission_heart") ? { mission_heart: opt(fd, "mission_heart", 1000) } : {}),
+      website: opt(fd, "website", 200), business_address: opt(fd, "business_address", 200), business_phone: opt(fd, "business_phone", 50), share: Object.fromEntries(SHARE_KEYS.map((k) => [k, fd.get(`share_${k}`) === "on"])), church: opt(fd, "church", 120), faith_story: opt(fd, "faith_story", 1000), ...(fd.has("mission_heart") ? { mission_heart: opt(fd, "mission_heart", 1000) } : {}),
     }).eq("member_id", me.id);
     if (error?.message.includes("category_taken")) redirect("/connect/profile?error=category_taken");
   } else if (me.role === "partner") {
@@ -126,7 +130,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
       <div className="lg:col-span-full"><PageTitle eyebrow="Profile">{t.title}</PageTitle></div>
       {err === "category_taken" && <p role="alert" className="lg:col-span-full rounded-2xl bg-[#fdf1ee] px-4 py-3 text-sm text-[#8a2f1a]">{t.categoryTaken}</p>}
       {saved && <p role="status" className="lg:col-span-full rounded-2xl bg-tint px-4 py-3 text-sm text-accent">{t.saved}</p>}
-      <div className="space-y-5 lg:sticky lg:top-6">
+      <div className="space-y-5">
       <Card>
         <AvatarUploader action={uploadAvatar} hasPhoto={!!me.photo_url} name={t.photo.title} labels={t.photo}
           preview={me.photo_url ? <Avatar name={me.name} url={me.photo_url} size={88} /> : <Avatar name={me.name} size={88} />} />
@@ -168,6 +172,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
       <p className="px-1 text-sm text-soft">{t.install}</p>
       <form action={logout} data-demo-allow><button className="cbtn cbtn-quiet w-full">{t.logout}</button></form>
       </div>
+      <div className="min-w-0 space-y-5">
       <Card>
         <form action={saveProfile} className="space-y-4">
           <label className="block"><span className={labelCls}>{f.fields.name}</span><input name="name" required defaultValue={me.name} className="field" /></label>
@@ -211,7 +216,16 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
                 <label className="block"><span className={labelCls}>{t.more.address}</span><input name="business_address" maxLength={200} defaultValue={(p.business_address as string) ?? ""} placeholder={t.more.addressHint} className="field" /></label>
                 <label className="block"><span className={labelCls}>{t.more.bizPhone}</span><input name="business_phone" type="tel" maxLength={50} defaultValue={(p.business_phone as string) ?? ""} className="field" /></label>
               </div>
-              <label className="flex items-start gap-3"><input type="checkbox" name="share_contact" defaultChecked={!!p.share_contact} className="mt-1 h-4 w-4 accent-[var(--clay)]" /><span><span className="block text-sm font-medium">{t.more.shareContact}</span><span className="block text-xs text-soft">{t.more.shareContactHint}</span></span></label>
+              <fieldset className="rounded-2xl bg-tint p-4">
+                <legend className="px-1 text-sm font-semibold">{t.more.visTitle}</legend>
+                <p className="mb-3 text-xs leading-relaxed text-soft">{t.more.visHint}</p>
+                <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
+                  {SHARE_KEYS.map((k) => {
+                    const sh = ((p.share ?? {}) as Record<string, boolean>)[k];
+                    return <label key={k} className="flex items-center gap-2.5 py-1"><input type="checkbox" name={`share_${k}`} defaultChecked={sh ?? SHARE_DEFAULT[k]} className="h-4 w-4 accent-[var(--clay)]" />{t.more.vis[k]}</label>;
+                  })}
+                </div>
+              </fieldset>
               <label className="block"><span className={labelCls}>{t.more.church}</span><input name="church" maxLength={120} defaultValue={(p.church as string) ?? ""} className="field" /></label>
               <label className="block"><span className={labelCls}>{t.more.faith}</span><textarea name="faith_story" rows={3} maxLength={1000} defaultValue={(p.faith_story as string) ?? ""} placeholder={t.more.faithHint} className="field" /></label>
               {hasMission(me) && <label className="block"><span className={labelCls}>{t.more.mission}</span><textarea name="mission_heart" rows={3} maxLength={1000} defaultValue={(p.mission_heart as string) ?? ""} placeholder={t.more.missionHint} className="field" /></label>}
@@ -262,6 +276,7 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           )}
         </Card>
       )}
+      </div>
     </div>
   );
 }
