@@ -1072,6 +1072,12 @@ export const ko = {
       title: "나의 활동 대시보드", sub: "최근 활동을 포인트와 그래프로 한눈에 봅니다.",
       points: "내 포인트", gaugeAria: "포인트 {n}점(100점 만점)", detail: "성장 지표 자세히 보기",
       activity: "내 활동", monthly: "월별 활동(최근 6개월)", breakdown: "포인트 구성", empty: "아직 보여 드릴 기록이 없어요. 모임에 참석하고 소개를 시작해 보세요.",
+      head: { tent: "소속 텐트", renewal: "갱신 예정일", level: "성장 단계" },
+      chart: { title: "누적 기록", metrics: { referrals_given: "준 소개", one_to_one: "1:1 만남", visitors: "초대한 손님" }, info: "이 그래프는 확정된 기록(상대가 확인했거나 텐트장이 확인한 것)만 모아 보여 줍니다.", count: "누적 건수", empty: "이 기간에는 기록이 없어요." },
+      record: "기록하기", review: "보기",
+      reports: { title: "바로가기", weekly: "주간 활동 기록표 인쇄", received: "받은 소개 보기", attendance: "나의 참석 현황" },
+      profile: { title: "프로필 완성도", sub: "프로필을 채우면 다른 사업가가 나를 더 잘 찾고 소개할 수 있어요.", update: "프로필 고치기", done: "프로필이 모두 채워졌어요.", items: { photo: "증명사진", phone: "연락처", business_name: "사업장 이름", industry: "업종", intro: "하시는 일 소개", keywords: "찾기용 키워드", years: "사업 햇수", website: "웹사이트", church: "섬기는 교회", faith: "신앙 한 줄 이야기" } },
+      events: { title: "다가오는 모임과 행사", seeMore: "더 보기", details: "자세히", none: "예정된 모임이 아직 없어요." },
     },
     dash: {
       chartTitle: "최근 6개월의 나눔",

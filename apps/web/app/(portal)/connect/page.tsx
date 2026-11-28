@@ -8,7 +8,7 @@ import { Card, PageTitle, StageBar } from "@/components/connect/ui";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { DemoPersona } from "@/components/connect/DemoPersona";
 import { ActivityChart } from "@/components/connect/ActivityChart";
-import { MemberDashboard } from "@/components/connect/MemberDashboard";
+import { MemberDashboard, METRICS, type Metric } from "@/components/connect/MemberDashboard";
 import type { GrowthData } from "@/components/connect/GrowthIndex";
 import { catsFor, monthlyActivity } from "@/lib/activity";
 import { fmtMoney } from "@/lib/format";
@@ -16,18 +16,35 @@ import type { FeedRow, FundRow } from "@/lib/sponsor";
 
 type Ev = { id: string; title: string; start_at: string; meeting_url: string | null };
 
-export default async function ConnectHome({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
+export default async function ConnectHome({ searchParams }: { searchParams: Promise<{ p?: string; m?: string }> }) {
   const locale = await getPortalLocale();
   const { me, supabase, demo } = await requireMe();
   const m = getMessages(locale).connect;
   // CBC 사업가(선교 권한 없음)에게는 선교사·멘토링·후원 내용을 보이지 않습니다.
   const cbc = me.role === "mentor" && !hasMission(me);
-  const { p: periodRaw } = await searchParams;
+  const { p: periodRaw, m: metricRaw } = await searchParams;
+  const metric: Metric = (METRICS as readonly string[]).includes(metricRaw ?? "") ? (metricRaw as Metric) : "referrals_given";
   const period = periodRaw === "365" ? 365 : periodRaw === "0" ? 0 : 90;
   const { data: actData } = me.role === "mentor" ? await supabase.rpc("my_activity", { p_days: period }) : { data: null };
   const act = (actData ?? null) as Record<string, number> | null;
   const { data: f90 } = me.role === "mentor" ? await supabase.rpc("my_first90") : { data: null };
   const { data: gData } = cbc ? await supabase.rpc("my_growth") : { data: null };
+  // 대시보드(사업가): 누적 그래프용 날짜, 소속 텐트·갱신일
+  let metricDates: string[] = [];
+  type DashHead = { chapter: string | null; term_end: string | null };
+  let dashHead: DashHead | null = null as DashHead | null;
+  if (cbc) {
+    const [md, hd] = await Promise.all([
+      metric === "referrals_given"
+        ? supabase.from("referrals").select("created_at").eq("giver_id", me.id).limit(2000)
+        : metric === "one_to_one"
+          ? supabase.from("one_to_ones").select("held_at").eq("status", "confirmed").or(`member_a.eq.${me.id},member_b.eq.${me.id}`).limit(2000)
+          : supabase.from("visitors").select("attended_at").eq("invited_by", me.id).eq("kind", "guest").in("status", ["attended", "joined"]).limit(2000),
+      supabase.from("members").select("chapter,term_end").eq("id", me.id).maybeSingle(),
+    ]);
+    metricDates = ((md.data ?? []) as Record<string, string | null>[]).map((r) => (r.created_at ?? r.held_at ?? r.attended_at) as string).filter(Boolean);
+    dashHead = (hd.data ?? null) as DashHead | null;
+  }
   const first90 = (f90 ?? null) as { day: number; days_left: number; buddy_id: string | null; buddy_name: string | null; steps: { key: string; done: boolean; actual: number; target: number }[] } | null;
 
   const { data: ev } = await supabase
@@ -285,7 +302,10 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
     <div className="space-y-4">
       <PageTitle eyebrow="Home" sub={cbc ? m.board.sub : undefined}>{me.name}{m.greeting}</PageTitle>
       {cbc && (
-        <MemberDashboard g={(gData ?? null) as GrowthData | null} act={act} rows={rows} period={period} t={m.board} m={m} locale={locale} />
+        <MemberDashboard g={(gData ?? null) as GrowthData | null} act={act} rows={rows} period={period} metric={metric} dates={metricDates}
+          tent={dashHead?.chapter ?? null} termEnd={dashHead?.term_end ?? null} events={upcoming}
+          profile={([["photo", !!me.photo_url], ["phone", !!me.phone], ["business_name", !empty((me.profile as Record<string, unknown> | null)?.business_name)], ["industry", !empty((me.profile as Record<string, unknown> | null)?.industry)], ["intro", !empty((me.profile as Record<string, unknown> | null)?.intro)], ["keywords", !empty((me.profile as Record<string, unknown> | null)?.keywords)], ["years", !empty((me.profile as Record<string, unknown> | null)?.years_in_business)], ["website", !empty((me.profile as Record<string, unknown> | null)?.website)], ["church", !empty((me.profile as Record<string, unknown> | null)?.church)], ["faith", !empty((me.profile as Record<string, unknown> | null)?.faith_story)]] as [string, boolean][])}
+          t={m.board} m={m} locale={locale} />
       )}
       {demo && <DemoPersona me={me} db={supabase} locale={locale} />}
       {demo && me.role && (

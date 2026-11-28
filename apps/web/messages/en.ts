@@ -1061,6 +1061,12 @@ export const en: Messages = {
       title: "My activity dashboard", sub: "Your recent activity at a glance, in points and charts.",
       points: "My points", gaugeAria: "{n} points out of 100", detail: "See growth details",
       activity: "My activity", monthly: "Monthly activity (last 6 months)", breakdown: "Points breakdown", empty: "Nothing to show yet. Attend a gathering and make your first referral.",
+      head: { tent: "My tent", renewal: "Renewal date", level: "Growth level" },
+      chart: { title: "Cumulative record", metrics: { referrals_given: "Referrals sent", one_to_one: "1:1 meetings", visitors: "Guests invited" }, info: "This chart counts only confirmed records (confirmed by the other person or the tent leader).", count: "Cumulative count", empty: "No records in this period." },
+      record: "Log", review: "View",
+      reports: { title: "Shortcuts", weekly: "Print weekly activity sheet", received: "View referrals received", attendance: "My attendance" },
+      profile: { title: "Profile completeness", sub: "A fuller profile helps other owners find and refer you.", update: "Edit profile", done: "Your profile is complete.", items: { photo: "Photo", phone: "Phone", business_name: "Business name", industry: "Industry", intro: "About your work", keywords: "Search keywords", years: "Years in business", website: "Website", church: "Church", faith: "One-line faith story" } },
+      events: { title: "Upcoming gatherings and events", seeMore: "See more", details: "Details", none: "No upcoming gatherings yet." },
     },
     dash: {
       chartTitle: "Giving over the last six months",
