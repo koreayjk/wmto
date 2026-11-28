@@ -46,7 +46,7 @@ function cumulative(dates: string[], period: 90 | 365 | 0, locale: "ko" | "en") 
 }
 
 function Line({ pts, unit, aria, empty }: { pts: { label: string; value: number }[]; unit: string; aria: string; empty: string }) {
-  const w = 640, h = 230, l = 34, r = 12, tp = 14, b = 30;
+  const w = 640, h = 240, l = 34, r = 12, tp = 26, b = 30;
   const max = Math.max(4, ...pts.map((p) => p.value));
   const step = max <= 8 ? 2 : max <= 20 ? 5 : max <= 60 ? 10 : 20;
   const top = Math.ceil(max / step) * step;
@@ -60,7 +60,7 @@ function Line({ pts, unit, aria, empty }: { pts: { label: string; value: number 
   return (
     <figure role="img" aria-label={`${aria}: ${total}`}>
       <svg viewBox={`0 0 ${w} ${h}`} className="h-56 w-full">
-        <text x="2" y="10" className="fill-[var(--soft)]" style={{ fontSize: 11 }}>{unit}</text>
+        <text x="2" y="11" className="fill-[var(--soft)]" style={{ fontSize: 11 }}>{unit}</text>
         {ticks.map((tk) => (
           <g key={tk}>
             <line x1={l} x2={w - r} y1={y(tk)} y2={y(tk)} stroke="rgba(22,24,29,0.08)" />
