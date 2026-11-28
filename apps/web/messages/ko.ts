@@ -1068,6 +1068,11 @@ export const ko = {
       learning: { title: "내 학습 기록", sub: "강의 말고도 말씀 묵상, 제자훈련, 비즈니스 강의, 책 읽기를 기록하면 배움 점수에 반영돼요.", kind: { scripture: "말씀 묵상·성경 공부", discipleship: "제자훈련", business: "비즈니스 강의·세미나", book: "책 읽기", other: "기타" }, unit: "1회 = {n}단위", qty: "횟수", date: "날짜", note: "메모(선택)", add: "기록하기", recent: "최근 기록", empty: "아직 기록이 없어요.", remove: "지우기", error: "기록하지 못했어요. 날짜(최근 90일)와 이번 주 기록 수를 확인해 주세요." },
     },
     side: { network: "네트워크", activity: "활동", report: "리포트", learn: "배우기" },
+    board: {
+      title: "나의 활동 대시보드", sub: "최근 활동을 포인트와 그래프로 한눈에 봅니다.",
+      points: "내 포인트", gaugeAria: "포인트 {n}점(100점 만점)", detail: "성장 지표 자세히 보기",
+      activity: "내 활동", monthly: "월별 활동(최근 6개월)", breakdown: "포인트 구성", empty: "아직 보여 드릴 기록이 없어요. 모임에 참석하고 소개를 시작해 보세요.",
+    },
     dash: {
       chartTitle: "최근 6개월의 나눔",
       chartNote: "숫자는 순위가 아니라, 걸어온 길을 돌아보는 기록입니다.",

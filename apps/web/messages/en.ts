@@ -1057,6 +1057,11 @@ export const en: Messages = {
       learning: { title: "My learning log", sub: "Besides lessons, log scripture time, discipleship, business courses and reading to count toward your learning score.", kind: { scripture: "Scripture time / Bible study", discipleship: "Discipleship", business: "Business course / seminar", book: "Reading", other: "Other" }, unit: "1 time = {n} units", qty: "Times", date: "Date", note: "Note (optional)", add: "Log it", recent: "Recent entries", empty: "No entries yet.", remove: "Remove", error: "Could not save. Check the date (last 90 days) and how many entries you made this week." },
     },
     side: { network: "Network", activity: "Activity", report: "Reports", learn: "Learn" },
+    board: {
+      title: "My activity dashboard", sub: "Your recent activity at a glance, in points and charts.",
+      points: "My points", gaugeAria: "{n} points out of 100", detail: "See growth details",
+      activity: "My activity", monthly: "Monthly activity (last 6 months)", breakdown: "Points breakdown", empty: "Nothing to show yet. Attend a gathering and make your first referral.",
+    },
     dash: {
       chartTitle: "Giving over the last six months",
       chartNote: "These numbers are not a ranking. They are a record of the road you have walked.",

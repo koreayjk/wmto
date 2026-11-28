@@ -8,6 +8,8 @@ import { Card, PageTitle, StageBar } from "@/components/connect/ui";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { DemoPersona } from "@/components/connect/DemoPersona";
 import { ActivityChart } from "@/components/connect/ActivityChart";
+import { MemberDashboard } from "@/components/connect/MemberDashboard";
+import type { GrowthData } from "@/components/connect/GrowthIndex";
 import { catsFor, monthlyActivity } from "@/lib/activity";
 import { fmtMoney } from "@/lib/format";
 import type { FeedRow, FundRow } from "@/lib/sponsor";
@@ -25,6 +27,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
   const { data: actData } = me.role === "mentor" ? await supabase.rpc("my_activity", { p_days: period }) : { data: null };
   const act = (actData ?? null) as Record<string, number> | null;
   const { data: f90 } = me.role === "mentor" ? await supabase.rpc("my_first90") : { data: null };
+  const { data: gData } = cbc ? await supabase.rpc("my_growth") : { data: null };
   const first90 = (f90 ?? null) as { day: number; days_left: number; buddy_id: string | null; buddy_name: string | null; steps: { key: string; done: boolean; actual: number; target: number }[] } | null;
 
   const { data: ev } = await supabase
@@ -280,7 +283,10 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-4">
-      <PageTitle eyebrow="Home">{me.name}{m.greeting}</PageTitle>
+      <PageTitle eyebrow="Home" sub={cbc ? m.board.sub : undefined}>{me.name}{m.greeting}</PageTitle>
+      {cbc && (
+        <MemberDashboard g={(gData ?? null) as GrowthData | null} act={act} rows={rows} period={period} t={m.board} m={m} locale={locale} />
+      )}
       {demo && <DemoPersona me={me} db={supabase} locale={locale} />}
       {demo && me.role && (
         <Card title={m.demo.tourTitle}>
@@ -323,7 +329,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
         </Card>
       )}
 
-      {act && (
+      {act && !cbc && (
         <Card title={m.activity.title}>
           <p className="mb-4 text-sm text-soft">{m.activity.sub}</p>
           <p className="mb-6 flex gap-2 text-sm">
@@ -341,7 +347,7 @@ export default async function ConnectHome({ searchParams }: { searchParams: Prom
         </Card>
       )}
 
-      {showActivity && thisMonth && (
+      {showActivity && thisMonth && !cbc && (
         <div className="grid gap-4 lg:grid-cols-5">
           <Card title={d.chartTitle} className="lg:col-span-3">
             <ActivityChart rows={rows} locale={locale} unit={d.chartUnit} aria={d.chartAria} />
