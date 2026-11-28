@@ -154,6 +154,8 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         ))}
       </div>
 
+      <div className="col-span-full grid items-start gap-5 lg:grid-cols-2">
+        <div className="space-y-4">
       <Card title={t.next}>
         {next ? (
           <>
@@ -182,6 +184,8 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         )}
       </Card>
 
+        </div>
+        <div className="space-y-4">
       <Card title={t.posts}>
         {o.posts.length === 0 ? <p className="text-soft">{t.noPosts}</p> : (
           <ul className="space-y-5">
@@ -208,6 +212,9 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
           </form>
         )}
       </Card>
+
+        </div>
+      </div>
 
       {me.role === "mentor" && !cbc && (
         <Card title={t.seek} className="lg:col-span-full">
