@@ -102,7 +102,7 @@ export default async function TentPage({ searchParams }: { searchParams: Promise
         </span>
         {p.role === "mentor" && (
           <>
-            <span className="mt-0.5 block text-sm">{[p.business_name, p.industry].filter(Boolean).join(" · ")}</span>
+            <span className="mt-0.5 block text-sm">{p.business_name && p.industry && p.business_name.includes(p.industry) ? p.business_name : [p.business_name, p.industry].filter(Boolean).join(" · ")}</span>
             {!cbc && <span className="mt-1 block text-xs text-soft">{ways}{ways ? " · " : ""}{t.mentees.replace("{n}", String(p.mentee_count))}</span>}
           </>
         )}
