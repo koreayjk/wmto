@@ -169,7 +169,7 @@ export default async function ConnectLayout({ children }: { children: React.Reac
               <span className="pointer-events-auto ml-2 flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-1.5 text-sm shadow-[0_8px_20px_-14px_rgba(14,70,58,0.5),0_0_0_1px_rgba(22,24,29,0.05)]">
                 <Avatar name={active.name} url={active.photo_url} size={30} />
                 <span className="hidden text-ink/70 sm:inline">{active.name}</span>
-                {stageName && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
+                {stageName && !(active.role === "mentor" && !hasMission(active)) && <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">{stageName}</span>}
               </span>
             )}
           </div>

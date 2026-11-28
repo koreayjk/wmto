@@ -68,9 +68,9 @@ export function MemberDashboard({ g, act, rows, period, t, m, locale }: {
       <div className="grid gap-4 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <Card title={t.points}>
           {g ? (
-            <div className="flex flex-col items-center gap-4 sm:flex-row lg:flex-col xl:flex-row">
+            <div className="flex flex-col items-center gap-4">
               <Ring value={g.total} label={fill(t.gaugeAria, { n: Math.round(g.total) })} />
-              <div className="min-w-0 text-center sm:text-left lg:text-center xl:text-left">
+              <div className="min-w-0 text-center">
                 <p className="inline-flex items-center gap-2 rounded-full bg-tint px-3 py-1 text-sm font-semibold text-accent"><Icon size={18} weight="light" aria-hidden />{ix.levels[g.level]}</p>
                 <p className="mt-3 text-sm leading-relaxed text-ink/80">{ix.levelDesc[g.level]}</p>
                 {next ? <p className="mt-2 text-sm font-medium text-accent">{fill(ix.next, { name: ix.levels[next], n: toNext })}</p> : <p className="mt-2 text-sm font-medium text-accent">{ix.top}</p>}
